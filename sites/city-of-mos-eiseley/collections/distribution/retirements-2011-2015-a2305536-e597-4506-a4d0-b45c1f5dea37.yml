@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/retirements_0.csv'
+mediaType: text/csv
+format: csv
+description: "<p>Total number of employees who retired from the state workforce, 2011-2015.</p>\n"
+title: 'Retirements (2011 - 2015)'
+identifier: retirements-2011-2015-a2305536-e597-4506-a4d0-b45c1f5dea37
+interra-published: true

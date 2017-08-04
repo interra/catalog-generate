@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/data_0.csv'
+mediaType: text/csv
+format: csv
+description: "<p>CSV file extracted and cleaned from source excel.</p>\n<p>Click on Graph button under Preview and plot date (x-axis) against price (y-axis) to see a line graph. Hovering over a point gives you the value of that data entry.</p>\n"
+title: 'Table of Gold Prices'
+identifier: table-of-gold-prices-31911d1a-b172-45f5-b0f4-bdfb47740674
+interra-published: true

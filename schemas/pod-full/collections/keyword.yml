@@ -1,0 +1,25 @@
+"$schema": "http://json-schema.org/draft-04/schema"
+title: "Keyword"
+description: "A keyword and icon"
+type: object
+required:
+  - title
+  - identifier
+properties:
+  title:
+    title: "Title"
+    type: string
+  identifier:
+    type: string
+    title: "Identifier"
+  created:
+    type: string
+    title: Created
+    format: date-time
+  modified:
+    type: string
+    title: Modified
+    format: date-time
+  icon:
+    type: string
+    title: icon

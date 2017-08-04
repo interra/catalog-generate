@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/Polling_Places_Madison_0.csv'
+mediaType: text/csv
+format: csv
+description: "<p>This is a list and map of polling places in Madison, WI.</p>\n<p>Original data here:<br /><a href=\"https://data.cityofmadison.com/Polling-Places/Polling-Places/rtyh-6ucr\">https://data.cityofmadison.com/Polling-Places/Polling-Places/rtyh-6ucr</a></p>\n"
+title: 'Madison Polling Places'
+identifier: madison-polling-places-c8d8b694-88d4-4fb8-bd53-f5d865f255bc
+interra-published: true

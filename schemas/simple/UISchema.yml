@@ -1,0 +1,11 @@
+---
+datasets:
+  description:
+    ui:widget: textarea
+  organization:
+    ui:widget: referenced
+    ui:options:
+      collection: organizations
+organizations:
+  description:
+    ui:widget: textarea

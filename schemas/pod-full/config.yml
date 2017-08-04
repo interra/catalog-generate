@@ -1,0 +1,13 @@
+name: Project Open Data Full Specification
+collections:
+  - dataset
+  - organization
+  - distribution
+  - keyword
+  - license
+  - theme
+references:
+  dataset:
+      # field: referenced collection
+      publisher: organization
+      distribution: distribution

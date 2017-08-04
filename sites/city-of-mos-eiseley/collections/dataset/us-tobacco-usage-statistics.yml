@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+accrualPeriodicity: R/P1Y
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Statistics on U.S. smoking rates and tobacco taxation rates for all fifty states.</p>\n<p><strong>Source:</strong> Centers for Disease Control and Prevention, 2015<br /><a href=\"http://www.cdc.gov/tobacco/data_statistics/state_data/\">http://www.cdc.gov/tobacco/data_statistics/state_data/</a></p>\n<p><strong>Related Data Story: </strong><a href=\"/story/state-level-policies-reduce-smoking-rates-nationwide\">State-Level Policies Reduce Smoking Rates Nationwide</a></p>\n"
+distribution:
+  - {interra-reference: us-adult-smoking-rate-f81ba171-c0e6-4529-8e24-db292229fd45}
+  - {interra-reference: us-adult-smoking-rate-f81ba171-c0e6-4529-8e24-db292229fd45}
+identifier: 1f2042ad-c513-4fcf-a933-cae6c6fd35e6
+issued: '2016-04-10'
+keyword:
+  - demographics
+  - health
+license: 'http://opendefinition.org/licenses/cc-by/'
+modified: '2017-08-01'
+publisher:
+  interra-reference: advisory-council-for-infectious-disease
+spatial: 'POLYGON ((-127.705078125 24.206889622398, -127.705078125 50.625073063414, -63.193359375 50.625073063414, -63.193359375 24.206889622398))'
+theme:
+  - 'Health Care'
+title: 'U.S. Tobacco Usage Statistics'

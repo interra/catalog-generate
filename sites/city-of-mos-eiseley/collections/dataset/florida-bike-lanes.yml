@@ -1,0 +1,21 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+accrualPeriodicity: R/P1Y
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:noemailprovided@usa.gov'
+description: "<p>Data on bike lanes in Florida.</p>\n"
+distribution:
+  - {interra-reference: florida-bike-lanes-dd33021c-ac68-4dbe-9594-76d47b94aa07}
+identifier: cedcd327-4e5d-43f9-8eb1-c11850fa7c55
+issued: '2016-06-22'
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-08-01'
+publisher:
+  interra-reference: demogetdkancom
+theme:
+  - Transportation
+  - 'City Planning'
+title: 'Florida Bike Lanes '
+keyword:
+  - 'No keyword provided'

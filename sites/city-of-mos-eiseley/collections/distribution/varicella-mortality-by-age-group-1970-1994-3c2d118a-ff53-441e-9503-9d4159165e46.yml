@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/varicelladeaths1970_1994.csv'
+mediaType: text/csv
+format: csv
+description: "<p>Source: Centers for Disease Control and Prevention in Atlanta, Georgia. “Varicella Mortality: Trends before Vaccine Licensure in the United States, 1970–1994” published August 2000 in the Journal of Infectious Diseases.</p>\n"
+title: 'Varicella Mortality by Age Group, 1970-1994'
+identifier: varicella-mortality-by-age-group-1970-1994-3c2d118a-ff53-441e-9503-9d4159165e46
+interra-published: true
