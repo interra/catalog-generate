@@ -1,70 +1,72 @@
 const Ajv = require('ajv');
-const fs = require('fs-extra');
 const Content = require('../models/content');
 const Config = require('../models/config');
 const Site = require('../models/site');
 const Schema = require('../models/schema');
+const Search = require('../models/search');
 const _ = require('lodash');
 const chalk = require('chalk');
 const slug = require('slug');
+const fs = require('fs-extra');
 const Async = require('async');
 
 const config = new Config();
 const storage = config.get('storage');
+const searchEngine = config.get('search');
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 
-function get(site) {
-    var siteInfo = new Site();
-    var schemaName = siteInfo.getConfigItem(site, 'schema');
-    var schema = new Schema(schemaName);
-    var collections = schema.getConfigItem('collections');
-    var buildDir = config.get('buildDir');
-    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
-    var schemas = {
-      collections: collections,
-      schema: {}
-    }
-    Async.each(collections, function(collection, callback) {
-        const content = new Content[storage](site);
-        if (collection == 'dataset') {
-            schema.dereference(collection, (err, collectionSchema) => {
-                if (err) {
-                    console.log(chalk.red("Error for " + collection), err);
-                    process.exit(1);
-                }
-                schemas.schema[collection] = collectionSchema;
-                callback();
-            });
-        }
-        else {
-            schema.load(collection, (err, collectionSchema) => {
-                if (err) {
-                    console.log(chalk.red("Error for " + collection), err);
-                    process.exit(1);
-                }
-                schemas.schema[collection] = collectionSchema;
-                callback();
-            });
-        }
+function all(site) {
+    const siteInfo = new Site();
+    const schemaName = siteInfo.getConfigItem(site, 'schema');
+    const schema = new Schema(schemaName);
+    const buildDir = config.get('buildDir');
+    const siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
+    const search = new Search[searchEngine](site);
+    const content = new Content[storage](site);
 
-    }, function (err) {
-        schema.map((err, result) => {
-          schemas.map = result;
-          schema.uiSchema((err, ui) => {
-            schemas.uiSchema = ui;
-            fs.outputJson(siteDir + '/schema.json', schemas, err => {
-                if (err) {
-                    console.log(err);
-                }
+    search.init();
+
+    Async.auto({
+        load: function(done) {
+            schema.dereference("dataset", (err, collectionSchema) => {
+                content.findByCollection("dataset", true, (err, results) => {
+                    console.log(chalk.blue("Indexing datasets"));
+                    done(err, results);
+                });
             });
+        },
+        index: ['load', function (results, done) {
+            Async.eachSeries(results.load, function(item, callback) {
+                search.insertOne(item, (err, out) => {
+                    if (err) {
+                        console.log("Error indexing " +  item.identifier);
+                    }
+                    else {
+                        console.log(chalk.green("Indexing " + item.identifier));
+                        callback();
+                    }
+                });
+            }, function(err) {
+              if (err) {
+                  console.log(chalk.red("Error indexing"));
+                  done(err);
+              }
+              else {
+                  done(null)
+              }
             });
-        });
+        }],
+    }, (err, results) => {
+          if (err) {
+              console.log(chalk.red("Error indexings"));
+          }
+          search.push();
     });
 
 }
 
 module.exports = {
-   get 
+    all
 }

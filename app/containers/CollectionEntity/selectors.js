@@ -4,7 +4,7 @@
 
 import { createSelector } from 'reselect';
 
-const selectCol = (state) => { console.log(state); return state.get('collections')};
+const selectCol = (state) => { return state.get('collections')};
 
 
 const makeSelectCollection = () => createSelector(

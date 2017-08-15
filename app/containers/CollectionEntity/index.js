@@ -39,6 +39,8 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
 
      const { collection, schema, loadSchema, loadCollection, repos, error } = this.props;
 
+     
+
      if (collection === false && error === false) {
          loadCollection('dataset/httpsdatamedicaregovapiviewst6ug-wt53');
      }
@@ -74,7 +76,7 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
           <H2>{this.props.collection.title}</H2>
           {this.props.collectionName}
 
-{button}
+          {button}
 
           This is not the end.
       </article>
@@ -93,8 +95,6 @@ CollectionEntity.propTypes = {
     PropTypes.object,
     PropTypes.bool,
   ]),
-  loadCollection: PropTypes.func,
-  loadSchema: PropTypes.func,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([
     PropTypes.object,
@@ -104,6 +104,9 @@ CollectionEntity.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
+  // Dispatch.
+  loadCollection: PropTypes.func,
+  loadSchema: PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -117,8 +120,6 @@ const mapStateToProps = createStructuredSelector({
   collection: makeSelectCollection(),
   collectionName: makeSelectCollectionName(),
   schema: makeSelectSchema(),
-  //repos: makeSelectRepos(),
-//  username: makeSelectUsername(),
   loading: makeSelectLoading(),
   error: makeSelectError(),
 });

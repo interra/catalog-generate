@@ -15,6 +15,8 @@ import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import BasicListPage from 'containers/BasicListPage/Loadable';
 import CollectionEntity from 'containers/CollectionEntity/Loadable';
+import SearchPage from 'containers/SearchPage/Loadable';
+
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
@@ -43,6 +45,8 @@ export default function App() {
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={FeaturePage} />
         <Route path="/list" component={BasicListPage} />
+        <Route path="/search" component={SearchPage} />
+
         <Route path="" component={CollectionEntity} />
       </Switch>
       <Footer />

@@ -1,3 +1,4 @@
 sitesDir: sites
 storage: FileStorage
 buildDir: build
+search: elasticLunr

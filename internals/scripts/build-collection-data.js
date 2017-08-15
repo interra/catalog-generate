@@ -8,6 +8,7 @@ const chalk = require('chalk');
 const slug = require('slug');
 const fs = require('fs-extra');
 const lunr = require('lunr');
+const elasticlunr = require('elasticlunr');
 
 const config = new Config();
 const storage = config.get('storage');
@@ -36,12 +37,8 @@ function all(site) {
                 console.log(chalk.blue("Exporting " + collection));
                 console.log(err);
 
-                buildSchema(results, collectionSchema, siteDir);
-
-                const list = [];
                 // TODO: Move to Async.
                 _.each(results, function(item) {
-                    list.push({title: item.title, identifier: item.identifier});
                     // TODO: Check if published.
                     console.log(chalk.yellow("Creating file for " + item.identifier));
                     // TODO: Use Search model that includes Lunr or ES.
@@ -55,37 +52,12 @@ function all(site) {
                         }
                     });
                 });
-                fs.writeJson(siteDir + '/list.json', list, err => {
-                    if (err) {
-                        console.log(err);
-                    }
-
-                });
             });
 
         });
 
     });
 
-}
-
-function buildSchema(docs, schema, dir) {
-
-    var idx = lunr(function() {
-        var that = this;
-        this.ref("identifier");
-        this.field('title');
-        this.field('all');
-        _.each(docs, function(doc) {
-            var fullIndex = '';
-            _.each(Object.keys(schema.properties), function(key) {
-                fullIndex = fullIndex + doc[key];
-            });
-            console.log(fullIndex);
-            that.add({all: fullIndex});
-        });
-    });
-    fs.writeFile(dir + "/search-index.json", JSON.stringify(idx));
 }
 
 module.exports = {

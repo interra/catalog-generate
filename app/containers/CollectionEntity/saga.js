@@ -25,7 +25,6 @@ export function* getSchema() {
   try {
     // Call our request helper (see 'utils/request')
     const currentSchema = yield call(request, requestURL);
-    console.log("SCEHMAAAAA!!!!", currentSchema);
     yield put(schemaLoaded(currentSchema));
   } catch (err) {
         console.log("error?", err);

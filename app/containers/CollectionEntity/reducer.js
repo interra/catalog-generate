@@ -29,9 +29,6 @@ const initialState = fromJS({
 });
 
 function homeReducer(state = initialState, action) {
-    console.log("ACTION!!!!!", action)
-    console.log(action.type);
-    console.log(LOAD_COLLECTION);
   switch (action.type) {
     case LOAD_COLLECTION:
       console.log('were are loading', action);
@@ -47,7 +44,6 @@ function homeReducer(state = initialState, action) {
       return state
         .set('loading', true)
     case LOAD_SCHEMA_SUCCESS:
-      console.log("SUCCS")
       return state
         .set('loading', false)
         .set('schema', action.schema);

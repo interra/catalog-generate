@@ -42,7 +42,6 @@ function actionLoadCollection(collectionName) {
 * @return {object} An action object with a type of LOAD_REPOS
 */
 function actionLoadSchema() {
-    console.log('action fired');
     return {
       type: LOAD_SCHEMA,
     };
@@ -57,7 +56,6 @@ function actionLoadSchema() {
 * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
 */
 function schemaLoaded(schema) {
-    console.log('it got loaded!!!!!!!!!!!!!!!!!!');
     return {
       type: LOAD_SCHEMA_SUCCESS,
       schema,
@@ -72,7 +70,6 @@ function schemaLoaded(schema) {
 * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
 */
 function collectionLoaded(collection) {
-    console.log('it got loaded');
     return {
       type: LOAD_COLLECTION_SUCCESS,
       collection,

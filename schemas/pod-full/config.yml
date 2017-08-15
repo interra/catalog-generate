@@ -6,6 +6,11 @@ collections:
   - keyword
   - license
   - theme
+facets:
+    - keyword
+    - theme
+    # TODO: Add ability to go down a level for format.
+#    - distribution:format
 references:
   dataset:
       # field: referenced collection
