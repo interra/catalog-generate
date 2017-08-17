@@ -16,6 +16,7 @@
  */
 
 import {
+    LEAVE_COLLECTION,
     LOAD_COLLECTION,
     LOAD_COLLECTION_SUCCESS,
     LOAD_COLLECTION_ERROR,
@@ -44,6 +45,18 @@ function actionLoadCollection(collectionName) {
 function actionLoadSchema() {
     return {
       type: LOAD_SCHEMA,
+    };
+}
+
+/**
+* Load the repositories, this action starts the request saga
+*
+* @return {object} An action object with a type of LOAD_REPOS
+*/
+function actionLeaveCollection() {
+    console.log("WE ARE LEAVING THE COLLECTION ACTION");
+    return {
+      type: LEAVE_COLLECTION,
     };
 }
 
@@ -93,6 +106,7 @@ return {
 
 
 export {
+    actionLeaveCollection,
     collectionLoaded,
     actionLoadCollection,
     actionLoadSchema,

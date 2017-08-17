@@ -7,14 +7,15 @@ import NavBar from './NavBar';
 import HeaderLink from './HeaderLink';
 import Banner from './banner.jpg';
 import messages from './messages';
+import { Link } from 'react-router-dom';
 
 class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <div>
-        <A href="https://twitter.com/mxstbr">
-          <Img src="/assets/logo.png" alt="react-boilerplate - Logo" />
-        </A>
+        <Link to="/">
+          <Img src="/logo.png" alt="Logo" />
+        </Link>
         <NavBar>
           <HeaderLink to="/">
             <FormattedMessage {...messages.home} />
@@ -22,7 +23,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <HeaderLink to="/about">
             <FormattedMessage {...messages.features} />
           </HeaderLink>
-          <HeaderLink to="/list">
+          <HeaderLink to="/search">
             Search
           </HeaderLink>
         </NavBar>

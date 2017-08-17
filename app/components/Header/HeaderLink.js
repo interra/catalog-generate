@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export default styled(Link)`
   display: inline-flex;
   padding: 0.25em 2em;
-  margin: 1em;
+  margin: .5em;
   text-decoration: none;
   border-radius: 4px;
   -webkit-font-smoothing: antialiased;

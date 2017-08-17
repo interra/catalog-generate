@@ -21,7 +21,6 @@ export function* getSchema() {
   // This breaks staic compilation. Lets fix that later :).
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
   const requestURL = url + '/schema.json';
-  console.log(requestURL);
   try {
     // Call our request helper (see 'utils/request')
     const currentSchema = yield call(request, requestURL);
@@ -39,18 +38,15 @@ export function* getRepos() {
 
   // This breaks staic compilation. Lets fix that later :).
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
-  console.log(url);
   // Select username from store
   const collection = yield select(makeSelectCollectionName());
   const requestURL = url + '/collections/' + collection + '.json';
-  console.log(requestURL);
   try {
     // Call our request helper (see 'utils/request')
     const currentCollectionne = yield call(request, requestURL);
-    console.log(currentCollectionne);
     yield put(collectionLoaded(currentCollectionne));
   } catch (err) {
-//          console.log("error?", err);
+        console.log("error?", err);
     yield put(repoLoadingError(err));
   }
 }

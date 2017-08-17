@@ -12,6 +12,7 @@
 import { fromJS } from 'immutable';
 
 import {
+  LEAVE_COLLECTION,
   LOAD_COLLECTION,
   LOAD_COLLECTION_SUCCESS,
   LOAD_SCHEMA,
@@ -30,8 +31,9 @@ const initialState = fromJS({
 
 function homeReducer(state = initialState, action) {
   switch (action.type) {
+    case LEAVE_COLLECTION:
+      return initialState;
     case LOAD_COLLECTION:
-      console.log('were are loading', action);
       return state
         .set('loading', true)
         .set('collectionName', action.collectionName);
@@ -40,7 +42,6 @@ function homeReducer(state = initialState, action) {
         .set('loading', false)
         .set('collection', action.collection);
     case LOAD_SCHEMA:
-      console.log('were are loading', action);
       return state
         .set('loading', true)
     case LOAD_SCHEMA_SUCCESS:

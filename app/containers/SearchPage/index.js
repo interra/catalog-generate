@@ -12,49 +12,69 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import elasticlunr from 'elasticlunr';
+import SearchList from 'components/SearchList';
+import PageContainer from 'components/PageContainer';
+import H3 from './H3';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectQuery, makeSelectResults } from './selectors';
+import { makeSelectQuery, makeSelectResults, makeSelectResultsError, makeSelectSearchLoading } from './selectors';
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { actionLoadSearchResults } from './actions';
+import LoadingIndicator from 'components/LoadingIndicator';
 
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
-  search() {
+  queryEnter(e) {
+      const { query, results, error, loadResults } = this.props;
 
+      if (e.target.value.length > 0) {
+          loadResults(e.target.value)
+      }
+      else if (e.target.value.length == 0) {
+          loadResults();
+      }
   }
 
-   componentWillMount() {
+  componentWillMount() {
 
-     const { query, results, error, loadResults } = this.props;
+    const { query, results, error, loadResults } = this.props;
 
-     if (results === false && error === false) {
-         loadResults();
-     }
-   }
+    if (results === false && error === false) {
+      loadResults();
+    }
+  }
 
   render() {
-     const { query, results, error, loadResults } = this.props;
-     console.log(results);
+     const { query, results, error, loading, searchLoading } = this.props;
+
+     const searchListProps = {
+         loading,
+         results,
+         error,
+     };
+
+    const number = results.length;
+    const message = query ? number + " Results for \"" + query + "\"": number + " Results";
 
     return (
-      <div>
+      <PageContainer>
+
+          <div className="col-xs-12 col-md-3">
           <div className="input-group">
-              <input type="text" className="form-control" placeholder="Search for..." />
+              <input type="text" className="form-control" onChange={this.queryEnter.bind(this)} placeholder="Search for..." />
               <span className="input-group-btn">
                   <button className="btn btn-default" type="button">Go!</button>
               </span>
           </div>
-              <div>
-              <h3>Results:</h3>
-              <p>
-              </p>
-              </div>
-      </div>
+          </div>
+          <div className="col-xs-12 col-md-9">
+              { loading ? ( <LoadingIndicator /> ) : ( <span><H3>{message}</H3> <SearchList {...searchListProps} /> </span>) }
+          </div>
+      </PageContainer>
     );
   }
 }
@@ -69,6 +89,7 @@ SearchPage.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
+  searchLoading: PropTypes.bool,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([
     PropTypes.object,
@@ -82,8 +103,8 @@ SearchPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   query: makeSelectQuery(),
   results: makeSelectResults(),
-  loading: makeSelectLoading(),
-  error: makeSelectError(),
+  loading: makeSelectSearchLoading(),
+  error: makeSelectResultsError(),
 });
 
 function mapDispatchToProps(dispatch) {

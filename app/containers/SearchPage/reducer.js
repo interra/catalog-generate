@@ -13,11 +13,12 @@ import {
 } from './constants';
 
 const initialState = fromJS({
-  loading: false,
-  query: '',
+  loading: true,
+  query: '*',
   results: false,
   error: false,
   facets: false,
+  searchLoading: true,
 });
 
 function searchPageReducer(state = initialState, action) {
@@ -27,10 +28,12 @@ function searchPageReducer(state = initialState, action) {
         .set('loading', true)
         .set('query', action.query);
     case LOAD_SEARCH_RESULTS:
+      console.log("We are loading now.")
       return state
         .set('loading', true)
         .set('query', action.query);
     case LOAD_SEARCH_RESULTS_SUCCESS:
+      console.log("We are loaded.")
       return state
         .set('loading', false)
         .set('results', action.results);

@@ -13,10 +13,22 @@ const makeSelectQuery = () => createSelector(
 const makeSelectResults = () => createSelector(
   selectSearchPageDomain(),
   (substate) => substate.get('results')
-);
+)
+
+const makeSelectSearchLoading = () => createSelector(
+  selectSearchPageDomain(),
+  (substate) => substate.get('loading')
+)
+
+const makeSelectResultsError = () => createSelector(
+  selectSearchPageDomain(),
+  (substate) => substate.get('error')
+);;
 
 export {
   selectSearchPageDomain,
   makeSelectQuery,
   makeSelectResults,
+  makeSelectResultsError,
+  makeSelectSearchLoading,
 };

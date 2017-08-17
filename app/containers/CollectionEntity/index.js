@@ -13,15 +13,16 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
-import { makeSelectSchema, makeSelectCollection, makeSelectCollectionName } from './selectors';
+import { makeSelectSchema, makeSelectCollection, makeSelectCollectionName, makeSelectCollectionError } from './selectors';
 
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
-import H2 from 'components/H2';
+import H1 from 'components/H1';
+import PageContainer from 'components/PageContainer';
 import ReposList from 'components/ReposList';
 import messages from './messages';
 import { loadRepos } from '../App/actions';
-import { actionLoadCollection, actionLoadSchema } from './actions';
+import { actionLoadCollection, actionLoadSchema, actionLeaveCollection } from './actions';
 import { makeSelectUsername } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -34,15 +35,20 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
   componentDidMount() {
 
   }
+  componentWillUnmount() {
+
+      const { leaveCollection } = this.props;
+
+      leaveCollection();
+  }
 
    componentWillMount() {
 
      const { collection, schema, loadSchema, loadCollection, repos, error } = this.props;
 
-     
-
      if (collection === false && error === false) {
-         loadCollection('dataset/httpsdatamedicaregovapiviewst6ug-wt53');
+         // TODO: get from router.
+         loadCollection(window.location.pathname.substr(1));
      }
      if (schema === false) {
         loadSchema();
@@ -52,7 +58,6 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
 
 
   render() {
-      console.log(this);
     const { loading, error, repos, collection } = this.props;
     const reposListProps = {
       loading,
@@ -61,7 +66,7 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
     };
     let formData = this.props.collection ? this.props.collection : null;
     let schema = this.props.schema ? this.props.schema.schema.dataset : null;
- let button = null;
+    let button = null;
     if (schema && formData) {
 
       button = <Form schema={schema}
@@ -72,14 +77,14 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
 
 
     return (
-      <article>
-          <H2>{this.props.collection.title}</H2>
+      <PageContainer>
+          <H1>{this.props.collection.title}</H1>
           {this.props.collectionName}
 
           {button}
 
           This is not the end.
-      </article>
+      </PageContainer>
     );
   }
 }
@@ -107,12 +112,14 @@ CollectionEntity.propTypes = {
   // Dispatch.
   loadCollection: PropTypes.func,
   loadSchema: PropTypes.func,
+  leaveCollection: PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     loadCollection: (collectionName) => dispatch(actionLoadCollection(collectionName)),
     loadSchema: () => dispatch(actionLoadSchema()),
+    leaveCollection: () => dispatch(actionLeaveCollection()),
   };
 }
 
@@ -121,7 +128,7 @@ const mapStateToProps = createStructuredSelector({
   collectionName: makeSelectCollectionName(),
   schema: makeSelectSchema(),
   loading: makeSelectLoading(),
-  error: makeSelectError(),
+  error: makeSelectCollectionError(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

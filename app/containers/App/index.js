@@ -27,7 +27,7 @@ const AppWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   min-height: 100%;
-  padding: 0 16px;
+  padding: 0;
   flex-direction: column;
 `;
 
@@ -44,9 +44,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={FeaturePage} />
-        <Route path="/list" component={BasicListPage} />
         <Route path="/search" component={SearchPage} />
-
         <Route path="" component={CollectionEntity} />
       </Switch>
       <Footer />

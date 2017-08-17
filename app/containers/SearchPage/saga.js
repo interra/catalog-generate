@@ -16,25 +16,39 @@ import elasticlunr from 'elasticlunr';
 /**
  * Get Search results.
  */
-export function* getResults() {
+export function* getResults(action) {
 
   const url = window.location.origin + '/search-index.json';
 
-  const query = 'test';//yield select(makeSelectQuery());
+  var query = action.query;// yield select(makeSelectQuery());
+  var index = '';//yield select(makeSelectIndex());
 
-
-  console.log(url);
   try {
-    // Call our request helper (see 'utils/request')
-    const results = yield call(request, url);
-    console.log(results);
-    const index = elasticlunr.Index.load(results);
-    console.log(index);
-//    index.SaveDocument(true);
-    const config = new elasticlunr.Configuration({ SaveDocument: true}, index.getFields());
-    console.log(config);
-    const items = index.search(query, config);
-    console.log(items);
+    if (!index) {
+      console.time("Loading index.");
+      index = yield call(request, url);
+      index = elasticlunr.Index.load(index);
+      //yield put(searchIndexLoaded(index));
+      console.timeEnd("Index Loaded");
+    }
+
+    var items = [];
+
+    if (query) {
+      items = index.search(query, {expand: true});
+    }
+    else {
+        const docs = index.documentStore.docs;
+        items = Object.keys(docs).map(function(index) {
+            var item = {
+                doc: docs[index],
+                ref: index,
+                score: 1
+            }
+            return item;
+        });
+    }
+
     yield put(searchResultsLoaded(items));
   } catch (err) {
     console.log("error?", err);

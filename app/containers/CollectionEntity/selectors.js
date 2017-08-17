@@ -9,22 +9,28 @@ const selectCol = (state) => { return state.get('collections')};
 
 const makeSelectCollection = () => createSelector(
   selectCol,
-  (collectionState) => { console.log(collectionState.get('collection')); return collectionState.get('collection')}
+  (collectionState) => { return collectionState.get('collection')}
+);
+
+const makeSelectCollectionError = () => createSelector(
+  selectCol,
+  (collectionState) => { return collectionState.get('error')}
 );
 
 const makeSelectSchema = () => createSelector(
   selectCol,
-  (collectionState) => { console.log(collectionState.get('schema')); return collectionState.get('schema')}
+  (collectionState) => { return collectionState.get('schema')}
 );
 
 const makeSelectCollectionName = () => createSelector(
   selectCol,
-  (collectionState) => { console.log(collectionState.get('collectionName')); return collectionState.get('collectionName')}
+  (collectionState) => { return collectionState.get('collectionName')}
 );
 
 
 export {
   selectCol,
+  makeSelectCollectionError,
   makeSelectCollectionName,
   makeSelectCollection,
   makeSelectSchema,
