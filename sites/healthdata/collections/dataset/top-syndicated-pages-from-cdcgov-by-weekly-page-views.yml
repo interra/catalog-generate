@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>The CDC Content Syndication site at <a href=\"https://tools.cdc.gov/syndication/\">https://tools.cdc.gov/syndication/</a> allows you to import content from CDC websites directly into your own website or application. These services are provided free of charge from CDC. The data shown in this table represent the weekly top page views from CDC.gov offered by syndication.</p>\n"
+distribution:
+  - {interra-reference: xsl-460c2adf-d1eb-4fb1-aba1-4259c37e9efa}
+  - {interra-reference: rdf-d2245adc-6163-4681-9474-43c3ef2896f7}
+  - {interra-reference: json-df79bb14-d735-4503-8a54-de25fb3f6598}
+  - {interra-reference: xsl-460c2adf-d1eb-4fb1-aba1-4259c37e9efa}
+identifier: 'https://data.cdc.gov/api/views/rppv-wbiv'
+keyword:
+  - cdc.gov
+  - 'page views'
+  - syndication
+  - 'web pages'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-26'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Top syndicated pages from CDC.gov by weekly page views'

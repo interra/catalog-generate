@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of hospitals participating in the Hospital VBP Program and their performance rates and scores for the Safety measures.</p>\n"
+distribution:
+  - {interra-reference: xsl-5db09a58-b0ea-41cb-90e1-abd0d43390e7}
+  - {interra-reference: rdf-acd1c644-955f-412e-b823-be8bda8bef4d}
+  - {interra-reference: json-47b29726-9d68-4653-b672-ee3edd6578b0}
+  - {interra-reference: xsl-5db09a58-b0ea-41cb-90e1-abd0d43390e7}
+identifier: 'https://data.medicare.gov/api/views/dgmq-aat3'
+keyword:
+  - hospital
+  - hvbp
+  - 'linking quality to payment'
+  - safety
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-01'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital Value-Based Purchasing (HVBP) â Safety'
+programCode:
+  - '009:000'

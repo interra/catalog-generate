@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:DialysisData@umich.edu'
+description: "<p>Payment Year 2015 ESRD QIP data by facility: % hemodialysis patients using an arteriovenous fistula, % hemodialysis patients using an intravenous catheter</p>\n"
+distribution:
+  - {interra-reference: xsl-a67c8d5f-3515-4a60-9d76-8db2ad9831f9}
+  - {interra-reference: rdf-6ec36e6b-1030-45eb-9a24-c94d4e4b16c8}
+  - {interra-reference: json-2a9ad025-6412-4e85-92c8-e3cfc33bd8da}
+  - {interra-reference: xsl-a67c8d5f-3515-4a60-9d76-8db2ad9831f9}
+identifier: 'https://data.medicare.gov/api/views/9vdt-zpmw'
+keyword:
+  - dfc
+  - dialysis
+  - 'dialysis facilities'
+  - 'linking quality to payment - qip'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-01'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'ESRD QIP - Vascular Access - Payment Year 2017'

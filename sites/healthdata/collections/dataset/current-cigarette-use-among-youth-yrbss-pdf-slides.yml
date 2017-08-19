@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: CDCINFO
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Download the current cigarette use among youth slides. These slides are available in PDF and PowerPoint formats. The PowerPoint version can be found at: <a href=\"https://chronicdata.cdc.gov/dataset/Current-Cigarette-Use-Among-Youth-YRBSS-Power-Poin/mme4-8kwj\">https://chronicdata.cdc.gov/dataset/Current-Cigarette-Use-Among-Youth-YR...</a></p>\n"
+distribution:
+  - {interra-reference: pdf-49e73feb-1b67-4a2a-be62-3ccc7cee36ae}
+identifier: 'https://data.cdc.gov/api/views/rpbm-bfkm'
+keyword:
+  - slides
+  - 'youth cigarette use'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-17'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Current Cigarette Use Among Youth (YRBSS) PDF Slides'

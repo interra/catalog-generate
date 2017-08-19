@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>Payment measures and value of care displays â provider data. This data set includes provider data for the payment measures and value of care displays.</p>\n"
+distribution:
+  - {interra-reference: xsl-982b1d6d-8844-4c6a-9141-2b0724bf234b}
+  - {interra-reference: rdf-379c9802-6a76-49ab-8ecb-a9452194dc72}
+  - {interra-reference: json-6ef89d4e-0ce8-46c2-a273-7791d557c4fe}
+  - {interra-reference: xsl-982b1d6d-8844-4c6a-9141-2b0724bf234b}
+identifier: 'https://data.medicare.gov/api/views/c7us-v4mf'
+keyword:
+  - 'hospital compare'
+  - 'medicare payment'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Payment and value of care - Hospital'

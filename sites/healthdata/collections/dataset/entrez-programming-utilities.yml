@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NCBI Customer Service'
+  hasEmail: 'mailto:info@ncbi.nlm.nih.gov'
+description: "<p>The Entrez Programming Utilities (E-utilities) are a set of eight server-side programs that provide a stable interface into the Entrez query and database system at the National Center for Biotechnology Information (NCBI). The E-utilities use a fixed URL syntax that translates a standard set of input parameters into the values necessary for various NCBI software components to search for and retrieve the requested data. The E-utilities are therefore the structured interface to the Entrez system, which currently includes 38 databases covering a variety of biomedical data, including nucleotide and protein sequences, gene records, three-dimensional molecular structures, and the biomedical literature.</p>\n"
+distribution:
+  - {interra-reference: api-8abcf50e-33b0-414b-b465-623996d5bd4d}
+identifier: 16ee3da6-36eb-4aa7-a406-7d4d80fa14c3
+keyword:
+  - biomedicine
+  - technology
+language:
+  - en
+modified: '2016-09-16'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: 'Entrez Programming Utilities'
+programCode:
+  - '009:000'

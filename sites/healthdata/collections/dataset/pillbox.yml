@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NLM Customer Service'
+  hasEmail: 'mailto:custserv@nlm.nih.gov'
+description: "<p>The Pillbox website was developed to aid in the identification of unknown pills (oral solid dosage form medications). It combines images of pills with appearance and other information to enable users to visually search for and identify oral solid dosage form medications.</p>\n"
+distribution:
+  - {interra-reference: download-pillbox-data-d19a8120-25ad-442e-b286-2499083ee6cc}
+  - {interra-reference: search-pillbox-16478661-53c6-46a1-8d0f-c900df1ca06e}
+  - {interra-reference: download-pillbox-data-d19a8120-25ad-442e-b286-2499083ee6cc}
+identifier: fd837136-f204-491c-b36f-349b5aaf4329
+keyword:
+  - pharmaceutical
+  - pharmacy
+  - 'pill identification'
+language:
+  - en
+modified: '2016-09-16'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: Pillbox
+programCode:
+  - '009:000'

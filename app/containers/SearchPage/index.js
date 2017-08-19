@@ -13,23 +13,26 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import elasticlunr from 'elasticlunr';
 import SearchList from 'components/SearchList';
+import FacetList from 'components/FacetList';
+
 import PageContainer from 'components/PageContainer';
-import H3 from './H3';
+import InputGroup from './InputGroup';
+import FormGroup from './FormGroup';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectQuery, makeSelectResults, makeSelectResultsError, makeSelectSearchLoading } from './selectors';
+import { makeSelectQuery, makeSelectResults, makeSelectResultsError, makeSelectSearchLoading, makeSelectSort, makeSelectFacets, makeSelectFacetsLoading, makeSelectFacetsResults, makeSelectFacetsResultsLoading } from './selectors';
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { actionLoadSearchResults } from './actions';
+import { actionLoadSearchResults, actionUpdateSort, actionLoadFacets } from './actions';
 import LoadingIndicator from 'components/LoadingIndicator';
 
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   queryEnter(e) {
-      const { query, results, error, loadResults } = this.props;
+      const { loadResults } = this.props;
 
       if (e.target.value.length > 0) {
           loadResults(e.target.value)
@@ -39,41 +42,69 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
       }
   }
 
-  componentWillMount() {
+  relevanceUpdate(e) {
+    const { setSort } = this.props;
 
-    const { query, results, error, loadResults } = this.props;
+    setSort(e.target.value);
+
+  }
+
+  componentWillMount() {
+    console.log("mounting");
+
+    const { query, results, error, loadResults, loadFacets } = this.props;
 
     if (results === false && error === false) {
+      loadFacets();
       loadResults();
     }
+
   }
 
   render() {
-     const { query, results, error, loading, searchLoading } = this.props;
+    const { query, results, error, loading, facets, loadFacets, loadingFacets, facetsResults, loadingFacetsResults } = this.props;
+
+    const number = results.length;
+    const resultmessage = query ? number + " Results for \"" + query + "\"": number + " Results";
 
      const searchListProps = {
          loading,
          results,
          error,
+         resultmessage,
      };
 
-    const number = results.length;
-    const message = query ? number + " Results for \"" + query + "\"": number + " Results";
+     const facetListProps = {
+         loadingFacets,
+         facets,
+         loadingFacetsResults,
+         facetsResults,
+     };
 
     return (
       <PageContainer>
-
-          <div className="col-xs-12 col-md-3">
-          <div className="input-group">
+        <div className="col-xs-12 col-md-3">
+          <InputGroup>
               <input type="text" className="form-control" onChange={this.queryEnter.bind(this)} placeholder="Search for..." />
               <span className="input-group-btn">
                   <button className="btn btn-default" type="button">Go!</button>
               </span>
-          </div>
-          </div>
-          <div className="col-xs-12 col-md-9">
-              { loading ? ( <LoadingIndicator /> ) : ( <span><H3>{message}</H3> <SearchList {...searchListProps} /> </span>) }
-          </div>
+          </InputGroup>
+          <FormGroup>
+            <span className="col-sm-2 control-label" style={{fontSize: '.75em', padding: '5px 0'}}>Sort by:</span>
+            <div className="col-sm-10">
+              <select className="form-control input-sm" onChange={this.relevanceUpdate.bind(this)}>
+                <option value="relevance">Relevance</option>
+                <option value="date">Date</option>
+                <option value="alpha">Alphabetical</option>
+              </select>
+            </div>
+          </FormGroup>
+          <FacetList {...facetListProps} />
+        </div>
+        <div className="col-xs-12 col-md-9">
+            <SearchList {...searchListProps} />
+        </div>
       </PageContainer>
     );
   }
@@ -85,31 +116,50 @@ SearchPage.propTypes = {
     PropTypes.string,
     PropTypes.bool,
   ]),
+  sort: PropTypes.string,
   results: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
-  searchLoading: PropTypes.bool,
+  loadingFacetsResults: PropTypes.bool,
+  loadingFacets: PropTypes.bool,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
+  facets: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
+  facetsResults: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
   ]),
   // Dispatch.
   loadQuery: PropTypes.func,
   loadResults: PropTypes.func,
+  loadFacets: PropTypes.func,
+  setSort: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   query: makeSelectQuery(),
   results: makeSelectResults(),
   loading: makeSelectSearchLoading(),
+  loadingFacets: makeSelectFacetsLoading(),
+  facetsResults: makeSelectFacetsResults(),
+  loadingFacetsResults: makeSelectFacetsResultsLoading(),
   error: makeSelectResultsError(),
+  sort: makeSelectSort(),
+  facets: makeSelectFacets(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     loadResults: (query) => dispatch(actionLoadSearchResults(query)),
+    loadFacets: () => dispatch(actionLoadFacets()),
+    setSort: (query) => dispatch(actionUpdateSort(query)),
   };
 }
 

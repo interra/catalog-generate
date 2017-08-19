@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:oralhealth@cdc.gov'
+description: "<p>2000-2014. Water Fluoridation Statistics is a biennial report of the percentage and number of people receiving fluoridated water from 2000 through 2014, originally published at <a href=\"http://www.cdc.gov/fluoridation/statistics/index.htm\">http://www.cdc.gov/fluoridation/statistics/index.htm</a>. For more information, see: <a href=\"http://www.cdc.gov/oralhealthdata/overview/fluoridation_indicators.html\">http://www.cdc.gov/oralhealthdata/overview/fluoridation_indicators.html</a></p>\n"
+distribution:
+  - {interra-reference: xsl-dfb5778e-65b2-4f76-a0b3-6ac886fa12bb}
+  - {interra-reference: rdf-9326d4cb-3c6c-42c0-8385-7147745aa969}
+  - {interra-reference: json-44803f3b-43a0-4aa9-b4fd-3af6076b9b40}
+  - {interra-reference: xsl-dfb5778e-65b2-4f76-a0b3-6ac886fa12bb}
+identifier: 'https://data.cdc.gov/api/views/8235-5d73'
+keyword:
+  - 'division of oral health'
+  - 'healthy people'
+  - nohss
+  - 'oral health'
+  - 'water fluoridation'
+  - wfrs
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-15'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Water Fluoridation Statistics - Percent of PWS population receiving fluoridated water'
+programCode:
+  - '009:000'

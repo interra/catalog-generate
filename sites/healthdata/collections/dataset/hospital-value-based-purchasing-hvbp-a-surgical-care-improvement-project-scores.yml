@@ -1,0 +1,36 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>A list of hospitals participating in the Hospital VBP Program and their performance rates and scores for the Clinical Process of Care SCIP measures.</p>\n"
+distribution:
+  - {interra-reference: xsl-0f15dd09-6913-46c3-a788-a6b56aed82f3}
+  - {interra-reference: rdf-418485dc-07a4-4251-9d16-e25a54d6ce61}
+  - {interra-reference: json-8b6b9c80-5e7d-407e-ad5b-ad4646174ab6}
+  - {interra-reference: xsl-0f15dd09-6913-46c3-a788-a6b56aed82f3}
+identifier: 'https://data.medicare.gov/api/views/aae7-dzxe'
+keyword:
+  - 'hospital compare'
+  - 'hospital value-based purchasing'
+  - hvbp
+  - 'linking quality to payment'
+  - 'process of care'
+  - quality
+  - rates
+  - ratings
+  - scip
+  - scores
+  - surgery
+  - 'value-based purchasing'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-14'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital Value-Based Purchasing (HVBP) â Surgical Care Improvement Project Scores'

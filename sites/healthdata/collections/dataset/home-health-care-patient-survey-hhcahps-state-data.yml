@@ -1,0 +1,33 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HomeHealthQualityQuestions@cms.hhs.gov'
+description: "<p>Home Health Care - Patient survey (HHCAHPS) State Data</p>\n"
+distribution:
+  - {interra-reference: xsl-127c14da-2306-4611-8b0e-93220df40091}
+  - {interra-reference: rdf-261eb2bd-989c-4211-9718-ebe9765e8fb5}
+  - {interra-reference: json-fbf8a64d-7c4c-477c-868f-68744359a0bb}
+  - {interra-reference: xsl-127c14da-2306-4611-8b0e-93220df40091}
+identifier: 'https://data.medicare.gov/api/views/m5jg-jg7i'
+keyword:
+  - comparison
+  - facilities
+  - hhc
+  - hhcahps
+  - 'home health agencies'
+  - 'patient survey results'
+  - quality
+  - ratings
+  - 'state average'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Home Health Care - Patient survey (HHCAHPS) State Data'

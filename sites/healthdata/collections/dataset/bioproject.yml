@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NCBI Help Desk'
+  hasEmail: 'mailto:info@ncbi.nlm.nih.gov'
+description: "<p>The BioProject database provides an organizational framework to access information about research projects with links to data that have been or will be deposited into archival databases maintained at members of the International Nucleotide Sequence Database Consortium (INSDC, which comprises the DNA DataBank of Japan (DDBJ), the European Nucleotide Archive at European Molecular Biology Laboratory (ENA), and GenBank at the National Center for Biotechnology Information (NCBI)).</p>\n"
+distribution:
+  - {interra-reference: query-interface-23c147cf-c2cd-4e28-be63-972c85ec0855}
+  - {interra-reference: e-utilities-api-c3976932-19b3-432a-821f-2ee4f9968d14}
+  - {interra-reference: query-interface-23c147cf-c2cd-4e28-be63-972c85ec0855}
+identifier: e1be5669-bd77-4263-963d-818b1e7dbf83
+language:
+  - en
+modified: '2016-09-16'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: BioProject
+programCode:
+  - '009:000'
+keyword:
+  - national-library-of-medicine-nlm

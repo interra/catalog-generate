@@ -1,0 +1,32 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of hospital ratings for the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS). HCAHPS is a national, standardized survey of hospital patients about their experiences during a recent inpatient hospital stay.</p>\n"
+distribution:
+  - {interra-reference: xsl-4739646d-470e-4b4c-a8aa-42930d36b054}
+  - {interra-reference: rdf-f39b8258-8e67-4584-b5a0-a55b829c5511}
+  - {interra-reference: json-02814c93-1b7a-4995-9732-bf6a57f02c02}
+  - {interra-reference: xsl-4739646d-470e-4b4c-a8aa-42930d36b054}
+identifier: 'https://data.medicare.gov/api/views/9g7e-btyt'
+keyword:
+  - hcahps
+  - 'hospital compare'
+  - 'patient survey'
+  - 'patient survey results'
+  - pch
+  - quality
+  - ratings
+  - 'timely and effective care'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Patient Survey (PCH - HCAHPS) PPS-exempt Cancer Hospital â National'
+programCode:
+  - '009:000'

@@ -1,0 +1,1 @@
+{"version":"0.9.5","fields":["keyword","theme","title","body"],"ref":"identifier","documentStore":{"docs":{},"docInfo":{},"length":0,"save":true},"index":{"keyword":{"root":{"docs":{},"df":0}},"theme":{"root":{"docs":{},"df":0}},"title":{"root":{"docs":{},"df":0}},"body":{"root":{"docs":{},"df":0}}},"pipeline":["trimmer","stopWordFilter","stemmer"]}

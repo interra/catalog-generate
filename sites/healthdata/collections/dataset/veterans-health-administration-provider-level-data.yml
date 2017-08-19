@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of all VHA hospitals. The list includes addresses and phone numbers.</p>\n"
+distribution:
+  - {interra-reference: xsl-cfe2a236-27f7-4698-b1b5-5c1a7df67ff9}
+  - {interra-reference: rdf-4e6b622e-f88c-4feb-a54d-3b1d16f0c2b0}
+  - {interra-reference: json-c1517af1-4023-4457-b0be-a727a6759006}
+  - {interra-reference: xsl-cfe2a236-27f7-4698-b1b5-5c1a7df67ff9}
+identifier: 'https://data.medicare.gov/api/views/uyx4-5s7f'
+keyword:
+  - 'hospital compare'
+  - 'provider level data'
+  - 'veterans health administration'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Veterans Health Administration Provider Level Data'
+programCode:
+  - '009:000'

@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of VHA hospitals with inpatient experience of care survey data. The VA SHEP uses the same questions as the Hospital Consumer Assessment of Health Providers and Systems (HCAHPS) Survey shown on Hospital Compare, however, the results do not represent official HCAHPS results.</p>\n"
+distribution:
+  - {interra-reference: xsl-6933aa58-52a0-4071-8895-2b708b8d62ca}
+  - {interra-reference: rdf-b6255491-293e-4ca0-b112-c9bb8ea1fae4}
+  - {interra-reference: json-e61e2d61-88a9-4e33-b2a1-206a8dec4a81}
+  - {interra-reference: xsl-6933aa58-52a0-4071-8895-2b708b8d62ca}
+identifier: 'https://data.medicare.gov/api/views/gesg-pgbr'
+keyword:
+  - veterans
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Veterans Health Administration Survey of Healthcare Experiences of Patients (SHEP)'
+programCode:
+  - '009:000'

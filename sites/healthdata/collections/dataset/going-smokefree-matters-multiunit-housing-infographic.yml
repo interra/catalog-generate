@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Explore the Going Smokefree Matters â Multiunit Housing Infographic which outlines key facts related to the effects of secondhand smoke exposure in multiunit housing.</p>\n"
+distribution:
+  - {interra-reference: pdf-380b9446-ea16-478a-b66e-1942a0f8662d}
+identifier: 'https://data.cdc.gov/api/views/d9eu-6czr'
+keyword:
+  - 'fact sheet'
+  - infographic
+  - 'multiunit housing'
+  - 'secondhand smoke'
+  - smokefree
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-08-04'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Going Smokefree Matters - Multiunit Housing Infographic'

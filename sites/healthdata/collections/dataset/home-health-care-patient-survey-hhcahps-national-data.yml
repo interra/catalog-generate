@@ -1,0 +1,32 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HomeHealthQualityQuestions@cms.hhs.gov'
+description: "<p>Home Health Care - Patient survey (HHCAHPS) National Data</p>\n"
+distribution:
+  - {interra-reference: xsl-1aa77bd2-7591-4054-aef0-e32d13719ff1}
+  - {interra-reference: rdf-4274baab-c3f9-4996-83d4-330d24190451}
+  - {interra-reference: json-f89624ee-e5d5-4384-ad1e-5868a092795f}
+  - {interra-reference: xsl-1aa77bd2-7591-4054-aef0-e32d13719ff1}
+identifier: 'https://data.medicare.gov/api/views/vxub-6swi'
+keyword:
+  - comparison
+  - facilities
+  - hhc
+  - hhcahps
+  - 'home health agencies'
+  - 'patient survey results'
+  - quality
+  - ratings
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Home Health Care - Patient survey (HHCAHPS) National Data'

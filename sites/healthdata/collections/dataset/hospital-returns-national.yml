@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>Hospital returns â national data. This data set includes national-level data for the hospital return days  (or excess days in acute care) measures and the 30-day readmission measures.</p>\n"
+distribution:
+  - {interra-reference: xsl-397b2ced-2798-45a1-83ec-32ffdb7c0721}
+  - {interra-reference: rdf-0db32100-bfc8-4369-91fa-01eb3d4cda3a}
+  - {interra-reference: json-c7c88a15-0ad0-4d62-823e-e5a68105b4c7}
+  - {interra-reference: xsl-397b2ced-2798-45a1-83ec-32ffdb7c0721}
+identifier: 'https://data.medicare.gov/api/views/cvcs-xecj'
+keyword:
+  - 'hospital compare'
+  - 'hospital returns'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital Returns - National'

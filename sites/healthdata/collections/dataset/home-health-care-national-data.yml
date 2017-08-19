@@ -1,0 +1,31 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HomeHealthQualityQuestions@cms.hhs.gov'
+description: "<p>The national averages for critical quality measures of Home Health Agencies.</p>\n"
+distribution:
+  - {interra-reference: xsl-da506026-2065-4cdc-9645-2ad49d965344}
+  - {interra-reference: rdf-12ff9ac0-efd2-493d-bf57-8a4bcaee4ccc}
+  - {interra-reference: json-dafc11a7-8ae2-4087-b513-86aab5d57b8c}
+  - {interra-reference: xsl-da506026-2065-4cdc-9645-2ad49d965344}
+identifier: 'https://data.medicare.gov/api/views/97z8-de96'
+keyword:
+  - comparison
+  - facilities
+  - hhc
+  - 'national average'
+  - quality
+  - 'quality measures'
+  - ratings
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-15'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Home Health Care - National Data'

@@ -1,0 +1,24 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:medicareproviderdata@cms.hhs.gov'
+description: "<p>In FY 2016, 758 out of 3,308 hospitals subject to the HAC Reduction Program are in the worst performing quartile and will have a one percent payment reduction applied to all Medicare discharges occurring between October 1, 2015 and September 30, 2016. In FY 2015, 724 hospitals were subject to a payment reduction.</p>\n"
+distribution:
+  - {interra-reference: html-3d3f5614-3c32-4a67-b0f0-d4edaa6b6b4d}
+identifier: '631'
+keyword:
+  - 'Interactive Tools'
+  - 'Long Term Care (LTC)'
+  - 'Publically Available Data File - for download'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-18'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital-Acquired Condition Reduction Program'

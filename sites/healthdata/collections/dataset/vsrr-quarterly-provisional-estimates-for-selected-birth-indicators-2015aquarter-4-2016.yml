@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p>Provisional estimates of selected reproductive indicators from birth data for 2015 through the fourth quarter of 2016. Estimates are presented for: general fertility rates, age-specific birth rates, total and low risk cesarean delivery rates, preterm birth rates and other gestational age categories.</p>\n"
+distribution:
+  - {interra-reference: xsl-7322ad9e-266a-45a5-ab84-9750417cc3cb}
+  - {interra-reference: rdf-3bbb6192-9e79-42ac-b285-3d6abae64ec4}
+  - {interra-reference: json-25c1ec8c-2429-4c72-a3f5-059d40db9b2d}
+  - {interra-reference: xsl-7322ad9e-266a-45a5-ab84-9750417cc3cb}
+identifier: 'https://data.cdc.gov/api/views/76vv-a7x8'
+keyword:
+  - 'birth rate'
+  - 'cesarean delivery'
+  - 'fertility rate'
+  - 'preterm birth'
+  - 'vital statistics rapid release'
+  - vsrr
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'VSRR - Quarterly provisional estimates for selected birth indicators, 2015âQuarter 4, 2016'

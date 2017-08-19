@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>TheÂ\_Healthcare-Associated Infections (HAI)Â\_measures - national data.  These measures are developed byÂ\_Centers for Disease Control and Prevention (CDC)Â\_and collected through theÂ\_National Healthcare Safety Network (NHSN). They provide information on infections that occur while the patient is in the hospital. These infections can be related to devices, such as central lines and urinary catheters, or spread from patient to patient after contact with an infected person or surface. Many healthcare associated infections can be prevented when the hospitals useÂ\_CDC-recommended infection control steps.</p>\n"
+distribution:
+  - {interra-reference: xsl-e748d2fe-b705-49b1-bc00-9d062afa317b}
+  - {interra-reference: rdf-183cca07-b155-4555-bfc6-002735c06ac7}
+  - {interra-reference: json-096a86df-1358-446f-bcfa-431ddd11d82e}
+  - {interra-reference: xsl-e748d2fe-b705-49b1-bc00-9d062afa317b}
+identifier: 'https://data.medicare.gov/api/views/yd3s-jyhd'
+keyword:
+  - complications
+  - 'hospital compare'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-28'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Healthcare Associated Infections - National'

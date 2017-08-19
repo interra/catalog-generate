@@ -1,0 +1,24 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:cms.data@cms.hhs.gov'
+description: "<p>These are the official datasets used on the Medicare.gov Dialysis Facility Compare Website provided by the Centers for Medicare and Medicaid Services.  These data allow you to compare the quality of care provided in Medicare-certified dialysis facilities nationwide.</p>\n"
+distribution:
+  - {interra-reference: csv-013ce36f-843f-4d6d-a91f-372b5c915da3}
+identifier: '470'
+keyword:
+  - 'Dialysis Center'
+  - 'End Stage Renal Disease (ESRD)'
+  - 'Publically Available Data File - for download'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-18'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Dialysis Facility Compare Data'

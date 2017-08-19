@@ -1,0 +1,31 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:vgp3@cdc.gov'
+description: "<p>The Water Fluoridation Reporting System (WFRS) has been developed to provide tools to assist states in managing fluoridation programs. WFRS is designed to track all community water systems including: 1) fluoridated water systems; 2) water systems that add fluoride; 3) water systems that are naturally fluoridated; 4) water systems that are not fluoridated.</p>\n"
+distribution:
+  - {interra-reference: xsl-73c05198-1c43-4aa9-821f-80292c067c4a}
+  - {interra-reference: rdf-06b01ab4-1c10-4a26-86fb-9e3c1e49780b}
+  - {interra-reference: json-2af0d42a-abd7-4e22-afcd-e4afd1007f23}
+  - {interra-reference: xsl-73c05198-1c43-4aa9-821f-80292c067c4a}
+identifier: 'https://data.cdc.gov/api/views/igqt-5aky'
+keyword:
+  - fluoridation
+  - national
+  - 'oral health'
+  - pws
+  - state
+  - 'water system'
+  - wfrs
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-29'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'State and National Water Fluoridation System (Public Water Systems)'

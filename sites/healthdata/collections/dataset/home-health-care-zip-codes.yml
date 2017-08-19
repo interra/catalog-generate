@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HomeHealthQualityQuestions@cms.hhs.gov'
+description: "<p>Home Health Care - Zip Codes</p>\n"
+distribution:
+  - {interra-reference: xsl-f57db7d6-9443-4f43-bf58-5dec5021e166}
+  - {interra-reference: rdf-625f122c-eb4c-4ab8-b61f-6d9594b5c648}
+  - {interra-reference: json-2560cdd1-bc5a-4eb5-81e7-04489c98e8e0}
+  - {interra-reference: xsl-f57db7d6-9443-4f43-bf58-5dec5021e166}
+identifier: 'https://data.medicare.gov/api/views/m5eg-upu5'
+keyword:
+  - 'general information'
+  - hhc
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Home Health Care - Zip Codes'

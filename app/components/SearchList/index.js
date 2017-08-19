@@ -5,8 +5,9 @@ import List from 'components/List';
 import ListItem from 'components/ListItem';
 import LoadingIndicator from 'components/LoadingIndicator';
 import SearchListItem from 'containers/SearchListItem';
+import H3 from './H3';
 
-function SearchList({ loading, error, results }) {
+function SearchList({ loading, error, results, resultmessage }) {
   if (loading) {
     return <List component={LoadingIndicator} />;
   }
@@ -19,7 +20,8 @@ function SearchList({ loading, error, results }) {
   }
 
   if (results !== false) {
-    return <List items={results} component={SearchListItem} />;
+
+    return <span><H3>{resultmessage}</H3><List items={results} component={SearchListItem} /></span>;
   }
 
   return null;

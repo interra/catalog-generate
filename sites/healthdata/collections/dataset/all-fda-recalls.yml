@@ -1,0 +1,32 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:10'
+contactPoint:
+  fn: 'FDA Enterprise Data Inventory'
+  hasEmail: 'mailto:FDA_Enterprise_Data_Inventory@fda.hhs.gov'
+description: "<p>Contains data for FDA recalls from 2009 through the present.</p>\n"
+distribution:
+  - {interra-reference: xml-9fbc7dbd-b6c8-48ca-90f9-8b1b406790ac}
+identifier: d4959928-1229-4fff-a32e-704245f42cb6
+keyword:
+  - 'animal health'
+  - biologics
+  - 'community health'
+  - drugs
+  - food
+  - health
+  - market
+  - 'medical devices'
+  - notifications
+  - recalls
+  - safety
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'All FDA Recalls'

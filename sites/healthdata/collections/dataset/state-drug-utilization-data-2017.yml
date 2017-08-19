@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:00'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Drug utilization data are reported by states for covered outpatient drugs that are paid for by state Medicaid agencies since the start of the Medicaid Drug Rebate Program. The data includes state, drug name, National Drug Code, number of prescriptions and dollars reimbursed.</p>\n"
+distribution:
+  - {interra-reference: xsl-a257e815-c136-4f64-acb6-faf012b6f110}
+  - {interra-reference: rdf-fce81922-d0dc-4995-a4ec-e4a73c46d927}
+  - {interra-reference: json-b1913db2-cf2e-4dea-a9c1-d80bb2d9af61}
+  - {interra-reference: xsl-a257e815-c136-4f64-acb6-faf012b6f110}
+identifier: 'https://data.medicaid.gov/api/views/3v5r-x5x9'
+keyword:
+  - 'drug utilization'
+  - 'medicaid reimbursements'
+  - pharmacy
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-29'
+programCode:
+  - '009:076'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'State Drug Utilization Data 2017'

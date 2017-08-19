@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Data collection periods for all measures for VHA hospitals on Hospital Compare.</p>\n"
+distribution:
+  - {interra-reference: xsl-94a4e180-373f-4981-aa5e-bbc93d38cb39}
+  - {interra-reference: rdf-d6823359-c196-48c4-a0bc-d6d9746f7fe7}
+  - {interra-reference: json-0533bb64-932e-43d5-9256-d7ddbc818888}
+  - {interra-reference: xsl-94a4e180-373f-4981-aa5e-bbc93d38cb39}
+identifier: 'https://data.medicare.gov/api/views/4aav-bsmy'
+keyword:
+  - 'hospital compare'
+  - 'measure dates'
+  - 'veterans health administration'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-26'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Veterans Health Administration Measure Dates'
+programCode:
+  - '009:000'

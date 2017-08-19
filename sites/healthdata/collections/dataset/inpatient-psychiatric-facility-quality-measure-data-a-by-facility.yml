@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>The Inpatient Psychiatric Facility Quality Reporting (IPFQR) program currently uses six measures. Psychiatric facilities that are eligible for this program may have their Medicare payments reduced if they do not report.</p>\n"
+distribution:
+  - {interra-reference: xsl-2a57ef38-206f-44af-bdfa-8439c1b62be2}
+  - {interra-reference: rdf-6217e876-4510-4cfa-9a0c-886176808a67}
+  - {interra-reference: json-fd082d07-8198-444c-ae84-1e1e18496565}
+  - {interra-reference: xsl-2a57ef38-206f-44af-bdfa-8439c1b62be2}
+identifier: 'https://data.medicare.gov/api/views/q9vs-r7wp'
+keyword:
+  - facility
+  - 'hospital compare'
+  - psych
+  - 'timely and effective care'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Inpatient Psychiatric Facility Quality Measure Data â by Facility'

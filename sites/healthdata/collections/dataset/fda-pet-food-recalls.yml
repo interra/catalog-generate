@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:10'
+contactPoint:
+  fn: 'FDA Enterprise Data Inventory'
+  hasEmail: 'mailto:FDA_Enterprise_Data_Inventory@fda.hhs.gov'
+description: "<p>Contains data for FDA pet food recalls since January 1, 2006.</p>\n"
+distribution:
+  - {interra-reference: excel-68045763-8526-492f-b458-402ab4fa1496}
+identifier: 617db889-3907-4429-aa64-b4747156d437
+keyword:
+  - 'community health'
+  - health
+  - market
+  - notifications
+  - 'pet food'
+  - recalls
+  - safety
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'FDA Pet Food Recalls'

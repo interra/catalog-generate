@@ -20,11 +20,13 @@ function get(site) {
     var schemaName = siteInfo.getConfigItem(site, 'schema');
     var schema = new Schema(schemaName);
     var collections = schema.getConfigItem('collections');
+    var facets = schema.getConfigItem('facets');
     var buildDir = config.get('buildDir');
     var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
     var schemas = {
       collections: collections,
-      schema: {}
+      schema: {},
+      facets: facets,
     }
     Async.each(collections, function(collection, callback) {
         const content = new Content[storage](site);
@@ -66,5 +68,5 @@ function get(site) {
 }
 
 module.exports = {
-   get 
+   get
 }

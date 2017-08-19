@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Table 2: FY2013 Distribution of Net Change in Base Operating DRG Payment Amount</p>\n"
+distribution:
+  - {interra-reference: textxml-5977b939-5bed-4bf3-94b4-f794ac49eb5f}
+  - {interra-reference: rdf-24161b8d-17fd-4007-b397-790ce8ecdd48}
+  - {interra-reference: json-a519bb92-43e6-4214-9460-0288cfc23b39}
+  - {interra-reference: textxml-5977b939-5bed-4bf3-94b4-f794ac49eb5f}
+identifier: 1212a8a3-379c-4f7a-9461-e9996858aa32
+keyword:
+  - hospital
+  - linking-quality-to-payment
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'Table 2: FY2013 Distribution of Net Change in Base Operating DRG Payment Amount'
+programCode:
+  - '009:000'

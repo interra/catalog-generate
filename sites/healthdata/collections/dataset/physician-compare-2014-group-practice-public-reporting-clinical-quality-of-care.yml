@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:PhysicianCompare@westat.com'
+description: "<p>Physician Quality Reporting System (PQRS) measures performance rates reported by group practices via the Web Interface.</p>\n"
+distribution:
+  - {interra-reference: xsl-2468858d-3c3e-447d-864d-19c2205df5e8}
+  - {interra-reference: rdf-d8c5e41b-8587-46d7-b34a-6d3848f0240e}
+  - {interra-reference: json-be124cb9-7dbd-4f37-961f-50c38ef0d944}
+  - {interra-reference: xsl-2468858d-3c3e-447d-864d-19c2205df5e8}
+identifier: 'https://data.medicare.gov/api/views/yfyj-vj3w'
+keyword:
+  - 'physician compare'
+  - 'physician quality reporting system'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-10-26'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Physician Compare 2014 Group Practice Public Reporting - Clinical Quality Of Care'

@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p>Revisions to the International Classification of Diseases (ICD) over time may result in discontinuities in cause-of-death trends.<br />\n<a href=\"http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/\">http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-4c28414c-36f2-4762-9903-2f4ef31ba023}
+  - {interra-reference: rdf-4f655bbc-3bd6-443d-967f-590627bc3828}
+  - {interra-reference: json-21ef95a4-b947-426b-b34a-bc873a6adc43}
+  - {interra-reference: xsl-4c28414c-36f2-4762-9903-2f4ef31ba023}
+identifier: 'https://data.cdc.gov/api/views/6rkc-nb2q'
+keyword:
+  - 'age-adjusted death rate'
+  - 'cause of death'
+  - nchs
+  - 'united states'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Age-adjusted Death Rates for Selected Major Causes of Death: United States, 1900-2013'

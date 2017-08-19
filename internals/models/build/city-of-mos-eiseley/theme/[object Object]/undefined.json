@@ -1,0 +1,8 @@
+(err,out) => {
+                        if (err) {
+                            console.log("Error creating " +  results.identifier);
+                        }
+                        else {
+                            console.log(chalk.green("File created for " + results.identifier));
+                        }
+                    }

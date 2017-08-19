@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+bureauCode:
+  - '009:00'
+contactPoint:
+  fn: 'Health Data @ HHS'
+  hasEmail: 'mailto:HealthData@HHS.gov'
+description: "<p>The Enterprise Data Inventory (EDI) is the comprehensive inventory listing of agency data resources including public, restricted public, and non-public datasets.</p>\n"
+distribution:
+  - {interra-reference: 2016-11-hhs-edi-json-7bfaa176-8ed0-4034-8e8b-8cd9631d6155}
+  - {interra-reference: 2015-11-hhs-edi-json-49528bfb-45ad-4c9a-bfc9-465842840f54}
+  - {interra-reference: 2016-02-hhs-edi-json-2743794b-21ef-4449-b791-724be36826b4}
+  - {interra-reference: 2016-05-hhs-edi-json-aa474d51-850f-41b7-a892-9f7b95aae0e2}
+  - {interra-reference: 2016-08-hhs-edi-json-a88a088c-551a-46dd-af26-94e67a7eb931}
+  - {interra-reference: 2016-11-hhs-edi-json-7bfaa176-8ed0-4034-8e8b-8cd9631d6155}
+identifier: c5acee93-1748-4fcf-8fcb-5c35f0336526
+keyword:
+  - catalog
+  - EDI
+  - 'Enterprise Data Inventory'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'HHS Enterprise Data Inventory'
+programCode:
+  - '009:000'
+accessLevel: public

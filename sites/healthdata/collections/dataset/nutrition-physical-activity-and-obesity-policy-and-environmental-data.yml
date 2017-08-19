@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>This dataset includes data on policy and environmental supports for physical activity, diet, and breastfeeding. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding.</p>\n"
+distribution:
+  - {interra-reference: xsl-d79065e1-ad75-4663-b102-70cfc7588ea3}
+  - {interra-reference: rdf-ad05d16c-950d-4374-ad7c-9bf058f8835a}
+  - {interra-reference: json-dfbc6eec-2de0-4bde-9985-4ec6840dde88}
+  - {interra-reference: xsl-d79065e1-ad75-4663-b102-70cfc7588ea3}
+identifier: 'https://data.cdc.gov/api/views/k8w5-7ju6'
+keyword:
+  - breastfeeding
+  - dnpao
+  - fruit
+  - nutrition
+  - 'physical activity'
+  - vegetable
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-05-27'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Nutrition, Physical Activity, and Obesity - Policy and Environmental Data'

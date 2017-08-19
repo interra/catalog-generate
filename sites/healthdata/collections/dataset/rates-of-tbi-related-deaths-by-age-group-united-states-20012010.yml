@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:iqw7@cdc.gov'
+description: "<p>Changes in the rates of TBI-related deaths vary depending on age.  For persons 44 years of age and younger, TBI-related deaths decreased between the periods of 2001–2002 and 2009–2010.  Rates for age groups 45–64 years of age remained stable for this same ten-year period.  For persons 65 years and older, rates of TBI-related deaths increased during this time period, from 41.2 to 45.2 deaths per 100,000.</p>\n<p>Go to <a href=\"http://www.cdc.gov/traumaticbraininjury/data/index.html\">http://www.cdc.gov/traumaticbraininjury/data/index.html</a> to view more TBI data &amp; statistics.</p>\n<p>Source: <a href=\"http://www.cdc.gov/traumaticbraininjury/data/rates_deaths_byage.html\">http://www.cdc.gov/traumaticbraininjury/data/rates_deaths_byage.html</a></p>\n"
+distribution:
+  - {interra-reference: xsl-df2cdcc6-5cc4-4585-b1af-0ef28f2df3bc}
+  - {interra-reference: rdf-b3e5b4ca-daee-4464-bdc8-9bad76c7de5a}
+  - {interra-reference: json-a5e3a998-9880-4a06-afee-724c94d1fd6c}
+  - {interra-reference: xsl-df2cdcc6-5cc4-4585-b1af-0ef28f2df3bc}
+identifier: 'https://data.cdc.gov/api/views/nq6q-szvs'
+keyword:
+  - 'brain injury'
+  - 'head trauma'
+  - tbi
+  - 'traumatic brain injury'
+language:
+  - en
+modified: '2016-08-04'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Rates of TBI-related Deaths by Age Group — United States, 2001–2010'

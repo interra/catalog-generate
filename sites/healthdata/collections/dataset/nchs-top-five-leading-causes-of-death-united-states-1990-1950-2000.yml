@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/\">http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-6d558d5f-5a01-44db-aaaf-fee8edbd1fff}
+  - {interra-reference: rdf-9711ccdd-2c25-4095-80d7-5681d8b740b0}
+  - {interra-reference: json-8e22cb15-c801-4372-a18d-387ffef7f878}
+  - {interra-reference: xsl-6d558d5f-5a01-44db-aaaf-fee8edbd1fff}
+identifier: 'https://data.cdc.gov/api/views/mc4y-cbbv'
+keyword:
+  - 'cause of death'
+  - nchs
+  - 'united states'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Top Five Leading Causes of Death: United States, 1990, 1950, 2000'

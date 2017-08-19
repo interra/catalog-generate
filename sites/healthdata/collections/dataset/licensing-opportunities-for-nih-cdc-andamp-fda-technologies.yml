@@ -1,0 +1,33 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+accrualPeriodicity: R/P1D
+contactPoint:
+  fn: 'Ajoy Prabhu'
+  hasEmail: 'mailto:aprabhu@od.nih.gov'
+description: "<p>This dataset represents all technologies available for licensing from the National Institutes of Health (NIH), the Food and Drug Administration (FDA), and the Center for Disease Control and Prevention (CDC).</p>\n"
+distribution:
+  - {interra-reference: nih-ott-api-260d28af-81ae-495a-9c6f-cc025438748a}
+  - {interra-reference: nih-ott-api-260d28af-81ae-495a-9c6f-cc025438748a}
+identifier: caf1a232-013f-4bcf-9258-d7fc10adc73e
+keyword:
+  - cdc
+  - fda
+  - innovation
+  - invention
+  - licensing
+  - materials
+  - nih
+  - 'occupational safety'
+  - patents
+  - reasearch
+  - technology
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-05-02'
+publisher:
+  interra-reference: national-institutes-of-health-nih
+temporal: '2014-03-31T20:00:00-04:00/2014-03-31T20:00:00-04:00'
+title: 'Licensing Opportunities for NIH, CDC &amp; FDA Technologies'
+programCode:
+  - '009:000'

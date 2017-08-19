@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p>Provisional estimates of infant mortality (deaths of infants under 1 year per 1,000 live births), neonatal mortality (deaths of infants aged 0-27 days per 1,000 live births), postneonatal mortality (deaths of infants aged 28 days through 11 months per 1,000 live births), and death rates for the five leading causes of infant death for 2014 through the second quarter of 2016.</p>\n"
+distribution:
+  - {interra-reference: xsl-a8fac34b-b766-4c69-8ce6-ef25fabf4ab9}
+  - {interra-reference: rdf-fbf4d0bb-4279-43e7-bfba-2ebb9a525e6e}
+  - {interra-reference: json-2eda07fa-42db-42c1-b48f-e90c54bf7e49}
+  - {interra-reference: xsl-a8fac34b-b766-4c69-8ce6-ef25fabf4ab9}
+identifier: 'https://data.cdc.gov/api/views/jqwm-z2g9'
+keyword:
+  - 'causes of death'
+  - 'infant mortality'
+  - 'national vital statistics system'
+  - nvss
+  - 'vital statistics rapid release'
+  - vsrr
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'VSRR - Quarterly provisional estimates for infant mortality, 2014âQuarter 2, 2016'

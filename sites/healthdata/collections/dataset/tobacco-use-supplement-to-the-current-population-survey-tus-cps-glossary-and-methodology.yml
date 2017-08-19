@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Download the latest version of the Glossary and Methodology File</p>\n"
+distribution:
+  - {interra-reference: zip-2a26eaaf-282c-4f83-8c63-41edd256b24d}
+identifier: 'https://chronicdata.cdc.gov/api/views/idgn-d2g2'
+keyword:
+  - glossary
+  - methodology
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-13'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Tobacco Use Supplement to the Current Population Survey (TUS-CPS) Glossary and Methodology'

@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NLM Customer Service'
+  hasEmail: 'mailto:custserv@nlm.nih.gov'
+description: "<p>RxNorm provides normalized names for clinical drugs and links its names to many of the drug vocabularies commonly used in pharmacy management and drug interaction software, including those of First Databank, Micromedex, MediSpan, Gold Standard, and Multum. By providing links between these vocabularies, RxNorm can mediate messages between systems not using the same software and vocabulary.</p>\n<p>RxNorm now includes the National Drug File - Reference Terminology (NDF-RT) from the Veterans Health Administration. NDF-RT is a terminology used to code clinical drug properties, including mechanism of action, physiologic effect, and therapeutic category.</p>\n"
+distribution:
+  - {interra-reference: prescribable-rxnorm-api-dfcb207c-6679-467d-9360-291b1114978d}
+  - {interra-reference: rxnorm-api-c07ee64d-89e4-406b-a050-6823cec5aa29}
+  - {interra-reference: query-interface-rxnav-3d089d6d-b2a2-4116-8b62-f28c2618d666}
+  - {interra-reference: prescribable-rxnorm-api-dfcb207c-6679-467d-9360-291b1114978d}
+identifier: ad22c4fe-caa4-4634-a6dd-4a35e67a3b3b
+keyword:
+  - drugs
+  - generic
+  - naming
+  - pharmaceuticals
+  - semantic
+  - terminology
+language:
+  - en
+modified: '2016-09-16'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: RxNorm
+programCode:
+  - '009:000'

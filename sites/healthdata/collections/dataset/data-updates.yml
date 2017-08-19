@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>Lists the data updates for a scheduled quarterly refresh and as well those that are updated in between refreshes.</p>\n"
+distribution:
+  - {interra-reference: xsl-340d9da0-fead-4e68-b3c4-456505ddaead}
+  - {interra-reference: rdf-7b4ad818-974e-47db-825b-3c31e7225e80}
+  - {interra-reference: json-cf63338e-c01a-4bca-9662-f1642fb23879}
+  - {interra-reference: xsl-340d9da0-fead-4e68-b3c4-456505ddaead}
+identifier: 'https://data.medicare.gov/api/views/bzsr-4my4'
+keyword:
+  - 'general information'
+  - 'hospital compare'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-29'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Data Updates'

@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Table 4: FY2013 Value-Based Incentive Payment Amount</p>\n"
+distribution:
+  - {interra-reference: textxml-751d34ff-22fa-42b5-a354-fe151edae0be}
+  - {interra-reference: rdf-61a24b94-c3cf-4f8b-bcc4-bb9fbc4fe369}
+  - {interra-reference: json-beb1827b-c02d-459c-ad71-0b00b89d1f08}
+  - {interra-reference: textxml-751d34ff-22fa-42b5-a354-fe151edae0be}
+identifier: 1b460a5e-0bbe-445b-9323-460f316bf49f
+keyword:
+  - hospital
+  - linking-quality-to-payment
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'Table 4: FY2013 Value-Based Incentive Payment Amount'
+programCode:
+  - '009:000'

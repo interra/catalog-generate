@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Explore the STATE System with this Quick Start Guide.</p>\n"
+distribution:
+  - {interra-reference: pdf-e4057db4-4e79-4c59-ad37-9b31998790f6}
+identifier: 'https://data.cdc.gov/api/views/gfs7-ehc9'
+keyword:
+  - 'fact sheet'
+  - faq
+  - osh
+  - 'state system'
+  - tobacco
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-17'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'STATE System Quick Start Guide'

@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of VHA hospitals with timely and effective care (process of care) measure data. VHA collects this information through a Quality Improvement Organization (External Peer Review Program) or directly from electronic medical records.</p>\n"
+distribution:
+  - {interra-reference: xsl-aaddae37-90bd-4682-8b7f-287026da68df}
+  - {interra-reference: rdf-49b6d943-f71b-480d-8409-9c110aaf016e}
+  - {interra-reference: json-1f4addc9-49e0-4709-8000-2357e0a6470e}
+  - {interra-reference: xsl-aaddae37-90bd-4682-8b7f-287026da68df}
+identifier: 'https://data.medicare.gov/api/views/ptds-r8im'
+keyword:
+  - veterans
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Veterans Health Administration Timely and Effective Care Data'
+programCode:
+  - '009:000'

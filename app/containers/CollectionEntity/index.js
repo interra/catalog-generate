@@ -55,8 +55,6 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
      }
    }
 
-
-
   render() {
     const { loading, error, repos, collection } = this.props;
     const reposListProps = {
@@ -74,7 +72,6 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
     } else {
       button = "";
     }
-
 
     return (
       <PageContainer>

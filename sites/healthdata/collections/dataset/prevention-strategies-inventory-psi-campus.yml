@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: 'restricted public'
+bureauCode:
+  - '009:30'
+contactPoint:
+  fn: 'Condron, Susanne'
+  hasEmail: 'mailto:SPDCRequests@icfi.com'
+description: "<p>The PSI dataset contains information about the types of strategies that GLS grantees are implementing as part of their suicide prevention activities.</p>\n"
+distribution:
+  - {interra-reference: prevention-strategies-inventory-psi-campus-d78e7e0b-e272-418a-9e6d-85c8f050df02}
+identifier: 3e514106-74d8-4dfe-94f1-6ff7944e6fbe
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-08-05'
+publisher:
+  interra-reference: substance-abuse-andamp-mental-health-services-administration
+references:
+  - 'https://www.suicideprevention-datacenter.com/spdc/login/pud/pud_request_dua.cfm'
+temporal: '2006-09-30T20:00:00-04:00/2006-09-30T20:00:00-04:00'
+title: 'Prevention Strategies Inventory (PSI) Campus'
+programCode:
+  - '009:000'
+keyword:
+  - substance-abuse-amp-mental-health-services-administration

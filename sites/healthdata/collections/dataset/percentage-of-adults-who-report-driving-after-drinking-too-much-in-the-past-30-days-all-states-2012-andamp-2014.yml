@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Source: Behavioral Risk Factor Surveillance System (BRFSS), 2012 &amp; 2014.</p>\n"
+distribution:
+  - {interra-reference: xsl-74871eb4-38f8-4481-ac47-a5826e483786}
+  - {interra-reference: rdf-42e7be4e-097a-4a14-ab97-0027ea7abe5d}
+  - {interra-reference: json-1c8fdaa5-922d-4fb3-8320-4b76c151676c}
+  - {interra-reference: xsl-74871eb4-38f8-4481-ac47-a5826e483786}
+identifier: 'https://data.cdc.gov/api/views/s9bp-7k3m'
+keyword:
+  - cdc
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-10-07'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Percentage of Adults Who Report Driving After Drinking Too Much (in the past 30 days), All States, 2012 &amp; 2014'

@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Consumer Assessment of Healthcare Providers and Systems (CAHPS) for PQRS measure performance rates reported by groups.</p>\n"
+distribution:
+  - {interra-reference: xsl-6563c608-3b98-475e-8e6f-22cf00bb615b}
+  - {interra-reference: rdf-af3818e8-7e33-45ef-a896-3a5e4a7a0106}
+  - {interra-reference: json-05ac1d51-898a-4c5c-ad60-719fd324d192}
+  - {interra-reference: xsl-6563c608-3b98-475e-8e6f-22cf00bb615b}
+identifier: 'https://data.medicare.gov/api/views/2x5u-g5ws'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-07'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Physician Compare 2015 Group Public Reporting - Patient Experience'
+programCode:
+  - '009:000'
+keyword:
+  - centers-for-medicare-amp-medicaid-services

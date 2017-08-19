@@ -1,0 +1,31 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:10'
+contactPoint:
+  fn: 'FDA Enterprise Data Inventory'
+  hasEmail: 'mailto:FDA_Enterprise_Data_Inventory@fda.hhs.gov'
+description: "<p>This list is intended to alert consumers about Web sites that are or were illegally marketing unapproved, uncleared, or unauthorized products in relation to the 2009 H1N1 Flu Virus (sometimes referred to as the 'swine flu' virus).</p>\n"
+distribution:
+  - {interra-reference: xml-486490e5-38a3-40be-9c26-3ac8e55fabb2}
+identifier: 8b366073-48df-4c87-9120-9878f4875373
+keyword:
+  - 'community health'
+  - h1n1
+  - health
+  - influenza
+  - market
+  - notifications
+  - ora
+  - recalls
+  - safety
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+temporal: '2009-01-01T00:00:00-05:00/2009-12-31T00:00:00-05:00'
+title: 'Fraudulent 2009 H1N1 Influenza Products'

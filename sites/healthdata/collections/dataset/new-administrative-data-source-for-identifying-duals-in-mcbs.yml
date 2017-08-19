@@ -1,0 +1,24 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:cms.data@cms.hhs.gov'
+description: "<p>The MCBS team is in the process of reviewing data operations, and as part of this work, we are utilizing a new administrative source for determining Medicaid participation in order to be more consistent with guidelines suggested by the Federal Medicare-Medicaid Coordination Office at the Centers for Medicare and Medicaid Services (CMS). This paper describes the impact this change will have on estimates of Medicare-Medicaid enrollees in the MCBS.</p>\n"
+distribution:
+  - {interra-reference: resource-c204e176-c2b0-438a-8d75-93833bb76a96}
+identifier: '593'
+keyword:
+  - 'Dual Eligibles'
+  - 'Physician Services'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+temporal: '2016-06-23T20:11:00-04:00/2016-06-23T20:11:00-04:00'
+title: 'New Administrative Data Source for Identifying Duals In MCBS'

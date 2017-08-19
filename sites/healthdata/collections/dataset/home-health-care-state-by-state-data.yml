@@ -1,0 +1,32 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HomeHealthQualityQuestions@cms.hhs.gov'
+description: "<p>State averages of several home health agency quality measures for Home Health Agencies.</p>\n"
+distribution:
+  - {interra-reference: xsl-05d88837-dd4e-4298-b6fb-6976a1650517}
+  - {interra-reference: rdf-cb4f1695-7d81-44b6-bb00-995f664635b5}
+  - {interra-reference: json-d1386f76-e91c-4975-a179-5c3f86343073}
+  - {interra-reference: xsl-05d88837-dd4e-4298-b6fb-6976a1650517}
+identifier: 'https://data.medicare.gov/api/views/tee5-ixt5'
+keyword:
+  - comparison
+  - facilities
+  - hhc
+  - 'home health agencies'
+  - quality
+  - 'quality measures'
+  - ratings
+  - 'state average'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Home Health Care - State by State Data'

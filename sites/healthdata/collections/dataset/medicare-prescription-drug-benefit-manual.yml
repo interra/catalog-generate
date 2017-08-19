@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:cms.data@cms.hhs.gov'
+description: "<p>The Part D Prescription Drug Benefit Manual (PDBM) is user guide to Part D Prescription Drug Program.  It includes information on general provisions, benefits, beneficiary protection, and more.</p>\n"
+distribution:
+  - {interra-reference: resource-39a0aed2-297a-4827-aa5d-2d122e79b550}
+identifier: '356'
+keyword:
+  - 'Prescription Drug Plans'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Medicare Prescription Drug Benefit Manual'

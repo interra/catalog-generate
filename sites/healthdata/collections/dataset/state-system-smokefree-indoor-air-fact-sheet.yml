@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Explore state smokefree indoor air laws. For accessibility issues contact <a href=\"mailto:OSHData@cdc.gov\">OSHData@cdc.gov</a>.</p>\n"
+distribution:
+  - {interra-reference: pdf-4d645121-153c-4481-96f5-c917ac80726a}
+identifier: 'https://data.cdc.gov/api/views/vgq2-kkcg'
+keyword:
+  - 'fact sheet'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-05-27'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'STATE System Smokefree Indoor Air Fact Sheet'

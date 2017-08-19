@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:PhysicianCompare@westat.com'
+description: "<p>The Physician Compare National Downloadable File  is organized at the individual eligible professional level; each line is unique at the professional/enrollment record/Group Practice/address level. Professionals with multiple Medicare enrollment records and/or single enrollments linking to multiple practice location addresses are listed on multiple lines.</p>\n"
+distribution:
+  - {interra-reference: xsl-2906f421-ac54-4480-9915-c75f3527ba85}
+  - {interra-reference: rdf-263eaa2a-ae79-4bd0-89e0-5b1736b3c085}
+  - {interra-reference: json-fce2aaa1-1d99-4b6e-a52d-dc96a16de48c}
+  - {interra-reference: xsl-2906f421-ac54-4480-9915-c75f3527ba85}
+identifier: 'https://data.medicare.gov/api/views/mj5m-pzi6'
+keyword:
+  - doctors
+  - 'eligible professional'
+  - 'healthcare professional'
+  - 'physician compare'
+  - physicians
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-20'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Physician Compare National Downloadable File'

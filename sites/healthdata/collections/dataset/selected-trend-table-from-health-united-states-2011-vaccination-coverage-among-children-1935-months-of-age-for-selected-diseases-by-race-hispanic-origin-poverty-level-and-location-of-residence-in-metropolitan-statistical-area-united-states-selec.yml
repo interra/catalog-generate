@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:healthdata@hhs.gov'
+description: "<p>Health, United States is an annual report on trends in health statistics, find more information at <a href=\"http://www.cdc.gov/nchs/hus.htm\">http://www.cdc.gov/nchs/hus.htm</a>.</p>\n"
+distribution:
+  - {interra-reference: xsl-e48afae4-d4ee-40e6-9ef3-77c4333a3ef0}
+  - {interra-reference: rdf-bac62571-735f-4dd2-ac39-1f8f54460dde}
+  - {interra-reference: json-0e1114db-5994-48e3-9ff5-8ac0d153da5a}
+  - {interra-reference: xsl-e48afae4-d4ee-40e6-9ef3-77c4333a3ef0}
+identifier: 'https://data.cdc.gov/api/views/nkri-ptxd'
+keyword:
+  - children
+  - hus
+  - vaccination
+language:
+  - en
+modified: '2016-08-04'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Selected Trend Table from Health, United States, 2011. Vaccination coverage among children 19–35 months of age for selected diseases, by race, Hispanic origin, poverty level, and location of residence in metropolitan statistical area: United States, selec'

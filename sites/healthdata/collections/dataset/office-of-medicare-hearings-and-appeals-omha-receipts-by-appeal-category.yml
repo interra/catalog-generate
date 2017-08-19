@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+bureauCode:
+  - '009:00'
+contactPoint:
+  fn: 'Kimberly Rubi'
+  hasEmail: 'mailto:kimberly.rubi@hhs.gov'
+description: "<p>This data set provides information about the appeals and claims received by the Office of Medicare and Hearings by appeal category for Fiscal Year 2006 - 2012.</p>\n"
+distribution:
+  - {interra-reference: csv-cd36d282-0046-4a7b-beda-f2e2287efa94}
+  - {interra-reference: csv-5aeea893-d39a-40ee-8bee-4a1191d24df1}
+  - {interra-reference: csv-1e0e58b9-71ed-43fd-9e6a-a315c3c41328}
+  - {interra-reference: csv-cd36d282-0046-4a7b-beda-f2e2287efa94}
+identifier: 6db3eff5-b903-43cd-8447-ec536bde3c1f
+keyword:
+  - 'appeal category'
+  - appeals
+  - claims
+  - medicare
+  - omha
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-09-02'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+temporal: '2005-12-31T19:00:00-05:00/2011-12-31T19:00:00-05:00'
+title: 'Office of Medicare Hearings and Appeals (OMHA) - Receipts by Appeal Category'
+accessLevel: public

@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:10'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>The CDRH Inspections Database provides information about medical device inspections that were the responsibility of CDRH from 2008 to the present.</p>\n"
+distribution:
+  - {interra-reference: httpwwwaccessdatafdagovscriptscdrhcfdocscftplcinspectcfm-d117e302-4810-4202-bc78-c651ec2380da}
+identifier: 967b3009-7fda-40fe-8094-0981af1dbd94
+keyword:
+  - cdrh
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+programCode:
+  - '009:005'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'CDRH Inspections Database'

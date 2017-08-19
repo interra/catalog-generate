@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>1995-2017. Centers for Disease Control and Prevention (CDC). State Tobacco Activities Tracking and Evaluation (STATE) System.  E-Cigarette LegislationâSmokefree Campus. The STATE System houses current and historical state-level legislative data on tobacco use prevention and control policies. Data are reported on a quarterly basis. Data include state smokefree indoor air laws for smokefree campuses in private and public colleges and schools (K-12).</p>\n"
+distribution:
+  - {interra-reference: xsl-45f749e4-03b8-4231-b849-c800ac3bbdfc}
+  - {interra-reference: rdf-4cc3014f-db98-47d0-bf1b-b09742b8643e}
+  - {interra-reference: json-a8e2feee-4bf7-49ac-9f15-b6df896736b6}
+  - {interra-reference: xsl-45f749e4-03b8-4231-b849-c800ac3bbdfc}
+identifier: 'https://data.cdc.gov/api/views/itia-u6fu'
+keyword:
+  - e-cigarette
+  - legislation
+  - osh
+  - 'smokefree campus'
+  - 'state system'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-04'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'CDC STATE System E-Cigarette Legislation - Smokefree Campus'

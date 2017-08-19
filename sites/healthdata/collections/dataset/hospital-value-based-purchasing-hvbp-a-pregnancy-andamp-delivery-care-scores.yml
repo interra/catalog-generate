@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of hospitals participating in the Hospital VBP Program and their performance rates and scores for the Pregnancy &amp; Delivery Care measure.</p>\n"
+distribution:
+  - {interra-reference: xsl-2b885a04-7a21-43b5-ac70-e9cc7fb71a4a}
+  - {interra-reference: rdf-b011f120-8e60-40d6-9901-fa40972737c0}
+  - {interra-reference: json-ca6a59ce-ee63-4fde-b3f0-da66ca6f2e04}
+  - {interra-reference: xsl-2b885a04-7a21-43b5-ac70-e9cc7fb71a4a}
+identifier: 'https://data.medicare.gov/api/views/8mqi-75qk'
+keyword:
+  - 'hospital compare'
+  - 'hospital value-based purchasing'
+  - 'linking quality to payment'
+  - 'value-based purchasing'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-30'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital Value-Based Purchasing (HVBP) â Pregnancy &amp; Delivery Care Scores'
+programCode:
+  - '009:000'

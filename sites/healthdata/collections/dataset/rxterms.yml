@@ -1,0 +1,24 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NLM Customer Service'
+  hasEmail: 'mailto:custserv@nlm.nih.gov'
+description: "<p>RxTerms is a drug interface terminology derived from RxNorm for prescription writing or medication history recording (e.g. in e-prescribing systems, PHRs). RxTerms is derived only from the non-proprietary content of RxNorm, which is developed and maintained by the U.S. National Library of Medicine. No fee or license is required to use the RxTerms data.</p>\n"
+distribution:
+  - {interra-reference: download-rxterms-data-1e2f28c0-7fc5-424c-a806-309733a0a293}
+  - {interra-reference: download-rxterms-data-1e2f28c0-7fc5-424c-a806-309733a0a293}
+identifier: d9fe5470-b19a-4860-8da8-70990acaf84a
+keyword:
+  - 'drug terminology'
+  - pharmaceuticals
+  - pharmacy
+language:
+  - en
+modified: '2016-09-16'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: RxTerms
+programCode:
+  - '009:000'

@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:OSHData@cdc.gov'
+description: "<p>1999-2011. The GYTS is a school-based survey that collects data on students aged 13â15 years using a standardized methodology for constructing the sample frame, selecting schools and classes, and processing data. The GYTS surveillance system is intended to enhance the capacity of countries to design, implement, and evaluate tobacco control and prevention programs. Funding for the GYTS has been provided by the Canadian Public Health Association, National Cancer Institute, United Nations Children Emergency Fund, and the World Health OrganizationâTobacco Free Initiative.</p>\n"
+distribution:
+  - {interra-reference: xsl-f153c5e7-1301-43aa-9ec9-6bfa4be32f87}
+  - {interra-reference: rdf-71aa52ba-12ac-4f72-8c1d-e37a60c0f54d}
+  - {interra-reference: json-f8774fdc-45e2-4cf5-891f-31c620b04af1}
+  - {interra-reference: xsl-f153c5e7-1301-43aa-9ec9-6bfa4be32f87}
+identifier: 'https://chronicdata.cdc.gov/api/views/57qw-ifet'
+keyword:
+  - global
+  - gtss
+  - gyts
+  - osh
+  - tobacco
+  - youth
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-12'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Global Tobacco Surveillance System (GTSS) - Global Youth Tobacco Survey (GYTS)'
+programCode:
+  - '009:000'

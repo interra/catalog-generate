@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>QIP data by facility: % patients with Hgb &gt;12.</p>\n"
+distribution:
+  - {interra-reference: textxml-d7eda82e-658f-4c85-a0bf-70c5d71946aa}
+  - {interra-reference: rdf-8ac7daa4-0ee9-476e-b3e4-5c0264ca9254}
+  - {interra-reference: json-362909c2-6ab7-4a51-badd-f92a0a95f791}
+  - {interra-reference: textxml-d7eda82e-658f-4c85-a0bf-70c5d71946aa}
+identifier: a21f0723-4af2-4d46-b27c-77ea73a4160b
+keyword:
+  - dfc
+  - dialysis
+  - dialysis-facilities
+  - linking-quality-to-payment--qip
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'ESRD QIP - Anemia - Payment Year 2015'
+programCode:
+  - '009:000'

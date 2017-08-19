@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Lists the performance and baseline periods for Hospital Value-Based Purchasing</p>\n"
+distribution:
+  - {interra-reference: textxml-fa7fcb70-1d97-4fd2-8978-e81bc765b327}
+  - {interra-reference: rdf-e2ca5b7f-e3dc-43d7-a53b-ca776b73dc40}
+  - {interra-reference: json-f318781e-0474-4a2c-b574-b1b3c73cb93b}
+  - {interra-reference: textxml-fa7fcb70-1d97-4fd2-8978-e81bc765b327}
+identifier: eb8520ae-f6be-4c83-a398-f467598debec
+keyword:
+  - hvbp
+  - linking-quality-to-payment
+  - measure-dates
+  - quarters
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'Hospital Value-Based Purchasing (HVBP) – Quarters file'
+programCode:
+  - '009:000'

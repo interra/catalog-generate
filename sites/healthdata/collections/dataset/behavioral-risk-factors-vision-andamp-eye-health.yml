@@ -1,0 +1,34 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>2005-2015.  In 2013 and subsequently, one question in the core of BRFSS asks about vision: Are you blind or do you have serious difficulty seeing, even when wearing glasses?  From 2005-2011 the BRFSS employed a ten question vision module regarding vision impairment, access and utilization of eye care, and self-reported eye diseases.  The Vision and Eye Health Surveillance System is intended   to provide population estimates of vision loss function, eye diseases, health disparities, as well as barriers and facilitators to access to vision and eye care.  This information can be used for designing, implementing, and evaluating vision and eye health prevention programs.</p>\n"
+distribution:
+  - {interra-reference: xsl-64344603-e121-42eb-a2d1-3c369d758fa7}
+  - {interra-reference: rdf-8f0ef189-69da-4297-927c-e88a9035cad4}
+  - {interra-reference: json-c1f73ed7-80cd-4172-817d-f2cc79743394}
+  - {interra-reference: xsl-64344603-e121-42eb-a2d1-3c369d758fa7}
+identifier: 'https://data.cdc.gov/api/views/pttf-ck53'
+keyword:
+  - diabetes
+  - 'eye diseases'
+  - 'heart diseases'
+  - hypertension
+  - 'physical activity'
+  - smoking
+  - state
+  - stroke
+  - vhi
+  - 'vision impairment'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-21'
+programCode:
+  - '009:029'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Behavioral Risk Factors - Vision &amp; Eye Health'

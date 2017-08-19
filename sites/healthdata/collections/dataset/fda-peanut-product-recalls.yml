@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:10'
+contactPoint:
+  fn: 'FDA Enterprise Data Inventory'
+  hasEmail: 'mailto:FDA_Enterprise_Data_Inventory@fda.hhs.gov'
+description: "<p>Contains data for FDA peanut product recalls since January 2009.</p>\n"
+distribution:
+  - {interra-reference: excel-53fcb48c-ce4e-43e3-af53-2d30a56b83ac}
+identifier: 1fce6941-625f-4dac-ae3b-6664fcfeea6d
+keyword:
+  - 'community health'
+  - food
+  - health
+  - market
+  - notifications
+  - peanut
+  - recalls
+  - safety
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'FDA Peanut Product Recalls'

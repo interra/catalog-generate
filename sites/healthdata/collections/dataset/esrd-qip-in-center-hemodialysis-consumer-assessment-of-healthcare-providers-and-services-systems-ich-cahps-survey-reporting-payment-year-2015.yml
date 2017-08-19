@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Lists ICH CAHPS survey data used by ESRD QIP to assess dialysis facility performance.</p>\n"
+distribution:
+  - {interra-reference: textxml-eadf4363-748c-4aba-a149-71589756b92c}
+  - {interra-reference: rdf-3bee9ca4-13c4-47ec-84bb-01af297ed402}
+  - {interra-reference: json-c20fee8a-542b-4195-80f0-633253f27174}
+  - {interra-reference: textxml-eadf4363-748c-4aba-a149-71589756b92c}
+identifier: c179de40-ce8d-499c-ae76-fccf13b7bfc1
+keyword:
+  - dfc
+  - dialysis
+  - dialysis-facilities
+  - linking-quality-to-payment--qip
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'ESRD QIP - In-Center Hemodialysis Consumer Assessment of Healthcare Providers and Services Systems (ICH CAHPS) Survey Reporting - Payment Year 2015'
+programCode:
+  - '009:000'

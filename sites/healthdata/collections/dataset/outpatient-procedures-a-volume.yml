@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>The aggregate count of selected outpatient procedures performed within the outpatient department from all-payer data.</p>\n"
+distribution:
+  - {interra-reference: xsl-2f326b60-e738-4289-a6ee-f3aa2d6aea79}
+  - {interra-reference: rdf-6a1824ae-5cb1-4dd1-aa6b-fd05fb390458}
+  - {interra-reference: json-515aa4f6-2015-47dd-b552-dd0471a48a9a}
+  - {interra-reference: xsl-2f326b60-e738-4289-a6ee-f3aa2d6aea79}
+identifier: 'https://data.medicare.gov/api/views/xbz4-gvaz'
+keyword:
+  - 'hospital compare'
+  - 'number of medicare patients'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-03'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Outpatient Procedures â Volume'

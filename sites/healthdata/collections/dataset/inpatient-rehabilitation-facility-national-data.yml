@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:IRFQualityQuestions@cms.hhs.gov'
+description: "<p>National data on the quality of patient care measures shown on Inpatient Rehabilitation Facility Compare.</p>\n"
+distribution:
+  - {interra-reference: xsl-1da4156c-f507-4f29-a2e7-e2189b4fa8ac}
+  - {interra-reference: rdf-ee74a4b8-e183-4659-b30b-c4d97864073b}
+  - {interra-reference: json-0b8084d1-e68b-4ae3-aee4-903c14de0671}
+  - {interra-reference: xsl-1da4156c-f507-4f29-a2e7-e2189b4fa8ac}
+identifier: 'https://data.medicare.gov/api/views/nasn-k89k'
+keyword:
+  - 'inpatient rehabilitation facilities'
+  - 'inpatient rehabilitation facility'
+  - rehabilitation
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Inpatient Rehabilitation Facility - National Data'

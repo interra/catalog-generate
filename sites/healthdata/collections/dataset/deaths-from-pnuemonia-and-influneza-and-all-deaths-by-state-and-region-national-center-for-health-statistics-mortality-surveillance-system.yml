@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'Krista Kniss'
+  hasEmail: 'mailto:krk9@cdc.gov'
+description: "<p>Deaths from pnuemonia and influneza and all deaths, by state and region, National Center For Health Statistics Mortality Surveillance System</p>\n"
+distribution:
+  - {interra-reference: xsl-bc2846a9-7f89-4e74-a542-9c88d75faae8}
+  - {interra-reference: rdf-e81e71d6-b645-4249-8692-e5222b9ed5f1}
+  - {interra-reference: json-5bc6e6e6-1af2-41df-a0eb-bb6f897b9d50}
+  - {interra-reference: xsl-bc2846a9-7f89-4e74-a542-9c88d75faae8}
+identifier: 'https://data.cdc.gov/api/views/pp7x-dyj2'
+keyword:
+  - mortality
+  - nchs
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-30'
+programCode:
+  - '54321'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Deaths from pnuemonia and influneza and all deaths, by state and region, National Center For Health Statistics Mortality Surveillance System'

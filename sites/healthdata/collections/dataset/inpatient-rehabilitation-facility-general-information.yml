@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:IRFQualityQuestions@cms.hhs.gov'
+description: "<p>This dataset shows characteristics of the inpatient rehabilitation facilities that are shown on Inpatient Rehabilitation Facility Compare.</p>\n"
+distribution:
+  - {interra-reference: xsl-c463148f-c656-4e2a-b769-48f2bd88f485}
+  - {interra-reference: rdf-93a3c81d-3b35-40d7-b367-e0f4eb815df0}
+  - {interra-reference: json-8e5aa267-1b57-4afb-a33c-d9d0ff0b05ac}
+  - {interra-reference: xsl-c463148f-c656-4e2a-b769-48f2bd88f485}
+identifier: 'https://data.medicare.gov/api/views/7t8x-u3ir'
+keyword:
+  - 'inpatient rehabilitation facilities'
+  - 'inpatient rehabilitation facility'
+  - rehabilitation
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-26'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Inpatient Rehabilitation Facility - General Information'

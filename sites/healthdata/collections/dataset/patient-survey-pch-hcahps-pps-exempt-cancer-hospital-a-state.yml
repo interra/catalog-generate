@@ -1,0 +1,32 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of the state averages for the HCAHPS survey responses. HCAHPS is a national, standardized survey of hospital patients about their experiences during a recent inpatient hospital stay.</p>\n"
+distribution:
+  - {interra-reference: xsl-f9233c9d-8565-421e-84a5-22d3f4a90932}
+  - {interra-reference: rdf-ef5dc8b7-25a2-4c60-ac06-4b3ae6c71d4e}
+  - {interra-reference: json-45d6703e-a821-4477-9e6b-1237c929f178}
+  - {interra-reference: xsl-f9233c9d-8565-421e-84a5-22d3f4a90932}
+identifier: 'https://data.medicare.gov/api/views/qatj-nmws'
+keyword:
+  - hcahps
+  - 'hospital compare'
+  - 'patient survey'
+  - 'patient survey results'
+  - pch
+  - quality
+  - ratings
+  - 'timely and effective care'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Patient Survey (PCH - HCAHPS) PPS-exempt Cancer Hospital â State'
+programCode:
+  - '009:000'

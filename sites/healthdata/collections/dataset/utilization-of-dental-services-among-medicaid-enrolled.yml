@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:mmrr-editors@cms.hhs.gov'
+description: "<p>Medicare and Medicaid Research Review published data brief.  Ellen Bouchery</p>\n"
+distribution:
+  - {interra-reference: resource-5df2cf82-5d04-4f73-8619-9f2269534e1a}
+identifier: '460'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Utilization of Dental Services Among Medicaid-Enrolled...'
+keyword:
+  - centers-for-medicare-amp-medicaid-services

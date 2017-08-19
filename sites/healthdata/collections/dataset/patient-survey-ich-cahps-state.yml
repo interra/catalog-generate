@@ -1,0 +1,31 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:DialysisData@umich.edu'
+description: "<p>State averages for ICH-CAHPS Survey measures. The ICH-CAHPS Survey is a national, standardized survey of in-center hemodialysis patients about their experiences with the facility, facility doctors and staff, and care received.</p>\n"
+distribution:
+  - {interra-reference: xsl-7a437ac4-b65c-4601-8855-3a0143b45221}
+  - {interra-reference: rdf-3daf8700-e080-406d-9523-83d74e409876}
+  - {interra-reference: json-c49e9530-410b-4845-b288-d9eb2d3d1bdb}
+  - {interra-reference: xsl-7a437ac4-b65c-4601-8855-3a0143b45221}
+identifier: 'https://data.medicare.gov/api/views/hanv-ru8h'
+keyword:
+  - cahps
+  - dfc
+  - dialysis
+  - 'dialysis centers'
+  - 'dialysis facilities'
+  - 'experience of care'
+  - 'patient survey'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Patient survey (ICH-CAHPS) - State'

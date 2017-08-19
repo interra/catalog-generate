@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:DialysisData@umich.edu'
+description: "<p>Lists anemia management data used by ESRD QIP to assess dialysis facility performance.</p>\n"
+distribution:
+  - {interra-reference: xsl-9e11c39e-8921-45d9-8e6e-3609e6fc0052}
+  - {interra-reference: rdf-fdb87574-9852-424b-8f50-8fe0a63710e1}
+  - {interra-reference: json-4e8cbe35-545a-48f8-876e-f7bee3b3be1a}
+  - {interra-reference: xsl-9e11c39e-8921-45d9-8e6e-3609e6fc0052}
+identifier: 'https://data.medicare.gov/api/views/t6ez-29z5'
+keyword:
+  - dfc
+  - dialysis
+  - 'dialysis facilities'
+  - 'linking quality to payment - qip'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-02'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'ESRD QIP - Anemia Management Reporting - Payment Year 2017'

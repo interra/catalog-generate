@@ -1,0 +1,32 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Home Health Care - HHCAHPS National Data</p>\n"
+distribution:
+  - {interra-reference: textxml-92e426d7-77be-4935-b7a7-b78f0481989f}
+  - {interra-reference: rdf-af864b3c-6223-4c32-9f0c-ba27f3e2e5a7}
+  - {interra-reference: json-2239afa2-9591-434a-a8a2-d3bae0c3a1c0}
+  - {interra-reference: textxml-92e426d7-77be-4935-b7a7-b78f0481989f}
+identifier: 1e43f534-5235-4006-8383-e276f65005a0
+keyword:
+  - comparison
+  - facilities
+  - hhc
+  - hhcahps
+  - home-health-agencies
+  - patient-survey-results
+  - quality
+  - ratings
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'Home Health Care - HHCAHPS National Data'
+programCode:
+  - '009:000'

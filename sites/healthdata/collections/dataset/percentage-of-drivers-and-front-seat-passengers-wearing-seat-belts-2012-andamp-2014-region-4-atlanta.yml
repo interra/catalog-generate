@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Source for 2012 national data: National Occupant Protection Use Survey (NOPUS), 2012. Source for 2014 national data: National Occupant Protection Use Survey (NOPUS), 2014.  Source for 2012 state data: State Observational Survey of Seat Belt Use, 2012. Source for 2014 state data: Seat Belt Use in 2014- Use Rates in the States and Territories</p>\n"
+distribution:
+  - {interra-reference: xsl-2b8c8973-1313-481a-8282-5d92ca13cf59}
+  - {interra-reference: rdf-562519d0-ebe1-4b1f-8b79-1957974a77ac}
+  - {interra-reference: json-aa8210a0-56a5-4ac6-8f47-612b0599c9c3}
+  - {interra-reference: xsl-2b8c8973-1313-481a-8282-5d92ca13cf59}
+identifier: 'https://data.cdc.gov/api/views/vqff-ff7g'
+keyword:
+  - cdc
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-09-15'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Percentage of Drivers and Front Seat Passengers Wearing Seat Belts, 2012 &amp; 2014, Region 4 - Atlanta'

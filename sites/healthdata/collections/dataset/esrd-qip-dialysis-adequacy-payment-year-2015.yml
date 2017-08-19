@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>ESRD QIP data by facility: % of hemodialysis patient-months with spKt/V &gt;= 1.2; % of peritoneal patient-months with Kt/V &gt;= 1.7 Kt/V (dialytic + residual) during the four-month study period; % of pediatric in-center hemodialysis patient-months with spKt/V &gt;= 1.2</p>\n"
+distribution:
+  - {interra-reference: textxml-131484db-13ef-483a-86e1-144b1f9f7afa}
+  - {interra-reference: rdf-829390b3-7cb7-4459-a978-06ab38cd7444}
+  - {interra-reference: json-757d6d55-e80a-4b07-89ad-678ba8eff528}
+  - {interra-reference: textxml-131484db-13ef-483a-86e1-144b1f9f7afa}
+identifier: 88a2a056-cf3f-4af0-b8e5-c8229366fb64
+keyword:
+  - dfc
+  - dialysis
+  - dialysis-facilities
+  - linking-quality-to-payment--qip
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'ESRD QIP - Dialysis Adequacy - Payment Year 2015'
+programCode:
+  - '009:000'

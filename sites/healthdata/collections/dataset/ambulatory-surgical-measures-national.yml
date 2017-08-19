@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>The Ambulatory Surgical Center Quality Reporting (ASCQR) Program seeks to make care safer and more efficient through quality reporting. ASCs eligible for this program may have their Medicare payments reduced if they do not report data for these measures.</p>\n"
+distribution:
+  - {interra-reference: xsl-9589c253-94dd-4b6c-a9d9-e962059dbd9d}
+  - {interra-reference: rdf-03c0ff7b-7df6-4f56-9fd9-3bd903cd8820}
+  - {interra-reference: json-d5e9462f-e7ab-47d6-ab5e-affbfc2d0cdb}
+  - {interra-reference: xsl-9589c253-94dd-4b6c-a9d9-e962059dbd9d}
+identifier: 'https://data.medicare.gov/api/views/wue8-3vwe'
+keyword:
+  - 'hospital compare'
+  - 'timely and effective care'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Ambulatory Surgical Measures - National'

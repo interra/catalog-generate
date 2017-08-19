@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NLM Customer Service'
+  hasEmail: 'mailto:custserv@nlm.nih.gov'
+description: "<p>The UMLS integrates and distributes key terminology, classification and coding standards, and associated resources to promote creation of more effective and interoperable biomedical information systems and services, including electronic health records.</p>\n"
+distribution:
+  - {interra-reference: search-umls-metathesaurus-9e71c541-0d45-4747-989d-9d17c2cef007}
+  - {interra-reference: api-2dc066fb-8bbb-4269-a422-9344ca3b200c}
+  - {interra-reference: search-umls-metathesaurus-9e71c541-0d45-4747-989d-9d17c2cef007}
+identifier: 7234116c-0fbc-4384-92aa-e02f24a5b09d
+language:
+  - en
+modified: '2016-09-16'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: 'Unified Medical Language System (UMLS)'
+programCode:
+  - '009:000'
+keyword:
+  - national-library-of-medicine-nlm

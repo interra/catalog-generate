@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Readmissions, Complications and Deaths - provider data. This data set includes provider data for 30-day death and readmission measures, the hip/knee complication measure, and the Agency for Healthcare Research and Quality (AHRQ) measures of serious complications.</p>\n"
+distribution:
+  - {interra-reference: xsl-cc43af33-44d4-4e3b-a37c-e965139b2e5d}
+  - {interra-reference: rdf-284ba36d-cbc5-4662-b019-b55a7fc209ac}
+  - {interra-reference: json-667ea3b2-1409-4eaf-b43c-82ebc13964e5}
+  - {interra-reference: xsl-cc43af33-44d4-4e3b-a37c-e965139b2e5d}
+identifier: 'https://data.medicare.gov/api/views/7xux-kdpw'
+keyword:
+  - 'hospital compare'
+  - 'readmissions complications and death'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Readmissions Complications and Deaths - Hospital'
+programCode:
+  - '009:000'

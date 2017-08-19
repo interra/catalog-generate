@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>The footnote crosswalk displays a list of footnotes and their summary.</p>\n"
+distribution:
+  - {interra-reference: xsl-3f243f45-00f7-42df-86f2-7cd27a9e6df1}
+  - {interra-reference: rdf-25d544c6-82e8-48a8-92e6-defb3b57dd00}
+  - {interra-reference: json-4218778a-2b8c-46fc-9a99-8bb8d1cbb707}
+  - {interra-reference: xsl-3f243f45-00f7-42df-86f2-7cd27a9e6df1}
+identifier: 'https://data.medicare.gov/api/views/y9us-9xdf'
+keyword:
+  - 'general information'
+  - 'hospital compare'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-28'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Footnote Crosswalk'

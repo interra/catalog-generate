@@ -1,0 +1,31 @@
+'@type': 'dcat:Dataset'
+contactPoint:
+  fn: 'Fran Majestic'
+  hasEmail: 'mailto:fmajestic@acf.hhs.gov'
+description: "<p>Office of Head Start (OHS) web based search tool for finding Head Start program office contact information.   Searchable by location, grant number or center type.  Results are downloadable in CSV format.</p>\n"
+distribution:
+  - {interra-reference: xls-687daba3-a4dc-4be8-be13-387f08f93751}
+  - {interra-reference: xls-687daba3-a4dc-4be8-be13-387f08f93751}
+identifier: 8fce8c8e-dd59-4ab4-9aae-f720d356932d
+keyword:
+  - center
+  - children
+  - 'early head start'
+  - geocode
+  - grantee
+  - 'head start'
+  - location
+  - locator
+  - 'low income'
+  - program
+  - services
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-05-02'
+publisher:
+  interra-reference: administration-for-children-and-families-department-of-health-andamp-human-services
+title: 'Office of Head Start (OHS) Head Start Center Locations Search Tool'
+programCode:
+  - '009:000'
+accessLevel: public

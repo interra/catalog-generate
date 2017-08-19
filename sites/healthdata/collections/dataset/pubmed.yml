@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+accrualPeriodicity: R/P1D
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NLM Customer Service'
+  hasEmail: 'mailto:custserv@nlm.nih.gov'
+description: "<p>PubMed comprises more than 26 million citations for biomedical literature from MEDLINE, life science journals, and online books. Citations may include links to full-text content from PubMed Central and publisher web sites.</p>\n"
+distribution:
+  - {interra-reference: download-pubmed-data-20f73336-81c0-400f-add6-4f10d1d5f905}
+  - {interra-reference: e-utilities-api-dbf13f6c-1fab-4763-96e8-d405653c1952}
+  - {interra-reference: download-pubmed-data-20f73336-81c0-400f-add6-4f10d1d5f905}
+identifier: 063e015e-f2bf-46f2-8b12-7447ab2973cf
+keyword:
+  - bioethics
+  - 'clinical medicine'
+  - 'community health'
+  - dentistry
+  - 'ethics medical'
+  - medicine
+  - nursing
+language:
+  - en
+modified: '2016-09-30'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: PubMed
+programCode:
+  - '009:000'

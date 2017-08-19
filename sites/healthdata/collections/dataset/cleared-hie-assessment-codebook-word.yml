@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Cleared HIE Assessment Codebook Word</p>\n"
+distribution:
+  - {interra-reference: docx-7819efe6-02c6-43a8-ac1c-cd0073527972}
+identifier: 'https://data.cdc.gov/api/views/dkmg-ggf9'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-24'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Cleared HIE Assessment Codebook Word'
+programCode:
+  - '009:000'
+keyword:
+  - centers-for-disease-control-and-prevention

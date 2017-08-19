@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:IRFQualityQuestions@cms.hhs.gov'
+description: "<p>A list of inpatient rehabilitation facilities with data on the quality of patient care measures shown on Inpatient Rehabilitation Facility Compare.</p>\n"
+distribution:
+  - {interra-reference: xsl-963759a4-1ce7-4e0a-b93f-88c54b498f71}
+  - {interra-reference: rdf-70555c01-58f5-486a-a615-740f088cea3e}
+  - {interra-reference: json-08387860-0f5b-47e5-a6d0-ffaa7ec83a70}
+  - {interra-reference: xsl-963759a4-1ce7-4e0a-b93f-88c54b498f71}
+identifier: 'https://data.medicare.gov/api/views/v9e4-nwhh'
+keyword:
+  - 'inpatient rehabilitation facilities'
+  - 'inpatient rehabilitation facility'
+  - rehabilitation
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Inpatient Rehabilitation Facility - Provider Data'

@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Rate of deaths by age/gender (per 100,000 population) for motor vehicle occupants killed in crashes, 2012 &amp; 2014. 2012 Source: Fatality Analysis Reporting System (FARS). 2014 Source: National Highway Traffic Safety Administration's (NHTSA) Fatality Analysis Reporting System (FARS), 2014 Annual Report File Note: Blank cells indicate data are suppressed. Fatality rates based on fewer than 20 deaths are suppressed.</p>\n"
+distribution:
+  - {interra-reference: xsl-6df7aff5-5a1d-49d9-a356-837816455bc2}
+  - {interra-reference: rdf-f6bc0eb6-d4a0-4197-996d-98d9068f3609}
+  - {interra-reference: json-c9b52338-20f4-423c-bea4-6ab07ffc58f5}
+  - {interra-reference: xsl-6df7aff5-5a1d-49d9-a356-837816455bc2}
+identifier: 'https://data.cdc.gov/api/views/rqg5-mkef'
+keyword:
+  - 'death rate'
+  - 'motor vehicle'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-10-18'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Motor Vehicle Occupant Death Rate, by Age and Gender, 2012 &amp; 2014, All States'

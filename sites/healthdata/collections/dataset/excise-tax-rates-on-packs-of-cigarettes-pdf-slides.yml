@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: CDCINFO
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Download the current excise tax rates on packs of cigarettes slides. These slides are available in PDF and PowerPoint formats. The PowerPoint version can be found at: <a href=\"https://chronicdata.cdc.gov/Legislation/Excise-Tax-Rates-On-Packs-Of-Cigarettes-PowerPoint/6wg8-s245\">https://chronicdata.cdc.gov/Legislation/Excise-Tax-Rates-On-Packs-Of-Cig...</a></p>\n"
+distribution:
+  - {interra-reference: pdf-9dd3b259-323e-4d69-a684-9234cdea6e8f}
+identifier: 'https://data.cdc.gov/api/views/i9js-434w'
+keyword:
+  - 'cigarette excise tax'
+  - slides
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-08'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Excise Tax Rates On Packs Of Cigarettes PDF Slides'

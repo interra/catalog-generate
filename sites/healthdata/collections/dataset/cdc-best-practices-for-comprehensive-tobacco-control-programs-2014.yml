@@ -1,0 +1,34 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<ol start=\"2014\">\n<li>Centers for Disease Control and Prevention (CDC). Best Practices for Comprehensive Tobacco Control Programs. Funding. CDC's Best Practices for Comprehensive Tobacco Control Programs is an evidence-based guide to help states plan and establish effective tobacco control programs to prevent and reduce tobacco use.  These data update Best Practices for Comprehensive Tobacco Control Programsâ2007.  Data are reported at total and per capita funding levels. Data include recommended and minimum total funding levels for state programs, in addition to funding breakdowns by intervention areas such as: State and Community Interventions, Mass-Reach Health Communication Interventions, Cessation Interventions, Surveillance and Evaluation, and Infrastructure, Administration, and Management.</li>\n</ol>\n"
+distribution:
+  - {interra-reference: xsl-0aa75108-cdc3-4478-b928-bed413be482a}
+  - {interra-reference: rdf-2eba8716-a44b-46b9-8c2b-fb944fb58211}
+  - {interra-reference: json-86a74da7-5b7a-4e97-811d-1d28a9c1e150}
+  - {interra-reference: xsl-0aa75108-cdc3-4478-b928-bed413be482a}
+identifier: 'https://chronicdata.cdc.gov/api/views/vm4m-idi8'
+keyword:
+  - 'administration and management'
+  - 'best practices'
+  - 'best practices for comprehensive tobacco control programs'
+  - 'cessation intervention'
+  - 'health communication interventions'
+  - 'office on smoking and health'
+  - osh
+  - 'state and community interventions'
+  - 'surveillance and evaluation'
+  - tobacco
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-05-25'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'CDC Best Practices for Comprehensive Tobacco Control Programs - 2014'

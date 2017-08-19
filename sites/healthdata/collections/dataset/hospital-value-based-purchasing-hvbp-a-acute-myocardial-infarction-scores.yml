@@ -1,0 +1,37 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>A list of hospitals participating in the Hospital VBP Program and their performance rates and scores for the Clinical Process of Care AMI measures.</p>\n"
+distribution:
+  - {interra-reference: xsl-f6d054e8-9b7b-45e5-af71-3c3eafe5ea40}
+  - {interra-reference: rdf-0a2f8038-4c26-4d68-ad2d-202799746d62}
+  - {interra-reference: json-5dbb256c-3144-4058-afdc-c66c37577061}
+  - {interra-reference: xsl-f6d054e8-9b7b-45e5-af71-3c3eafe5ea40}
+identifier: 'https://data.medicare.gov/api/views/rm5p-8gae'
+keyword:
+  - 'acute myocardial infarction'
+  - ami
+  - 'heart attack'
+  - 'hospital compare'
+  - 'hospital value-based purchasing'
+  - hvbp
+  - 'linking quality to payment'
+  - 'process of care'
+  - quality
+  - rates
+  - ratings
+  - scores
+  - 'value-based purchasing'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital Value-Based Purchasing (HVBP) â Acute Myocardial Infarction Scores'

@@ -1,0 +1,21 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NCBI Help Desk'
+  hasEmail: 'mailto:info@ncbi.nlm.nih.gov'
+description: "<p>The protein sequences corresponding to the translations of coding sequences (CDS) in GenBank collected for each GenBank release.</p>\n"
+distribution:
+  - {interra-reference: download-genpept-data-258e7c52-da5f-4606-9778-8b92a1d6cd27}
+identifier: 3dbe09f6-2a7e-4009-92d2-6112f1d603eb
+language:
+  - en
+modified: '2016-09-01'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: GenPept
+programCode:
+  - '009:000'
+keyword:
+  - national-library-of-medicine-nlm

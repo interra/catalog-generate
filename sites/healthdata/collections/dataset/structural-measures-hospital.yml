@@ -1,0 +1,32 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>A list of hospitals and the availability of structural measures at that hospital. A structural measure reflects the environment in which hospitals care for patients. For example, whether or not a hospital participates in a Cardiac Surgery Registry.</p>\n"
+distribution:
+  - {interra-reference: xsl-2066b40c-9633-4a28-bc33-00f2ccd8e19b}
+  - {interra-reference: rdf-b561f466-ae2f-447f-b0f2-4227de1fd491}
+  - {interra-reference: json-5a9fca27-d056-40fe-805f-86b23cd409d3}
+  - {interra-reference: xsl-2066b40c-9633-4a28-bc33-00f2ccd8e19b}
+identifier: 'https://data.medicare.gov/api/views/4hje-vua3'
+keyword:
+  - cardiac
+  - 'general information'
+  - heart
+  - 'hospital compare'
+  - quality
+  - ratings
+  - 'structural measures'
+  - surgery
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-26'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Structural Measures - Hospital'

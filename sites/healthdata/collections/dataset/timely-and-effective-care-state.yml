@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>Timely and Effective Care measures - state data. This data set includes state-level data for measures of heart attack care, heart failure care, pneumonia care, surgical care, emergency department care, preventive care, childrenâs asthma care, stroke care, blood clot prevention and treatment, and pregnancy and delivery care.</p>\n"
+distribution:
+  - {interra-reference: xsl-76c4c8c6-011b-4063-8563-6864a06e2e83}
+  - {interra-reference: rdf-f69be123-2dfd-4648-abce-a64b7f5054a8}
+  - {interra-reference: json-3535460a-915e-4ca0-baaf-b72c7013628f}
+  - {interra-reference: xsl-76c4c8c6-011b-4063-8563-6864a06e2e83}
+identifier: 'https://data.medicare.gov/api/views/apyc-v239'
+keyword:
+  - 'hospital compare'
+  - 'timely and effective care'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Timely and Effective Care - State'

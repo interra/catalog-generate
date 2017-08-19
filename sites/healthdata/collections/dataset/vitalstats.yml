@@ -1,0 +1,37 @@
+'@type': 'dcat:Dataset'
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Interactive online tool for creating and manipulating tables based on birth and perinatal (fetal and infant death) data files.  Tabulated data can be graphed or mapped within VitalStats or exported to Excel for further analysis.</p>\n"
+distribution:
+  - {interra-reference: query-tool-c5e40a3e-8346-4d5e-b38f-e513c095e852}
+identifier: ea3de26e-e1c6-495b-a863-cf1f03cd012b
+keyword:
+  - 'birth certificate'
+  - 'birth rates'
+  - births
+  - birthweight
+  - 'community health'
+  - fertility
+  - 'fetal death'
+  - 'fetal mortality'
+  - 'gestational age'
+  - 'infant health'
+  - 'infant mortality'
+  - 'maternal health'
+  - 'perinatal mortality'
+  - 'pregnancy loss'
+  - stillbirth
+  - 'teen childbearing'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention-department-of-health-andamp-human-services
+title: VitalStats
+programCode:
+  - '009:000'
+accessLevel: public

@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Map Points - Location By Separate Latitutde Longitude Columns</p>\n"
+distribution:
+  - {interra-reference: xsl-056d3f68-0b8e-4c75-bebe-05e776dd87db}
+  - {interra-reference: rdf-4d4127e7-9a0c-47f3-a39c-cf52ca5d1064}
+  - {interra-reference: json-71124fbf-77f3-4a68-9283-c6e7a79b50fa}
+  - {interra-reference: xsl-056d3f68-0b8e-4c75-bebe-05e776dd87db}
+identifier: 'https://data.medicare.gov/api/views/mzav-drsq'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Map Points - Location By Separate Latitutde Longitude Columns'
+programCode:
+  - '009:000'
+keyword:
+  - centers-for-medicare-amp-medicaid-services

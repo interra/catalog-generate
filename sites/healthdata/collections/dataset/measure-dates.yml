@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>Data Collection Periods for all measures on Hospital Compare.</p>\n"
+distribution:
+  - {interra-reference: xsl-c0187c9b-c45f-44ea-8461-797dbb8428cf}
+  - {interra-reference: rdf-0dcd592a-ec7d-4bbd-b07e-d1f6ddb6ff3d}
+  - {interra-reference: json-cd402c23-546e-4ed7-a476-52e82823c9b2}
+  - {interra-reference: xsl-c0187c9b-c45f-44ea-8461-797dbb8428cf}
+identifier: 'https://data.medicare.gov/api/views/4j6d-yzce'
+keyword:
+  - 'general information'
+  - 'hospital compare'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-26'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Measure Dates'

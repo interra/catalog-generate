@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/\">http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-0be76d92-1d6f-4cb5-ab02-58abb4d1292f}
+  - {interra-reference: rdf-8671998e-e3ad-4a74-982b-6e3550f82d2f}
+  - {interra-reference: json-bf041eb7-ad69-46a9-a5e2-30fc53fcae95}
+  - {interra-reference: xsl-0be76d92-1d6f-4cb5-ab02-58abb4d1292f}
+identifier: 'https://data.cdc.gov/api/views/hzd8-r9mj'
+keyword:
+  - 'maternal age'
+  - nchs
+  - 'nonmarital births'
+  - 'percent distribution'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Percent Distribution of Nonmarital Births, by Maternal Age: 1970-2013'

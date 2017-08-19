@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>A list of all Hospice Agencies that have been certified by Medicare.  The list includes addresses, phone numbers, and date of original CMS certification, as well as additional demographic data for each agency.</p>\n"
+distribution:
+  - {interra-reference: xsl-d92ff520-16f0-48e1-9944-ae0ea8cd87e6}
+  - {interra-reference: rdf-89930f2c-a5ba-4b06-924c-175902c3001d}
+  - {interra-reference: json-f71cd529-0e3a-4ecb-9d2f-b68fdce6b4c0}
+  - {interra-reference: xsl-d92ff520-16f0-48e1-9944-ae0ea8cd87e6}
+identifier: 'https://data.medicare.gov/api/views/s8t3-rfbq'
+keyword:
+  - care
+  - hospice
+  - 'hospice care'
+  - list
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-07'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospice Agencies'

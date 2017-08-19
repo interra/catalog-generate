@@ -1,0 +1,21 @@
+'@type': 'dcat:Dataset'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Single source providing information on Temporary Assistance for Needy Families (TANF) program rules among States and across years (currently 1996-2010), including longitudinal tables with state TANF polices for selected years.</p>\n"
+distribution:
+  - {interra-reference: xml-a49f9962-24cf-4f90-a9fc-0790562011fa}
+identifier: 20287f1e-d621-41ee-928f-284caeb0b786
+keyword:
+  - 'Temporary Assistance to Needy Families  cash assistance  welfare policy'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-05-02'
+publisher:
+  interra-reference: administration-for-children-and-families-department-of-health-andamp-human-services
+temporal: '1995-12-31T19:00:00-05:00/2010-12-30T19:00:00-05:00'
+title: 'TANF Rules Data Base'
+programCode:
+  - '009:000'
+accessLevel: public

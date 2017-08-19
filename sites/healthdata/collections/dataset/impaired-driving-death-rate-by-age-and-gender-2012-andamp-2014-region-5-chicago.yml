@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Rate of deaths by age/gender (per 100,000 population) for people killed in crashes involving a driver with BAC =&gt;0.08%, 2012, 2014. 2012 Source: Fatality Analysis Reporting System (FARS). 2014 Source: National Highway Traffic Administration's (NHTSA) Fatality Analysis Reporting System (FARS), 2014 Annual Report File. Note: Blank cells indicate data are suppressed. Fatality rates based on fewer than 20 deaths are suppressed.</p>\n"
+distribution:
+  - {interra-reference: xsl-819a7b5d-1ac2-41af-a7ec-a0dc8e85f1d8}
+  - {interra-reference: rdf-9e93600e-c5c0-46d6-b464-e9264cb135e9}
+  - {interra-reference: json-58b2fa91-c3ee-45d6-b408-6097ba20e7d4}
+  - {interra-reference: xsl-819a7b5d-1ac2-41af-a7ec-a0dc8e85f1d8}
+identifier: 'https://data.cdc.gov/api/views/68ej-h5ze'
+keyword:
+  - cdc
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-09-15'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Impaired Driving Death Rate, by Age and Gender, 2012 &amp; 2014, Region 5 - Chicago'

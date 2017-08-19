@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p>Rates are infants (under 1 year) and neonatal (under 28 days) deaths per 1,000 live births.</p>\n<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/\">http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-9081a396-cdc7-4078-b2a3-ed2a4dd79ff9}
+  - {interra-reference: rdf-ffa507a7-ad73-4a12-ab76-39ab58448adf}
+  - {interra-reference: json-9ac7a796-c64c-4bc2-8412-84d0085655f9}
+  - {interra-reference: xsl-9081a396-cdc7-4078-b2a3-ed2a4dd79ff9}
+identifier: 'https://data.cdc.gov/api/views/epev-k6ss'
+keyword:
+  - infant
+  - mortality
+  - nchs
+  - neonatal
+  - 'united states'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Infant and neonatal mortality rates: United States, 1915-2013'

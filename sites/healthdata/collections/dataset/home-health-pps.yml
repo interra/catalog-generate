@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:cms.data@cms.hhs.gov'
+description: "<p>Under prospective payment, Medicare pays home health agencies (HHAs) a predetermined base payment. The payment is adjusted for the health condition and care needs of the beneficiary. The payment is also adjusted for the geographic differences in wages for HHAs across the country. The adjustment for the health condition, or clinical characteristics, and service needs of the beneficiary is referred to as the case-mix adjustment. The home health PPS will provide HHAs with payments for each 60-day episode of care for each beneficiary.</p>\n"
+distribution:
+  - {interra-reference: csv-addf3440-dc52-44cf-a44c-fc365dc9f116}
+identifier: '164'
+keyword:
+  - 'Coding and Coding Rules'
+  - 'Home Health (HHA)'
+  - 'Interactive Tools'
+  - 'Prospective Payment System (PPS)'
+  - 'Publically Available Data File - for download'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-17'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Home Health PPS'

@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Lists anemia management data used by ESRD QIP to assess dialysis facility performance.</p>\n"
+distribution:
+  - {interra-reference: textxml-d120c280-aac8-426f-b0fe-f6fa1fe1167f}
+  - {interra-reference: rdf-dadf1ea8-d60e-41f7-adfd-92919f9a2bcb}
+  - {interra-reference: json-81165715-583c-42f1-8ec8-081c0440dda9}
+  - {interra-reference: textxml-d120c280-aac8-426f-b0fe-f6fa1fe1167f}
+identifier: bad1d36f-de87-46cc-b327-882bd0fc2650
+keyword:
+  - dfc
+  - dialysis
+  - dialysis-facilities
+  - linking-quality-to-payment--qip
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'ESRD QIP - Anemia Management Reporting - Payment Year 2015'
+programCode:
+  - '009:000'

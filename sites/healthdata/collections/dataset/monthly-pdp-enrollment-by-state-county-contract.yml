@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:cms.data@cms.hhs.gov'
+description: "<p>Monthly Prescription Drug Plan Enrollment by State, County, Contract</p>\n"
+distribution:
+  - {interra-reference: html-4c2977f6-c66a-4024-951a-bfbf6eb7ef41}
+identifier: '377'
+keyword:
+  - 'Medicare Advantage'
+  - 'Prescription Drug Plans'
+  - 'Publically Available Data File - for download'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-18'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+temporal: '2007-01-01T00:00:00-05:00/2015-12-31T00:00:00-05:00'
+title: 'Monthly PDP Enrollment by State-County-Contract'

@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>The Prospective Payment System (PPS)-Exempt Cancer Hospital Quality Reporting (PCHQR) Program currently uses three cancer specific measures. The resulting PPS-Exempt Cancer Hospital Quality Reporting (PCHQR) Program measures allow consumers to compare the quality of care given at the eleven PPS-exempt cancer hospitals currently participating in the program.</p>\n"
+distribution:
+  - {interra-reference: xsl-9ecb0ff2-1c60-41d8-945c-69073998c47c}
+  - {interra-reference: rdf-2b6031af-3219-4f64-a403-5cb1b19dfb95}
+  - {interra-reference: json-8a061820-87d5-4cf5-bffc-019f6a86c349}
+  - {interra-reference: xsl-9ecb0ff2-1c60-41d8-945c-69073998c47c}
+identifier: 'https://data.medicare.gov/api/views/42wc-33ci'
+keyword:
+  - 'hospital compare'
+  - 'timely and effective care'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-29'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Cancer Treatment Measures â PPS-Exempt Cancer Hospital'

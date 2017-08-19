@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:MedicareProviderData@cms.hhs.gov'
+description: "<p>A provider level summary of Inpatient Prospective Payment System (IPPS) discharges, average charges and average Medicare payments for the Top 100 Diagnosis-Related Groups (DRG)</p>\n"
+distribution:
+  - {interra-reference: json-77035b90-7c9b-4331-962d-54dbfe0197c3}
+identifier: '474'
+keyword:
+  - 'Covered Services'
+  - 'Diagnosis Related Grouping (DRG)'
+  - 'Hospital Referral Region'
+  - 'Interactive Tools'
+  - 'Prospective Payment System (PPS)'
+  - 'Publically Available Data File - for download'
+  - 'Short Stay Hospital (SSH)'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-18'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'IPPS Provider Summary for the Top 100 DRGs - FY2011'

@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NCBI Help Desk'
+  hasEmail: 'mailto:info@ncbi.nlm.nih.gov'
+description: "<p>The BioSample database contains descriptions of biological source materials used in experimental assays.</p>\n"
+distribution:
+  - {interra-reference: query-interface-ad24ede0-8d52-4c79-8c67-835ff717e878}
+  - {interra-reference: e-utilities-api-3ed7026d-45e2-41e8-b2e1-f291e27baa09}
+  - {interra-reference: query-interface-ad24ede0-8d52-4c79-8c67-835ff717e878}
+identifier: 9d206496-bfa3-4579-8b1f-bdc038659380
+language:
+  - en
+modified: '2016-09-16'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: BioSample
+programCode:
+  - '009:000'
+keyword:
+  - national-library-of-medicine-nlm

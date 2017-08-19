@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>1970-2016. Orzechowski and Walker. Tax Burden on Tobacco. Tax burden data was obtained from the annual compendium on tobacco revenue and industry statistics, The Tax Burden on Tobacco. Data are reported on an annual basis; Data include federal and state-level information regarding taxes applied to the price of a pack of cigarettes.</p>\n"
+distribution:
+  - {interra-reference: xsl-115f7240-ef40-463b-844b-a4064178976b}
+  - {interra-reference: rdf-42f5e16c-693e-46dd-a737-0102d322bd91}
+  - {interra-reference: json-d366e93e-f566-4588-8c01-47b3912b2454}
+  - {interra-reference: xsl-115f7240-ef40-463b-844b-a4064178976b}
+identifier: 'https://chronicdata.cdc.gov/api/views/7nwe-3aj9'
+keyword:
+  - 'average cost per pack'
+  - 'cigarette sales'
+  - 'office on smoking and health'
+  - osh
+  - tax
+  - 'tax burden on tobacco'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-23'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'The Tax Burden on Tobacco Volume 51, 1970-2016'

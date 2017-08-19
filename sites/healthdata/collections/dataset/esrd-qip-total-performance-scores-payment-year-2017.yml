@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:DialysisData@umich.edu'
+description: "<p>Total Performance Scores by facility of the ESRD QIP.</p>\n"
+distribution:
+  - {interra-reference: xsl-9d432945-9767-461f-93a5-3159e25a21bb}
+  - {interra-reference: rdf-4e9f7104-3041-42df-ac64-04f867ec9b49}
+  - {interra-reference: json-33fa7712-6717-469d-a2db-81eec34f818a}
+  - {interra-reference: xsl-9d432945-9767-461f-93a5-3159e25a21bb}
+identifier: 'https://data.medicare.gov/api/views/fqah-awe3'
+keyword:
+  - dfc
+  - dialysis
+  - 'dialysis facilities'
+  - 'linking quality to payment - qip'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-02'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'ESRD QIP - Total Performance Scores - Payment Year 2017'

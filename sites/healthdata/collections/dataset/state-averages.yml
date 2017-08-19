@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:Edward.Mortimore@cms.hhs.gov'
+description: "<p>A list of a variety of averages for each state or territory as well as the national average, including each quality measure, staffing, fine amount and number of deficiencies. Each row displays a specific state or territory, the associated measure and average.</p>\n"
+distribution:
+  - {interra-reference: xsl-953aa107-0a6d-433f-a498-ce7a6fb38b18}
+  - {interra-reference: rdf-653fe693-4a8a-493a-bd18-98dea0b3721a}
+  - {interra-reference: json-548c1288-dbb0-4d8c-8d0c-6d2d742d6b72}
+  - {interra-reference: xsl-953aa107-0a6d-433f-a498-ce7a6fb38b18}
+identifier: 'https://data.medicare.gov/api/views/xcdc-v8bm'
+keyword:
+  - 'general information'
+  - nhc
+  - 'nursing home'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-28'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'State Averages'

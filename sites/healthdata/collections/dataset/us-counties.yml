@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>US Counties</p>\n"
+distribution:
+  - {interra-reference: xsl-20f270f5-bbe2-4eb8-b276-e16d8cfc37e5}
+  - {interra-reference: rdf-3409c33c-af90-4ed0-b7d5-e92cedaca54a}
+  - {interra-reference: json-099637eb-c84d-452c-87ee-d08e154705a7}
+  - {interra-reference: xsl-20f270f5-bbe2-4eb8-b276-e16d8cfc37e5}
+identifier: 'https://data.medicare.gov/api/views/f3tr-pr43'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-07-22'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'US Counties'
+programCode:
+  - '009:000'
+keyword:
+  - centers-for-medicare-amp-medicaid-services

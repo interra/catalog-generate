@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p>Final birth data for women aged 15â19, 15â17, and 18â19 for the United States and each of the 50 states.<br />\n<a href=\"http://blogs.cdc.gov/nchs-data-visualization/us-and-state-trends-on-teen-births-1990-2014/\">http://blogs.cdc.gov/nchs-data-visualization/us-and-state-trends-on-teen...</a></p>\n"
+distribution:
+  - {interra-reference: xsl-7b321c84-7c48-4110-89a3-b2bfecbf95b4}
+  - {interra-reference: rdf-5dcb7dba-f0ce-4077-9485-08ea49a682b7}
+  - {interra-reference: json-b99506f3-9f0c-4dbf-a5a3-4dfe0c37491e}
+  - {interra-reference: xsl-7b321c84-7c48-4110-89a3-b2bfecbf95b4}
+identifier: 'https://data.cdc.gov/api/views/y268-sna3'
+keyword:
+  - nchs
+  - 'state teen birth trends'
+  - 'teen births'
+  - 'u.s. and state trends on teen births'
+  - 'u.s. teen birth rate'
+  - 'united states'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-15'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - U.S. and State Trends on Teen Births, 1990â2014'

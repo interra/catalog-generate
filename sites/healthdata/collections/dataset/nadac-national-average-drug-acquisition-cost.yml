@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:00'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:Medicaid.gov@cms.hhs.gov'
+description: "<p>National Average Drug Acquisition Cost (NADAC) weekly reference data from November 2013 to current week.</p>\n"
+distribution:
+  - {interra-reference: xsl-68cdf137-a374-4418-b8d9-a9bccc8ea81a}
+  - {interra-reference: rdf-6a7755ee-2a43-4fc7-a408-cd9008460e11}
+  - {interra-reference: json-4f5177d6-45c1-4fcb-a91e-d1fc1bf05aab}
+  - {interra-reference: xsl-68cdf137-a374-4418-b8d9-a9bccc8ea81a}
+identifier: 'https://data.medicaid.gov/api/views/a4y5-998d'
+keyword:
+  - 'drug acquisition cost'
+  - nadac
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-26'
+programCode:
+  - '009:076'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'NADAC (National Average Drug Acquisition Cost)'

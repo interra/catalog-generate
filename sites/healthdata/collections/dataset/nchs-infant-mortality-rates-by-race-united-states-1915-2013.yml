@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p>All birth data by race before 1980 are based on race of the child; starting in 1980, birth data by race are based on race of the mother. Birth data are used to calculate infant mortality rate.</p>\n<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/\">http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-776b2a26-57dd-4bb9-90ec-1037d3b8b54f}
+  - {interra-reference: rdf-d34261d7-a8d3-4866-86c0-bec3ba88521f}
+  - {interra-reference: json-fadacf29-d30a-4138-a93a-5f78c212a7d7}
+  - {interra-reference: xsl-776b2a26-57dd-4bb9-90ec-1037d3b8b54f}
+identifier: 'https://data.cdc.gov/api/views/ddsk-zebd'
+keyword:
+  - 'infant mortality rates'
+  - nchs
+  - race
+  - 'united states'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Infant Mortality Rates, by Race: United States, 1915-2013'

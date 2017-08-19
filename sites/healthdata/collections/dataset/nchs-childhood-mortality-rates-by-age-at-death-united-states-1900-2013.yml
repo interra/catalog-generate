@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/\">http://blogs.cdc.gov/nchs-data-visualization/deaths-in-the-us/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-84003a79-c7c5-4780-b6e7-47a7585ae78d}
+  - {interra-reference: rdf-977a144f-1456-4c24-8a29-3335367504f1}
+  - {interra-reference: json-666c377a-71df-4cf4-9a7e-a1b985ea82bc}
+  - {interra-reference: xsl-84003a79-c7c5-4780-b6e7-47a7585ae78d}
+identifier: 'https://data.cdc.gov/api/views/v6ab-adf5'
+keyword:
+  - children
+  - 'mortality rates'
+  - nchs
+  - 'united states'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-15'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Childhood Mortality Rates, by Age at Death: United States, 1900-2013'

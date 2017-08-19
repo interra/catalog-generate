@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>A list of hospital ratings for the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS). HCAHPS is a national, standardized survey of hospital patients about their experiences during a recent inpatient hospital stay.</p>\n"
+distribution:
+  - {interra-reference: xsl-ab800143-ce2d-44f4-b67f-77c8be4268cc}
+  - {interra-reference: rdf-1f6ca4d5-8081-4002-b04c-cefa48717a94}
+  - {interra-reference: json-9f4beda3-8b3c-451a-9042-85e52eb6604e}
+  - {interra-reference: xsl-ab800143-ce2d-44f4-b67f-77c8be4268cc}
+identifier: 'https://data.medicare.gov/api/views/dgck-syfz'
+keyword:
+  - hcahps
+  - 'hospital compare'
+  - 'patient survey'
+  - 'patient survey results'
+  - quality
+  - ratings
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Patient survey (HCAHPS) - Hospital'

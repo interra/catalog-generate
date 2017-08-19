@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:00'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:Medicaid.gov@cms.hhs.gov'
+description: "<p>States may rely on eligibility information from \"Express Lane\" agency programs to streamline and simplify enrollment and renewal in Medicaid and CHIP. Express Lane agencies may include Supplemental Nutrition Assistance Program (SNAP), School Lunch programs, Temporary Assistance for Needy Families, Head Start, and the Women, infant, and children's program (WIC) , among others. States can also use state income tax data to determine Medicaid and CHIP eligibility for children.</p>\n"
+distribution:
+  - {interra-reference: xsl-a4c63778-b6d8-452a-8324-4485c58ee529}
+  - {interra-reference: rdf-d25a7217-5790-4b49-9972-0a7001be3b63}
+  - {interra-reference: json-0cbc8e7c-3b50-4acd-92b5-1fd14deb47b9}
+  - {interra-reference: xsl-a4c63778-b6d8-452a-8324-4485c58ee529}
+identifier: 'https://data.medicaid.gov/api/views/8vcd-dnq9'
+keyword:
+  - 'enrollment strategies'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-05-31'
+programCode:
+  - '009:076'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Express Lane Eligibility for Medicaid and CHIP Coverage'

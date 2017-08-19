@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:Edward.Mortimore@cms.hhs.gov'
+description: "<p>Nursing home summary information for the Health and Fire Safety Inspections currently listed on Nursing Home Compare, including dates of the three most recent inspections (including those with no deficiencies), and counts of deficiencies sited, overall and within the categories listed on Nursing Home Compare.  Data are presented as one inspection cycle per provider.  Note that deficiency counts do not include citations from complaint inspections.</p>\n"
+distribution:
+  - {interra-reference: xsl-1a118c41-57b1-4f12-bfa5-e5edcae86853}
+  - {interra-reference: rdf-ccf29e1e-7ab5-44ca-a1d4-4981e8b485f8}
+  - {interra-reference: json-18c836f4-fbb7-4670-9e17-305e0b29f66d}
+  - {interra-reference: xsl-1a118c41-57b1-4f12-bfa5-e5edcae86853}
+identifier: 'https://data.medicare.gov/api/views/tbry-pc2d'
+keyword:
+  - complaints
+  - 'inspection results'
+  - nhc
+  - 'nursing home'
+  - safety
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Survey Summary'

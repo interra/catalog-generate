@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/\">http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-adb6ed3e-5ff7-462c-9d01-b39c7b42ad06}
+  - {interra-reference: rdf-958045af-6507-4b6a-8047-08999763c083}
+  - {interra-reference: json-ebe69c4c-87d0-40eb-81db-524666a18a2f}
+  - {interra-reference: xsl-adb6ed3e-5ff7-462c-9d01-b39c7b42ad06}
+identifier: 'https://data.cdc.gov/api/views/g6qk-ngsf'
+keyword:
+  - births
+  - nchs
+  - 'united states'
+  - 'unmarried women'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Births to Unmarried Women, by Maternal Age: United States, 1940-2013'

@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+accrualPeriodicity: R/P1W
+bureauCode:
+  - '009:25'
+contactPoint:
+  fn: 'NLM Customer Service'
+  hasEmail: 'mailto:custserv@nlm.nih.gov'
+describedBy: 'http://toxnet.nlm.nih.gov/toxnetapi/TOXNETWebService.html'
+description: "<p>A cluster of databases on toxicology, hazardous chemicals, and related areas.</p>\n"
+distribution:
+  - {interra-reference: query-interface-325cbb87-9802-40a7-b571-6e6b56081f8b}
+  - {interra-reference: query-interface-325cbb87-9802-40a7-b571-6e6b56081f8b}
+identifier: 514d280f-7289-49cb-b947-d019ad213c1c
+keyword:
+  - 'hazardous substances'
+  - poisons
+  - toxicology
+language:
+  - en
+modified: '2016-09-15'
+publisher:
+  interra-reference: national-library-of-medicine-nlm
+title: TOXNET
+programCode:
+  - '009:000'

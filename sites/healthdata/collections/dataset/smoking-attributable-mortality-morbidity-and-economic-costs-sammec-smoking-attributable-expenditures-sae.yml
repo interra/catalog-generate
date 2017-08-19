@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>2005-2009. SAMMEC - Smoking-Attributable Mortality, Morbidity, and Economic Costs. Smoking-attributable expenditures (SAEs) are excess health care expenditures attributable to cigarette smoking, by type of service, among adults ages 19 years of age and older.</p>\n"
+distribution:
+  - {interra-reference: xsl-36bd5ee1-c9e6-4ec2-a0f6-af392733abb5}
+  - {interra-reference: rdf-b78f8137-d527-4549-a1dc-17475ddc40f2}
+  - {interra-reference: json-315be49b-767d-45a0-b11c-ff785c7a1916}
+  - {interra-reference: xsl-36bd5ee1-c9e6-4ec2-a0f6-af392733abb5}
+identifier: 'https://chronicdata.cdc.gov/api/views/ezab-8sq5'
+keyword:
+  - osh
+  - sae
+  - sammec
+  - tobacco
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-05-24'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Smoking-Attributable Mortality, Morbidity, and Economic Costs (SAMMEC) - Smoking-Attributable Expenditures (SAE)'

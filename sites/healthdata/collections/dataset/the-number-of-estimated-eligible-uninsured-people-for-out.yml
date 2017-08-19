@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:cms.data@cms.hhs.gov'
+description: "<p>The Number of Estimated Eligible Uninsured People for Outreach Targeting</p>\n"
+distribution:
+  - {interra-reference: csv-82c7f3ff-f7a9-421c-a920-a137f21dd39c}
+identifier: '483'
+keyword:
+  - 'Center for Consumer Information and Insurance Oversight'
+  - 'Health Insurance Marketplace'
+  - 'Interactive Tools'
+  - 'Publically Available Data File - for download'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-18'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'The Number of Estimated Eligible Uninsured People for Out..'

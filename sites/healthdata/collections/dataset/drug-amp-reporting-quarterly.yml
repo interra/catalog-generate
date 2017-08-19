@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:00'
+contactPoint:
+  fn: '&lt;Nobody&gt;'
+  hasEmail: 'mailto:Medicaid.gov@cms.hhs.gov'
+description: "<p>Drugs that have been reported under the Medicaid Drug Rebate Program along with an indication of whether or not the required Average Manufacturer Price (AMP) was reported for each drug. All drugs are identified in the file by the 11-digit National Drug Code, product name, labeler name, and reported (R) or not reported (NR).</p>\n"
+distribution:
+  - {interra-reference: xsl-96c4d28e-f354-4f42-b4d5-4e324604c548}
+  - {interra-reference: rdf-29433421-8be1-4533-84f0-2ebf085dafde}
+  - {interra-reference: json-b7757371-774d-451e-80b7-11aa666ed525}
+  - {interra-reference: xsl-96c4d28e-f354-4f42-b4d5-4e324604c548}
+identifier: 'https://data.medicaid.gov/api/views/xtys-qyty'
+keyword:
+  - amp
+  - 'average manufacturer price'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-05-31'
+programCode:
+  - '009:076'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Drug AMP Reporting - Quarterly'

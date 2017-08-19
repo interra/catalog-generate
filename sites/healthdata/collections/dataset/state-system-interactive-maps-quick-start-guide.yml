@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Explore STATE System Interactive Maps with this Quick Start Guide.</p>\n"
+distribution:
+  - {interra-reference: pdf-21182ee3-1020-4fb2-8fa4-145dddbe69e5}
+identifier: 'https://chronicdata.cdc.gov/api/views/mwib-z8as'
+keyword:
+  - 'fact sheet'
+  - faq
+  - osh
+  - tobacco
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-13'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'STATE System Interactive Maps Quick Start Guide'

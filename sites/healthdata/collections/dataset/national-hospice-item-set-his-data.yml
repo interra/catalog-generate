@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>This data set includes the national averages (mean) for quality measure scores of Medicare-certified hospice agencies calculated from the Hospice Item Set (HIS) for July 1, 2015 to June 30, 2016.</p>\n"
+distribution:
+  - {interra-reference: xsl-7674165b-faac-4472-82a6-c90a9ce8a5f8}
+  - {interra-reference: rdf-d82b08d4-6200-4f60-b128-cb2f9b93263a}
+  - {interra-reference: json-438e692a-775f-4a1b-ba88-39368ad67e87}
+  - {interra-reference: xsl-7674165b-faac-4472-82a6-c90a9ce8a5f8}
+identifier: 'https://data.medicare.gov/api/views/xtkc-juf3'
+keyword:
+  - care
+  - hospice
+  - 'hospice care'
+  - list
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-03'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'National Hospice Item Set (HIS) data'

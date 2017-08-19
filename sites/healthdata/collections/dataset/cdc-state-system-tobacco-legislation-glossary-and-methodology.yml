@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Download the latest version of the Glossary and Methodology File</p>\n"
+distribution:
+  - {interra-reference: xls-314197d9-13b9-4a1c-861e-97e4b96502ee}
+identifier: 'https://data.cdc.gov/api/views/5qag-uzp2'
+keyword:
+  - glossary
+  - methodology
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-15'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'CDC STATE System Tobacco Legislation Glossary and Methodology'

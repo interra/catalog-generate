@@ -1,0 +1,37 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>A list of hospitals participating in the Hospital VBP Program and their performance rates and scores for the Clinical Process of Care Pneumonia measures.</p>\n"
+distribution:
+  - {interra-reference: xsl-770afc0b-dbab-45c2-b3cd-63b9d5367d89}
+  - {interra-reference: rdf-0b9de17f-72b7-48e7-8a01-f7f7b27777f4}
+  - {interra-reference: json-4c373e43-5a6b-4e3e-ab3e-e977cfb34995}
+  - {interra-reference: xsl-770afc0b-dbab-45c2-b3cd-63b9d5367d89}
+identifier: 'https://data.medicare.gov/api/views/md6f-wqvv'
+keyword:
+  - 'hospital compare'
+  - 'hospital value-based purchasing'
+  - hvbp
+  - 'linking quality to payment'
+  - pn
+  - pneumonia
+  - 'process of care'
+  - purchasing
+  - quality
+  - rates
+  - ratings
+  - scores
+  - value-based
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-15'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital Value-Based Purchasing (HVBP) â Pneumonia Scores'

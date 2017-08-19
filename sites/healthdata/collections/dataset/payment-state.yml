@@ -1,0 +1,26 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>Payment measures â state data. This data set includes state-level data for the payment measures associated with an episode of care for heart attack, heart failure, pneumonia, and hip/knee replacement patients.</p>\n"
+distribution:
+  - {interra-reference: xsl-65d07b6d-5fc3-438e-8be6-203043193f8c}
+  - {interra-reference: rdf-f68228a9-be41-47a5-9d50-2dc6de3a48b7}
+  - {interra-reference: json-741a59c2-efbd-4610-b49f-6b232f169386}
+  - {interra-reference: xsl-65d07b6d-5fc3-438e-8be6-203043193f8c}
+identifier: 'https://data.medicare.gov/api/views/98ix-2iqy'
+keyword:
+  - 'hospital compare'
+  - 'medicare payment'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-26'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Payment - State'

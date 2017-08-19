@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>U.S. Census Annual Estimates of the Resident Population for Selected Age Groups by Sex for the United States. The estimates are based on the 2010 Census and reflect changes to the April 1, 2010 population due to the Count Question Resolution program and geographic program revisions. Median age is calculated based on single year of age. For population estimates methodology statements, see <a href=\"http://www.census.gov/popest/methodology/index.html\">http://www.census.gov/popest/methodology/index.html</a>.</p>\n"
+distribution:
+  - {interra-reference: xls-5db59fe0-4acc-4925-853a-271b836687bf}
+identifier: 'https://data.cdc.gov/api/views/mhj9-4wi2'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-12-07'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'US Census Methodology'
+programCode:
+  - '009:000'
+keyword:
+  - centers-for-disease-control-and-prevention

@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/\">http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-23e826cb-fc70-4565-81d5-4009e68007fd}
+  - {interra-reference: rdf-6a1d0abd-6705-4c05-8aab-fcb3fde2fc1f}
+  - {interra-reference: json-e20b6f14-9a9b-4820-9a64-fe65c4f63527}
+  - {interra-reference: xsl-23e826cb-fc70-4565-81d5-4009e68007fd}
+identifier: 'https://data.cdc.gov/api/views/jvf6-ix4w'
+keyword:
+  - 'age group'
+  - 'birth rates'
+  - nchs
+  - 'united states'
+  - women
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Nonmarital Birth Rates, by Age Group for All Women Age 15-44: United States, 1980-2013'

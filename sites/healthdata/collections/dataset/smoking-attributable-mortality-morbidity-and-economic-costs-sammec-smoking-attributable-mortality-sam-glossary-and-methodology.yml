@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC Info'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Download the latest version of the Glossary and Methodology File</p>\n"
+distribution:
+  - {interra-reference: xls-7bbb0d11-5b9a-4cb3-a47b-64fdbdc7864b}
+identifier: 'https://data.cdc.gov/api/views/w47j-r23n'
+keyword:
+  - glossary
+  - methodology
+  - sam
+  - sammec
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-18'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Smoking-Attributable Mortality, Morbidity, and Economic Costs (SAMMEC) - Smoking-Attributable Mortality (SAM) Glossary and Methodology'

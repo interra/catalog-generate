@@ -1,0 +1,22 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:10'
+contactPoint:
+  fn: openFDA
+  hasEmail: 'mailto:open@fda.hhs.gov'
+description: "<p>The FDA Acronyms and Abbreviations database provides a quick reference to acronyms and abbreviations related to Food and Drug Administration (FDA) activities</p>\n"
+distribution:
+  - {interra-reference: unknown-4b325fd0-3ee3-4290-b640-64b55c0ec114}
+identifier: a2220ac4-2d5b-4355-af75-5b4aafecdaf4
+keyword:
+  - definitions
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-08-04'
+programCode:
+  - '009:002'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'FDA Acronyms and Abbreviations'

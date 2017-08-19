@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:DialysisData@umich.edu'
+description: "<p>Lists NHSN data used by ESRD QIP to assess dialysis facility performance.</p>\n"
+distribution:
+  - {interra-reference: xsl-320d93da-e986-438b-b3fc-8c84238caed3}
+  - {interra-reference: rdf-4e756190-0677-45d7-a5e2-245117c079c0}
+  - {interra-reference: json-771f1c91-a049-4af5-b2dd-ac2ad606c288}
+  - {interra-reference: xsl-320d93da-e986-438b-b3fc-8c84238caed3}
+identifier: 'https://data.medicare.gov/api/views/bmqj-88i5'
+keyword:
+  - dfc
+  - dialysis
+  - 'dialysis facilities'
+  - 'linking quality to payment - qip'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-06-01'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'ESRD QIP - National Healthcare Safety Network (NHSN) Dialysis  Reporting - Payment Year 2017'

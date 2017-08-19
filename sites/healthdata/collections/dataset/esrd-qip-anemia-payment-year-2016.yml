@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:DialysisData@umich.edu'
+description: "<p>QIP data by facility: % patients with Hgb &gt;12.</p>\n"
+distribution:
+  - {interra-reference: xsl-be3e7cb3-dd8a-41f9-a5f7-a1bfe0bda220}
+  - {interra-reference: rdf-89244a91-d05a-4049-8a46-511055682856}
+  - {interra-reference: json-f92352b5-380c-49d8-b0b8-35ee54e8ac5b}
+  - {interra-reference: xsl-be3e7cb3-dd8a-41f9-a5f7-a1bfe0bda220}
+identifier: 'https://data.medicare.gov/api/views/965w-87dq'
+keyword:
+  - dfc
+  - dialysis
+  - 'dialysis facilities'
+  - 'linking quality to payment - qip'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-10-26'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'ESRD QIP - Anemia - Payment Year 2016'

@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>2001-2011. The GSPS was initiated in 2000 to collect information on tobacco use, knowledge and attitudes of school personnel toward tobacco, existence and effectiveness of tobacco control policies in schools, and training and materials available for implementing tobacco prevention and control interventions.</p>\n"
+distribution:
+  - {interra-reference: xsl-649f170a-d23f-4d3d-b33e-3351027ff67a}
+  - {interra-reference: rdf-05a70b64-95ca-45c1-befd-8c47f4717967}
+  - {interra-reference: json-8bfc87a7-188a-4635-8b0e-5c825604e995}
+  - {interra-reference: xsl-649f170a-d23f-4d3d-b33e-3351027ff67a}
+identifier: 'https://chronicdata.cdc.gov/api/views/5hns-mwci'
+keyword:
+  - gsps
+  - gtss
+  - osh
+  - 'school personnel'
+  - tobacco
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-12'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Global Tobacco Surveillance System (GTSS) - Global School Personnel Survey (GSPS)'

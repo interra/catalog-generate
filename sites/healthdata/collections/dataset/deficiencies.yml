@@ -1,0 +1,29 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:Edward.Mortimore@cms.hhs.gov'
+description: "<p>A list of all deficiencies currently listed on Nursing Home Compare, including the nursing home that received the deficiency, the associated inspection date, deficiency tag number, scope and severity, the current status of the deficiency and the correction date.  Data are presented as one deficiency per row.</p>\n"
+distribution:
+  - {interra-reference: xsl-0045f337-b180-425f-abe4-5ed2532463bc}
+  - {interra-reference: rdf-ee41fd1c-e433-43c3-9aab-620cedf0d2a2}
+  - {interra-reference: json-dfd1c5d6-cfc8-4cb0-ab36-6e8642c473d7}
+  - {interra-reference: xsl-0045f337-b180-425f-abe4-5ed2532463bc}
+identifier: 'https://data.medicare.gov/api/views/r5ix-sfxw'
+keyword:
+  - complaints
+  - 'inspection results'
+  - nhc
+  - 'nursing home'
+  - safety
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-27'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: Deficiencies

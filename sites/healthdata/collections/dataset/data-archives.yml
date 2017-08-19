@@ -1,0 +1,25 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Data Archives</p>\n"
+distribution:
+  - {interra-reference: xsl-f9e70190-7512-4fda-951a-72ca8f548f44}
+  - {interra-reference: rdf-e50ae871-45ae-4bcd-ac2c-cfe51f53e435}
+  - {interra-reference: json-1e9ec11c-f451-4329-b532-523ed9b456e0}
+  - {interra-reference: xsl-f9e70190-7512-4fda-951a-72ca8f548f44}
+identifier: 'https://data.medicare.gov/api/views/bdfu-yahz'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-10-22'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Data Archives'
+programCode:
+  - '009:000'
+keyword:
+  - centers-for-medicare-amp-medicaid-services

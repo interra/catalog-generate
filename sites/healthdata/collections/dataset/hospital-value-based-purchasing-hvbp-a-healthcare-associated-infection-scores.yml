@@ -1,0 +1,37 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:HospitalCompare@hsag.com'
+description: "<p>A list of hospitals participating in the Hospital VBP Program and their performance rates and scores for the Clinical Process of Care HAI measures.</p>\n"
+distribution:
+  - {interra-reference: xsl-87dc51ce-dfc8-47ca-bb9c-c6560a51e439}
+  - {interra-reference: rdf-f138f2fd-d31a-429b-841c-02f2255b21ae}
+  - {interra-reference: json-40319c2f-aac7-470a-8d1b-85b812ccf255}
+  - {interra-reference: xsl-87dc51ce-dfc8-47ca-bb9c-c6560a51e439}
+identifier: 'https://data.medicare.gov/api/views/qmeg-skqq'
+keyword:
+  - hai
+  - 'healthcare-associated infection'
+  - 'hospital compare'
+  - 'hospital value-based purchasing'
+  - hvbp
+  - infection
+  - 'linking quality to payment'
+  - 'process of care'
+  - quality
+  - rates
+  - ratings
+  - scores
+  - 'value-based purchasing'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-16'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Hospital Value-Based Purchasing (HVBP) â Healthcare-Associated Infection Scores'

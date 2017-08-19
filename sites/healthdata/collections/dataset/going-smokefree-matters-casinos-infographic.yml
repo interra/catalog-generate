@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Explore the Going Smokefree Matters - Casinos Infographic which outlines key facts related to the effects of secondhand smoke exposure in casinos.</p>\n"
+distribution:
+  - {interra-reference: pdf-ecf85bf2-4cfa-4447-a880-b5f767e06823}
+identifier: 'https://data.cdc.gov/api/views/xdg2-nh8n'
+keyword:
+  - casinos
+  - 'fact sheet'
+  - gaming
+  - infographic
+  - 'secondhand smoke'
+  - smokefree
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-18'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'Going Smokefree Matters - Casinos Infographic'

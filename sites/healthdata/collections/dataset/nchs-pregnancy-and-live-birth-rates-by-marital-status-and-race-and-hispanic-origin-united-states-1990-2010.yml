@@ -1,0 +1,30 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'National Center for Health Statistics'
+  hasEmail: 'mailto:hku4@cdc.gov'
+description: "<p><a href=\"http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/\">http://blogs.cdc.gov/nchs-data-visualization/nonmarital-births/</a></p>\n"
+distribution:
+  - {interra-reference: xsl-ae8843e8-7fa2-4edd-87ed-142e3a6cdb8f}
+  - {interra-reference: rdf-e7262ee1-1930-4aec-b5a8-a17a0ac1ea54}
+  - {interra-reference: json-e1b0b309-73a0-4aac-9d79-54a878eed64b}
+  - {interra-reference: xsl-ae8843e8-7fa2-4edd-87ed-142e3a6cdb8f}
+identifier: 'https://data.cdc.gov/api/views/7pcd-2tnr'
+keyword:
+  - 'hispanic origin'
+  - 'live birth rate'
+  - 'marital status'
+  - nchs
+  - race
+  - 'united states'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-14'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'NCHS - Pregnancy and Live Birth Rates, by Marital Status and Race and Hispanic Origin: United States, 1990-2010'

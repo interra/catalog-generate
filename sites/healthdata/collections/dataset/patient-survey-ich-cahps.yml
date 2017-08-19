@@ -1,0 +1,31 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: CMS
+  hasEmail: 'mailto:DialysisData@umich.edu'
+description: "<p>In-Center Hemodialysis Facilites Patient evaluations from the In-Center Hemodialysis Consumer Assessment of Healthcare Providers and Systems (ICH-CAHPS) Survey. The ICH-CAHPS Survey is a national, standardized survey of in-center hemodialysis patients about their experiences with the facility, facility doctors and staff, and care received.</p>\n"
+distribution:
+  - {interra-reference: xsl-9556c872-e484-4ddc-b000-c2a1fed48f5a}
+  - {interra-reference: rdf-2d0cb916-af25-4b46-9c9c-9544f48e4019}
+  - {interra-reference: json-64c8ebf6-ba5d-4dca-8fd6-d704598f8ae7}
+  - {interra-reference: xsl-9556c872-e484-4ddc-b000-c2a1fed48f5a}
+identifier: 'https://data.medicare.gov/api/views/59mq-zhts'
+keyword:
+  - cahps
+  - dfc
+  - dialysis
+  - 'dialysis centers'
+  - 'dialysis facilities'
+  - 'experience of care'
+  - 'patient survey'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-07-15'
+programCode:
+  - '009:078'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'Patient survey (ICH CAHPS)'

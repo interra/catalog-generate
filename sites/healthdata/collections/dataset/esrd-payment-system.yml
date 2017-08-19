@@ -1,0 +1,27 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: 'Health Data Initiative'
+  hasEmail: 'mailto:cms.data@cms.hhs.gov'
+description: "<p>Medicare payment to ESRD facilities for outpatient maintenance dialysis services furnished to Medicare beneficiaries with End-Stage Renal Disease (ESRD) is based on a prospective payment system known as the basic case-mix adjusted composite payment system.  The base composite rate covers the costs of the dialysis treatment and certain routine drugs, laboratory tests, and supplies furnished at home or in a facility.</p>\n"
+distribution:
+  - {interra-reference: csv-2ae3d674-134a-4954-bd5d-cee638356f4a}
+identifier: '161'
+keyword:
+  - 'Coding and Coding Rules'
+  - 'Durable Medical Equipment (DME)'
+  - 'End Stage Renal Disease (ESRD)'
+  - 'Interactive Tools'
+  - 'Prospective Payment System (PPS)'
+  - 'Publically Available Data File - for download'
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-03-17'
+programCode:
+  - '009:000'
+publisher:
+  interra-reference: centers-for-medicare-andamp-medicaid-services
+title: 'ESRD Payment System'

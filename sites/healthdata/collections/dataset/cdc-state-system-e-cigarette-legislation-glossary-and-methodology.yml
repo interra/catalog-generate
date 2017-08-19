@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:20'
+contactPoint:
+  fn: 'CDC Info'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Download the latest version of the Glossary and Methodology File</p>\n"
+distribution:
+  - {interra-reference: xls-2359b28a-6efe-4a08-94db-b750a54b4c33}
+identifier: 'https://data.cdc.gov/api/views/sfei-pddr'
+keyword:
+  - glossary
+  - methodology
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2017-02-18'
+programCode:
+  - '009:020'
+publisher:
+  interra-reference: centers-for-disease-control-and-prevention
+title: 'CDC STATE System E-Cigarette Legislation Glossary and Methodology'

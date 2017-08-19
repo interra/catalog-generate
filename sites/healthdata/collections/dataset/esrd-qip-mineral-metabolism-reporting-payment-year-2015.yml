@@ -1,0 +1,28 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+bureauCode:
+  - '009:38'
+contactPoint:
+  fn: admin
+  hasEmail: 'mailto:HealthData@hhs.gov'
+description: "<p>Lists mineral metabolism data used by ESRD QIP to assess dialysis facility performance.</p>\n"
+distribution:
+  - {interra-reference: textxml-696525ae-8ddb-44b1-9332-bd90c9b964ef}
+  - {interra-reference: rdf-c919d81c-f76e-42cb-93af-2d3763319286}
+  - {interra-reference: json-0960dcfc-5751-4a6b-b827-be121683f125}
+  - {interra-reference: textxml-696525ae-8ddb-44b1-9332-bd90c9b964ef}
+identifier: f2b48491-e121-40ee-b409-785d00a3d1a7
+keyword:
+  - dfc
+  - dialysis
+  - dialysis-facilities
+  - linking-quality-to-payment--qip
+language:
+  - en
+license: 'http://opendefinition.org/licenses/odc-odbl/'
+modified: '2016-04-05'
+publisher:
+  interra-reference: department-of-health-andamp-human-services
+title: 'ESRD QIP - Mineral Metabolism Reporting - Payment Year 2015'
+programCode:
+  - '009:000'
