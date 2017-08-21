@@ -13,7 +13,6 @@ import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
-import BasicListPage from 'containers/BasicListPage/Loadable';
 import CollectionEntity from 'containers/CollectionEntity/Loadable';
 import SearchPage from 'containers/SearchPage/Loadable';
 

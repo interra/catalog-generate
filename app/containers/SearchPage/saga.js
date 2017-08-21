@@ -61,9 +61,10 @@ export function* getResults(action) {
 
   var query = action.query;// yield select(makeSelectQuery());
   var index = '';//yield select(makeSelectIndex());
-  const facets = yield select(makeSelectFacets());
-  const relevance = yield select(makeSelectSort());
-
+  const sort = yield select(makeSelectSort());
+  const pageSize = 25;
+  const pageSizeFacets = 15;
+  const currentPage = 0; // yield select(makeSelectCurrentPage());
   try {
     if (!index) {
       console.time("Loading index.");
@@ -74,6 +75,8 @@ export function* getResults(action) {
     }
 
     var items = [];
+
+    console.time("Querying index.");
 
     if (query) {
       items = index.search(query, {expand: true});
@@ -91,23 +94,58 @@ export function* getResults(action) {
         // Alphabetical by default if there is no query.
         items = alphabetize(items);
     }
+    console.timeEnd("Query Loaded");
 
-    const testFacets =
-        {
-          keyword: {
-            test: 5,
-            best: 2,
-            none: 1
-          },
-          theme: {
-            one: 14,
-            lost: 10,
-            bots: 2
-          }
-        };
+    // yield put(searchResultsTotal(items))
 
-    yield put(searchResultsLoaded(items));
-    yield put(actionFacetResultsLoaded(testFacets));
+    const paged = items.slice(0, pageSize);
+
+    yield put(searchResultsLoaded(paged));
+
+    const facets = yield select(makeSelectFacets());
+
+    let facetsTotal = [];
+
+    facets.forEach(function(facet) {
+      facetsTotal[facet] = [];
+
+      items.forEach(function(i) {
+        if (typeof i.doc[facet] != "undefined") {
+          i.doc[facet].forEach(function(t) {
+            facetsTotal[facet].push(t);
+          });
+        }
+      });
+    });
+    console.log(facetsTotal);
+    var facetsResults = {};
+
+    facets.forEach(function(facet) {
+      facetsResults[facet] = {};
+      facetsTotal[facet].forEach(function(i) {
+          facetsResults[facet][i] = (facetsResults[facet][i]||0)+1;
+      });
+    });
+
+    //TODO: save facetsResults.
+
+    // TODO: separate into func.
+    let facetsSorted = {};
+    facets.forEach(function(facet) {
+      facetsSorted[facet] = [];
+      facetsSorted[facet] = Object.entries(facetsResults[facet]).sort(function(a,b) {
+        return (a[1] > b[1]) ? -1 : ((b[1] > a[1]) ? 1 : 0)
+      });
+    });
+
+    // TODO:
+    let facetsPaged = {};
+    facets.forEach(function(facet) {
+      facetsPaged[facet] = facetsSorted[facet].slice(0, pageSizeFacets);
+    });
+
+//    yield put(searchResultsLoaded(items));
+    yield put(actionFacetResultsLoaded(facetsPaged));
 
   } catch (err) {
     console.log("error?", err);

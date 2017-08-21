@@ -4,6 +4,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const compression = require('compression');
 const dllPlugin = require('./dllPlugin');
 
 function createWebpackMiddleware(compiler, publicPath) {
@@ -21,6 +22,7 @@ function dllPluginsMiddleware(req, res) {
 }
 
 module.exports = function addDevMiddlewares(app, webpackConfig, site) {
+  app.use(compression());
   const fromDir = ['build', site, 'static'].join('/');
   webpackConfig.plugins.push(new CopyWebpackPlugin([{ from: fromDir }]));
   const compiler = webpack(webpackConfig);
