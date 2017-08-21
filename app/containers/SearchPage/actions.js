@@ -17,10 +17,12 @@ import {
   UPDATE_RESULTS_COUNT,
 } from './constants';
 
-export function actionLoadSearchResults(query) {
+export function actionLoadSearchResults(query, selectedFacets) {
+  console.log(selectedFacets);
   return {
     type: LOAD_SEARCH_RESULTS,
     query,
+    selectedFacets,
   };
 }
 export function actionFacetResultsLoaded(facetsResults) {

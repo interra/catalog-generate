@@ -27,7 +27,6 @@ export function* getFacets(results) {
   }
 }
 
-
 export function* sortResults(action) {
     const results = yield select(makeSelectResults());
     const sort = yield select(makeSelectSort());
@@ -48,9 +47,17 @@ export function* sortResults(action) {
           yield put(searchResultsLoaded(alphaItems));
           break;
         case "date":
+          const dateItems = datetize(results);
+          yield put(searchResultsLoaded(dateItems));
           return;
     }
 }
+
+
+Object.filter = (obj, predicate) =>
+    Object.keys(obj)
+          .filter( key => predicate(obj[key]) )
+          .reduce( (res, key) => (res[key] = obj[key], res), {} );
 
 /**
  * Get Search results.
@@ -61,6 +68,8 @@ export function* getResults(action) {
 
   var query = action.query;// yield select(makeSelectQuery());
   var index = '';//yield select(makeSelectIndex());
+  const selectedFacets = action.selectedFacets;
+  console.log(selectedFacets);
   const sort = yield select(makeSelectSort());
   const pageSize = 25;
   const pageSizeFacets = 15;
@@ -96,9 +105,31 @@ export function* getResults(action) {
     }
     console.timeEnd("Query Loaded");
 
-    yield put(actionsearchResultsTotal(items.length))
+    let faceted = [];
+    console.log(selectedFacets);
+    if (selectedFacets) {
+      selectedFacets.forEach(function(selectedFacet) {
+        faceted = items.filter(function(item) {
+          if (item.doc[selectedFacet[0]] !== undefined) {
+            var evalItem = Object.filter(item.doc[selectedFacet[0]], facet => facet == selectedFacet[1]);
+            if (Object.keys(evalItem).length !== 0) {
+              return true;
+            }
+            else {
+              return false;
+            }
+          }
+        });
+      })
+    }
+    else {
+      faceted = items;
+    }
 
-    const paged = items.slice(0, pageSize);
+    yield put(actionsearchResultsTotal(faceted.length));
+//    console.log(faceted);
+
+    const paged = faceted.slice(0, pageSize);
 
     yield put(searchResultsLoaded(paged));
 
@@ -109,7 +140,7 @@ export function* getResults(action) {
     facets.forEach(function(facet) {
       facetsTotal[facet] = [];
 
-      items.forEach(function(i) {
+      faceted.forEach(function(i) {
         if (typeof i.doc[facet] != "undefined") {
           i.doc[facet].forEach(function(t) {
             facetsTotal[facet].push(t);
@@ -117,7 +148,7 @@ export function* getResults(action) {
         }
       });
     });
-    console.log(facetsTotal);
+//    console.log(facetsTotal);
     var facetsResults = {};
 
     facets.forEach(function(facet) {
@@ -157,6 +188,10 @@ function relatize(items) {
     return items.sort(relatCompare);
 }
 
+function datetize(items) {
+    return items.sort(dateCompare);
+}
+
 function alphabetize(items) {
     return items.sort(alphaCompare);
 }
@@ -165,6 +200,14 @@ function relatCompare(a,b) {
   if (a.score < b.score)
     return -1;
   if (a.score > b.score)
+    return 1;
+  return 0;
+}
+
+function alphaCompare(a,b) {
+  if (a.doc.modified < b.doc.modified)
+    return -1;
+  if (a.doc.modified > b.doc.modified)
     return 1;
   return 0;
 }

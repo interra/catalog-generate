@@ -12,7 +12,7 @@ import StyledA from './StyledA';
 import FacetBlockDiv from './FacetBlockDiv';
 
 
-function FacetBlocks({ title, items, loading }) {
+function FacetBlocks({ title, items, loading, click, selectedFacets }) {
 
     if (loading) {
       return <FacetBlockDiv><h4>{title}</h4><List component={LoadingIndicator} /></FacetBlockDiv>;
@@ -21,8 +21,17 @@ function FacetBlocks({ title, items, loading }) {
 
     content = items[title].map(function callback(facet, i) {
       const name = facet[0];
-      const value = facet[1];
-      return <LI key={`facet-${i}`}><StyledA href={`#facet-${title}-${name}`}>{name} ({value})</StyledA></LI>
+      var value = "(" + facet[1] + ")";
+      let active = false;
+      if (selectedFacets) {
+        selectedFacets.forEach(function(facet) {
+          if (title == facet[0] && name == facet[1]) {
+            active = 'active';
+            value = ""
+          }
+        });
+      }
+      return <LI key={`facet-${i}`}><StyledA data-facet-type={title} className={active} onClick={click} href={`#facet-${title}-${name}`}>{name} {value}</StyledA></LI>
     });
 
     return <FacetBlockDiv><h4>{title}</h4><ul className="list-group" key="items">{content}</ul></FacetBlockDiv>;
@@ -30,7 +39,7 @@ function FacetBlocks({ title, items, loading }) {
 }
 
 
-function FacetList({ facets, loadingFacets, loadingFacetsResults, facetsResults }) {
+function FacetList({ facets, loadingFacets, loadingFacetsResults, selectedFacets, facetsResults, facetClick }) {
 
   let content = (<div></div>);
 
@@ -40,10 +49,9 @@ function FacetList({ facets, loadingFacets, loadingFacetsResults, facetsResults 
 
   if (facets !== false) {
     content = facets.map((item) => (
-        <FacetBlocks title={item} key={item} items={facetsResults} loading={loadingFacetsResults} />
+        <FacetBlocks title={item} key={item} selectedFacets={selectedFacets} items={facetsResults} click={facetClick} loading={loadingFacetsResults} />
     ));
     return <div key="wtf">{content}</div>;
-    return <div>wow</div>;
 
   }
 

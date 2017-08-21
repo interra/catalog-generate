@@ -25,6 +25,7 @@ const initialState = fromJS({
   error: false,
   facets: false,
   resultsCount: false,
+  selectFacets: false,
   facetsResults: false,
   loadingFacets: false,
   loadingFacetsResults: true,
@@ -43,7 +44,6 @@ function searchPageReducer(state = initialState, action) {
         .set('loadingFacets', false)
         .set('facets', action.facets);
     case LOAD_FACETS_RESULTS_SUCCESS:
-      console.log(state);
       return state
         .set('loadingFacetsResults', false)
         .set('facetsResults', action.facetsResults);
@@ -52,9 +52,11 @@ function searchPageReducer(state = initialState, action) {
         .set('loading', true)
         .set('query', action.query);
     case LOAD_SEARCH_RESULTS:
+      console.log("what the but");
       return state
         .set('loading', true)
         .set('loadingFacetsResults', true)
+        .set('selectedFacets', action.selectedFacets)
         .set('query', action.query);
     case LOAD_SEARCH_RESULTS_SUCCESS:
       return state

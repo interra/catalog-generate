@@ -20,6 +20,17 @@ const StyledA = styled.a`
       right: 6px;
       text-decoration: none;
    }
+   &.active {
+     background-color: #eaeaea;
+   }
+   &.active:after {
+      content: "\\2715";
+      color: #337ab7;
+      position: absolute;
+      top: 3px;
+      right: 6px;
+      text-decoration: none;
+   }
 `;
 
 export default StyledA;

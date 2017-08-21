@@ -15,6 +15,11 @@ const makeSelectFacets = () => createSelector(
   (substate) => substate.get('facets')
 );
 
+const makeSelectSelectedFacets = () => createSelector(
+  selectSearchPageDomain(),
+  (substate) => substate.get('selectedFacets')
+);
+
 const makeSelectFacetsLoading = () => createSelector(
   selectSearchPageDomain(),
   (substate) => substate.get('loadingFacets')
@@ -53,12 +58,13 @@ const makeSelectSearchLoading = () => createSelector(
 const makeSelectResultsError = () => createSelector(
   selectSearchPageDomain(),
   (substate) => substate.get('error')
-);;
+);
 
 export {
   selectSearchPageDomain,
   makeSelectSort,
   makeSelectFacets,
+  makeSelectSelectedFacets,
   makeSelectFacetsLoading,
   makeSelectFacetsResults,
   makeSelectFacetsResultsLoading,

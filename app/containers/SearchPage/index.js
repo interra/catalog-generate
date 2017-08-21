@@ -21,7 +21,7 @@ import FormGroup from './FormGroup';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectQuery, makeSelectResults, makeSelectResultsCount, makeSelectResultsError, makeSelectSearchLoading, makeSelectSort, makeSelectFacets, makeSelectFacetsLoading, makeSelectFacetsResults, makeSelectFacetsResultsLoading } from './selectors';
+import { makeSelectQuery, makeSelectResults, makeSelectResultsCount, makeSelectResultsError, makeSelectSearchLoading, makeSelectSort, makeSelectFacets, makeSelectSelectedFacets, makeSelectFacetsLoading, makeSelectFacetsResults, makeSelectFacetsResultsLoading } from './selectors';
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -32,29 +32,56 @@ import LoadingIndicator from 'components/LoadingIndicator';
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   queryEnter(e) {
-      const { loadResults } = this.props;
+      const { loadResults, selectedFacets } = this.props;
 
       if (e.target.value.length > 0) {
-          loadResults(e.target.value)
+          loadResults(e.target.value, selectedFacets)
       }
       else if (e.target.value.length == 0) {
-          loadResults();
+          loadResults(null, selectedFacets);
       }
   }
 
   relevanceUpdate(e) {
     const { setSort } = this.props;
 
-    setSort(e.target.value);
+    if (e) {
+      setSort(e.target.value);
+    }
+  }
 
+  facetUpdate(e) {
+    const { loadResults, query, selectedFacets } = this.props;
+
+    if (e) {
+      var text = e.target.textContent;
+      // Remove "(N)" if there.
+      text = text.substring(0,text.indexOf(' (')) ?  text.substring(0,text.indexOf(' (')) : text;
+      const facetType = e.target.getAttribute('data-facet-type');
+      var facets = [];
+      // Active clicked so we are removing.
+      if (e.target.classList.contains('active')) {
+        selectedFacets.forEach(function(facet,i) {
+          if (facet[0].trim() === facetType && facet[1].trim() === text.trim()) {
+          }
+          else {
+            facets[i] = facet;
+          }
+        });
+      }
+      else {
+        facets = selectedFacets ? selectedFacets.concat([[facetType, text]]) : [[facetType, text]];
+      }
+      facets = facets.length ? facets : false;
+      loadResults(query, facets);
+    }
   }
 
   componentWillMount() {
-    console.log("mounting");
 
-    const { query, results, error, loadResults, loadFacets } = this.props;
+    const { query, results, error, loadResults, selectedFacets, loadFacets } = this.props;
 
-    if (results === false && error === false) {
+    if (results === false && error === false && selectedFacets !== false) {
       loadFacets();
       loadResults();
     }
@@ -62,24 +89,26 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { query, results, resultsCount, error, loading, facets, loadFacets, loadingFacets, facetsResults, loadingFacetsResults } = this.props;
+    const { query, results, resultsCount, error, loading, facets, loadFacets, loadingFacets, selectedFacets, facetsResults, loadingFacetsResults } = this.props;
 
-//    const number = results.length;
-    console.log(resultsCount);
     const resultmessage = query  && resultsCount  ? resultsCount + " Results for \"" + query + "\"": resultsCount + " Results";
 
-     const searchListProps = {
+    const searchListProps = {
          loading,
          results,
          error,
          resultmessage,
      };
 
-     const facetListProps = {
+    const facetClick = this.facetUpdate.bind(this);
+
+    const facetListProps = {
          loadingFacets,
          facets,
          loadingFacetsResults,
          facetsResults,
+         facetClick,
+         selectedFacets,
      };
 
     return (
@@ -141,6 +170,10 @@ SearchPage.propTypes = {
     PropTypes.object,
     PropTypes.bool,
   ]),
+  selectedFacets: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
   // Dispatch.
   loadQuery: PropTypes.func,
   loadResults: PropTypes.func,
@@ -159,11 +192,12 @@ const mapStateToProps = createStructuredSelector({
   sort: makeSelectSort(),
   facets: makeSelectFacets(),
   resultsCount: makeSelectResultsCount(),
+  selectedFacets: makeSelectSelectedFacets(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadResults: (query) => dispatch(actionLoadSearchResults(query)),
+    loadResults: (query, selectedFacets) => dispatch(actionLoadSearchResults(query, selectedFacets)),
     loadFacets: () => dispatch(actionLoadFacets()),
     setSort: (query) => dispatch(actionUpdateSort(query)),
   };
