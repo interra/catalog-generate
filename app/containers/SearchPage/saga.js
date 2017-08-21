@@ -4,7 +4,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { LOAD_REPOS } from 'containers/App/constants';
 
 import { LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS } from './constants';
-import { searchResultsLoaded, searchResultsError, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
+import { searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
 
 import request from 'utils/request';
 import { makeSelectQuery, makeSelectSort, makeSelectFacets, makeSelectResults } from 'containers/SearchPage/selectors';
@@ -96,7 +96,7 @@ export function* getResults(action) {
     }
     console.timeEnd("Query Loaded");
 
-    // yield put(searchResultsTotal(items))
+    yield put(actionsearchResultsTotal(items.length))
 
     const paged = items.slice(0, pageSize);
 

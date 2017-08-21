@@ -21,7 +21,7 @@ import FormGroup from './FormGroup';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectQuery, makeSelectResults, makeSelectResultsError, makeSelectSearchLoading, makeSelectSort, makeSelectFacets, makeSelectFacetsLoading, makeSelectFacetsResults, makeSelectFacetsResultsLoading } from './selectors';
+import { makeSelectQuery, makeSelectResults, makeSelectResultsCount, makeSelectResultsError, makeSelectSearchLoading, makeSelectSort, makeSelectFacets, makeSelectFacetsLoading, makeSelectFacetsResults, makeSelectFacetsResultsLoading } from './selectors';
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -62,10 +62,11 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { query, results, error, loading, facets, loadFacets, loadingFacets, facetsResults, loadingFacetsResults } = this.props;
+    const { query, results, resultsCount, error, loading, facets, loadFacets, loadingFacets, facetsResults, loadingFacetsResults } = this.props;
 
-    const number = results.length;
-    const resultmessage = query ? number + " Results for \"" + query + "\"": number + " Results";
+//    const number = results.length;
+    console.log(resultsCount);
+    const resultmessage = query  && resultsCount  ? resultsCount + " Results for \"" + query + "\"": resultsCount + " Results";
 
      const searchListProps = {
          loading,
@@ -121,6 +122,10 @@ SearchPage.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
+  resultsCount: PropTypes.oneOfType([
+    PropTypes.integer,
+    PropTypes.bool,
+  ]),
   loadingFacetsResults: PropTypes.bool,
   loadingFacets: PropTypes.bool,
   loading: PropTypes.bool,
@@ -153,6 +158,7 @@ const mapStateToProps = createStructuredSelector({
   error: makeSelectResultsError(),
   sort: makeSelectSort(),
   facets: makeSelectFacets(),
+  resultsCount: makeSelectResultsCount(),
 });
 
 function mapDispatchToProps(dispatch) {

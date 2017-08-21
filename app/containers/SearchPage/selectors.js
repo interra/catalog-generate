@@ -20,6 +20,11 @@ const makeSelectFacetsLoading = () => createSelector(
   (substate) => substate.get('loadingFacets')
 );
 
+const makeSelectResultsCount = () => createSelector(
+  selectSearchPageDomain(),
+  (substate) => substate.get('resultsCount')
+);
+
 const makeSelectFacetsResults = () => createSelector(
   selectSearchPageDomain(),
   (substate) => substate.get('facetsResults')
@@ -59,6 +64,7 @@ export {
   makeSelectFacetsResultsLoading,
   makeSelectQuery,
   makeSelectResults,
+  makeSelectResultsCount,
   makeSelectResultsError,
   makeSelectSearchLoading,
 };

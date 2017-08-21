@@ -15,6 +15,7 @@ import {
   LOAD_SEARCH_RESULTS_ERROR,
   LOAD_QUERY,
   UPDATE_SORT,
+  UPDATE_RESULTS_COUNT,
 } from './constants';
 
 const initialState = fromJS({
@@ -23,6 +24,7 @@ const initialState = fromJS({
   results: false,
   error: false,
   facets: false,
+  resultsCount: false,
   facetsResults: false,
   loadingFacets: false,
   loadingFacetsResults: true,
@@ -62,6 +64,9 @@ function searchPageReducer(state = initialState, action) {
       return state
         .set('loading', true)
         .set('sort', action.sort);
+    case UPDATE_RESULTS_COUNT:
+      return state
+        .set('resultsCount', action.number);
     default:
       return state;
   }

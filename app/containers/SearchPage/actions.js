@@ -14,6 +14,7 @@ import {
   LOAD_SEARCH_RESULTS_ERROR,
   LOAD_QUERY,
   UPDATE_SORT,
+  UPDATE_RESULTS_COUNT,
 } from './constants';
 
 export function actionLoadSearchResults(query) {
@@ -22,7 +23,6 @@ export function actionLoadSearchResults(query) {
     query,
   };
 }
-
 export function actionFacetResultsLoaded(facetsResults) {
   return {
     type: LOAD_FACETS_RESULTS_SUCCESS,
@@ -51,10 +51,16 @@ export function actionLoadFacets() {
 }
 
 export function actionFacetsLoaded(facets) {
-  console.log("WHY AGAIN?");
   return {
     type: LOAD_FACETS_SUCCESS,
     facets,
+  };
+}
+
+export function actionsearchResultsTotal(number) {
+  return {
+    type: UPDATE_RESULTS_COUNT,
+    number,
   };
 }
 
