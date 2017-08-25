@@ -17,16 +17,16 @@ import {
 
 // The initial state of the App
 const initialState = fromJS({
-  username: '',
+  query: false,
+  index: false,
+  results: false,
+  loading: false,
 });
 
 function homeReducer(state = initialState, action) {
+  console.log(action.type);
   switch (action.type) {
-    case CHANGE_USERNAME:
 
-      // Delete prefixed '@' from the github username
-      return state
-        .set('username', action.name.replace(/@/gi, ''));
     default:
       return state;
   }

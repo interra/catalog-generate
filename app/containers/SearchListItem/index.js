@@ -7,14 +7,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { makeSelectCurrentUser } from 'containers/App/selectors';
 import ListItem from 'components/ListItem';
-import IssueIcon from './IssueIcon';
-import IssueLink from './IssueLink';
-import RepoLink from './RepoLink';
 import Wrapper from './Wrapper';
 
 export class SearchListItem extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function

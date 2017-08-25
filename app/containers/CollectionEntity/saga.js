@@ -26,7 +26,7 @@ export function* getSchema() {
     const currentSchema = yield call(request, requestURL);
     yield put(schemaLoaded(currentSchema));
   } catch (err) {
-        console.log("error?", err);
+    console.log("error?", err);
     yield put(repoLoadingError(err));
   }
 }
@@ -46,7 +46,7 @@ export function* getRepos() {
     const currentCollectionne = yield call(request, requestURL);
     yield put(collectionLoaded(currentCollectionne));
   } catch (err) {
-        console.log("error?", err);
+    console.log("error?", err);
     yield put(repoLoadingError(err));
   }
 }

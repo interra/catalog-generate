@@ -5,6 +5,11 @@ import { createSelector } from 'reselect';
  */
 const selectSearchPageDomain = () => (state) => state.get('search');
 
+const makeSelectIndex = () => createSelector(
+  selectSearchPageDomain(),
+  (substate) => substate.get('index')
+);
+
 const makeSelectQuery = () => createSelector(
   selectSearchPageDomain(),
   (substate) => substate.get('query')
@@ -62,6 +67,7 @@ const makeSelectResultsError = () => createSelector(
 
 export {
   selectSearchPageDomain,
+  makeSelectIndex,
   makeSelectSort,
   makeSelectFacets,
   makeSelectSelectedFacets,

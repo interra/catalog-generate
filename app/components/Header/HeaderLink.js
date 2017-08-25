@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 export default styled(Link)`
   display: inline-flex;
-  padding: 0.25em 2em;
-  margin: .5em;
+  padding: 0.25em 1em;
+  margin: .6em;
   text-decoration: none;
   border-radius: 4px;
   -webkit-font-smoothing: antialiased;
@@ -13,13 +13,10 @@ export default styled(Link)`
   cursor: pointer;
   outline: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: bold;
   font-size: 16px;
-
   color: #eaeaea;
 
-  &:active {
-    background: #41ADDD;
+  &:hover {
     color: #FFF;
   }
 `;

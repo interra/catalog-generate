@@ -6,7 +6,7 @@ const Img = styled(NormalImg)`
   max-width: 350px;
   max-height: 200px;
   margin: 0 auto;
-  padding: 10px;
+  padding: 20px 50px;
   float: left;
   display: block;
 `;

@@ -21,12 +21,12 @@ import FormGroup from './FormGroup';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectQuery, makeSelectResults, makeSelectResultsCount, makeSelectResultsError, makeSelectSearchLoading, makeSelectSort, makeSelectFacets, makeSelectSelectedFacets, makeSelectFacetsLoading, makeSelectFacetsResults, makeSelectFacetsResultsLoading } from './selectors';
+import { makeSelectIndex, makeSelectQuery, makeSelectResults, makeSelectResultsCount, makeSelectResultsError, makeSelectSearchLoading, makeSelectSort, makeSelectFacets, makeSelectSelectedFacets, makeSelectFacetsLoading, makeSelectFacetsResults, makeSelectFacetsResultsLoading } from './selectors';
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { actionLoadSearchResults, actionUpdateSort, actionLoadFacets } from './actions';
+import { actionClearResults, actionLoadSearchResults, actionUpdateSort, actionLoadFacets } from './actions';
 import LoadingIndicator from 'components/LoadingIndicator';
 
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -77,13 +77,21 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
     }
   }
 
+  componentWillUnmount() {
+    const { clearResults } = this.props;
+    clearResults();
+  }
+
   componentWillMount() {
 
     const { query, results, error, loadResults, selectedFacets, loadFacets } = this.props;
 
-    if (results === false && error === false && selectedFacets !== false) {
+    if (results === false && error === false && selectedFacets === false) {
       loadFacets();
       loadResults();
+    }
+    else if (results && selectedFacets === false) {
+      //loadFacets();
     }
 
   }
@@ -166,6 +174,10 @@ SearchPage.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
+  index: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
   facetsResults: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
@@ -179,6 +191,7 @@ SearchPage.propTypes = {
   loadResults: PropTypes.func,
   loadFacets: PropTypes.func,
   setSort: PropTypes.func,
+  clearResults: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -193,12 +206,14 @@ const mapStateToProps = createStructuredSelector({
   facets: makeSelectFacets(),
   resultsCount: makeSelectResultsCount(),
   selectedFacets: makeSelectSelectedFacets(),
+  index: makeSelectIndex(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     loadResults: (query, selectedFacets) => dispatch(actionLoadSearchResults(query, selectedFacets)),
     loadFacets: () => dispatch(actionLoadFacets()),
+    clearResults: () => dispatch(actionClearResults()),
     setSort: (query) => dispatch(actionUpdateSort(query)),
   };
 }

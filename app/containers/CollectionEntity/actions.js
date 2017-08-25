@@ -54,7 +54,6 @@ function actionLoadSchema() {
 * @return {object} An action object with a type of LOAD_REPOS
 */
 function actionLeaveCollection() {
-    console.log("WE ARE LEAVING THE COLLECTION ACTION");
     return {
       type: LEAVE_COLLECTION,
     };

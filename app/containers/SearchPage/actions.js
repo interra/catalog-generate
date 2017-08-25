@@ -5,10 +5,13 @@
  */
 
 import {
+  CLEAR_RESULTS,
   LOAD_FACETS,
   LOAD_FACETS_SUCCESS,
   LOAD_FACETS_RESULTS,
   LOAD_FACETS_RESULTS_SUCCESS,
+  LOAD_SEARCH_INDEX,
+  LOAD_SEARCH_INDEX_SUCCESS,
   LOAD_SEARCH_RESULTS,
   LOAD_SEARCH_RESULTS_SUCCESS,
   LOAD_SEARCH_RESULTS_ERROR,
@@ -17,8 +20,26 @@ import {
   UPDATE_RESULTS_COUNT,
 } from './constants';
 
+export function searchIndexLoaded(index) {
+  return {
+    type: LOAD_SEARCH_INDEX_SUCCESS,
+    index,
+  };
+}
+
+export function actionClearResults() {
+  return {
+    type: CLEAR_RESULTS,
+  };
+}
+
+export function searchLoadIndex() {
+  return {
+    type: LOAD_SEARCH_INDEX,
+  };
+}
+
 export function actionLoadSearchResults(query, selectedFacets) {
-  console.log(selectedFacets);
   return {
     type: LOAD_SEARCH_RESULTS,
     query,

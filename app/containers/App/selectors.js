@@ -8,6 +8,18 @@ const selectGlobal = (state) => state.get('global');
 
 const selectRoute = (state) => state.get('route');
 
+const selectSearchPageDomain = (state) => state.get('search');
+
+const makeSelectIndex = () => createSelector(
+  selectSearchPageDomain,
+  (substate) => substate.get('index')
+);
+
+const makeSelectQuery = () => createSelector(
+  selectSearchPageDomain,
+  (globalState) => globalState.get('query')
+);
+
 const makeSelectCollection = () => createSelector(
   selectGlobal,
   (globalState) => globalState.get('collection')
@@ -46,6 +58,8 @@ const makeSelectLocation = () => createSelector(
 
 export {
   selectGlobal,
+  makeSelectIndex,
+  makeSelectQuery,
   makeSelectCollection,
   makeSelectCollectionName,
   makeSelectCurrentUser,

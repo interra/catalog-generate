@@ -1,8 +1,18 @@
-import styled from 'styled-components';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom'
 
-const Input = styled.input`
-  outline: none;
-  border-bottom: 1px dotted #999;
-`;
+class Input extends React.PureComponent {
+  render() {
+    return  (
+      <input {...this.props} />
+    );
+  }
+
+};
+
+Input.PropTypes = {
+
+}
 
 export default Input;

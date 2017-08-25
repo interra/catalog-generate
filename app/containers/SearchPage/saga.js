@@ -3,15 +3,14 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { LOAD_REPOS } from 'containers/App/constants';
 
-import { LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS } from './constants';
-import { searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
+import { LOAD_SEARCH_INDEX, LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS } from './constants';
+import { searchIndexLoaded, searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
 
 import request from 'utils/request';
-import { makeSelectQuery, makeSelectSort, makeSelectFacets, makeSelectResults } from 'containers/SearchPage/selectors';
+import { makeSelectIndex, makeSelectQuery, makeSelectSort, makeSelectFacets, makeSelectResults } from 'containers/SearchPage/selectors';
 import elasticlunr from 'elasticlunr';
 
-export function* getFacets(results) {
-    console.log("facets loading!");
+export function* getFacets() {
 
   // This breaks staic compilation. Lets fix that later :).
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
@@ -21,9 +20,11 @@ export function* getFacets(results) {
     const currentSchema = yield call(request, requestURL);
 
     yield put(actionFacetsLoaded(currentSchema.facets));
+    return currentSchema.facets;
   } catch (err) {
-        console.log("error?", err);
+    console.log("error?", err);
     yield put(searchResultsError(err));
+    return null;
   }
 }
 
@@ -55,32 +56,96 @@ export function* sortResults(action) {
 
 
 Object.filter = (obj, predicate) =>
-    Object.keys(obj)
-          .filter( key => predicate(obj[key]) )
-          .reduce( (res, key) => (res[key] = obj[key], res), {} );
+  Object.keys(obj)
+    .filter( key => predicate(obj[key]) )
+    .reduce( (res, key) => (res[key] = obj[key], res), {} );
+
+
+
+/**
+ * Get Search results.
+ */
+export function* loadIndex() {
+  const url = window.location.origin + '/search-index.json';
+  console.time("Loading index.");
+  let index = yield call(request, url);
+  index = elasticlunr.Index.load(index);
+  yield put(searchIndexLoaded(index));
+  console.timeEnd("Index Loaded");
+  return index;
+}
+
+/**
+ * Get Search results.
+ */
+export function* loadFacetsFromResults() {
+  const facets = yield select(makeSelectFacets());
+  const results = yield select(makeSelectResults());
+  yield put(actionFacetResultsLoaded(loadFacets(facets, results)))
+}
+
+function loadFacets(facets, faceted) {
+  const pageSizeFacets = 15;
+
+  let facetsTotal = [];
+
+  facets.forEach(function(facet) {
+    facetsTotal[facet] = [];
+
+    faceted.forEach(function(i) {
+      if (typeof i.doc[facet] != "undefined") {
+        i.doc[facet].forEach(function(t) {
+          facetsTotal[facet].push(t);
+        });
+      }
+    });
+  });
+
+  var facetsResults = {};
+
+  facets.forEach(function(facet) {
+    facetsResults[facet] = {};
+    facetsTotal[facet].forEach(function(i) {
+        facetsResults[facet][i] = (facetsResults[facet][i]||0)+1;
+    });
+  });
+
+  //TODO: save facetsResults.
+
+  // TODO: separate into func.
+  let facetsSorted = {};
+  facets.forEach(function(facet) {
+    facetsSorted[facet] = [];
+    facetsSorted[facet] = Object.entries(facetsResults[facet]).sort(function(a,b) {
+      return (a[1] > b[1]) ? -1 : ((b[1] > a[1]) ? 1 : 0)
+    });
+  });
+
+  // TODO:
+  let facetsPaged = {};
+  facets.forEach(function(facet) {
+    facetsPaged[facet] = facetsSorted[facet].slice(0, pageSizeFacets);
+  });
+  return facetsPaged;
+
+}
 
 /**
  * Get Search results.
  */
 export function* getResults(action) {
 
-  const url = window.location.origin + '/search-index.json';
-
   var query = action.query;// yield select(makeSelectQuery());
-  var index = '';//yield select(makeSelectIndex());
+  var index = yield select(makeSelectIndex());
   const selectedFacets = action.selectedFacets;
-  console.log(selectedFacets);
+
   const sort = yield select(makeSelectSort());
   const pageSize = 25;
-  const pageSizeFacets = 15;
   const currentPage = 0; // yield select(makeSelectCurrentPage());
   try {
     if (!index) {
-      console.time("Loading index.");
-      index = yield call(request, url);
-      index = elasticlunr.Index.load(index);
-      //yield put(searchIndexLoaded(index));
-      console.timeEnd("Index Loaded");
+      index = yield call(loadIndex)
+
     }
 
     var items = [];
@@ -106,7 +171,7 @@ export function* getResults(action) {
     console.timeEnd("Query Loaded");
 
     let faceted = [];
-    console.log(selectedFacets);
+
     if (selectedFacets) {
       selectedFacets.forEach(function(selectedFacet) {
         faceted = items.filter(function(item) {
@@ -127,56 +192,16 @@ export function* getResults(action) {
     }
 
     yield put(actionsearchResultsTotal(faceted.length));
-//    console.log(faceted);
 
     const paged = faceted.slice(0, pageSize);
 
     yield put(searchResultsLoaded(paged));
 
-    const facets = yield select(makeSelectFacets());
+    const facets = yield getFacets();
 
-    let facetsTotal = [];
-
-    facets.forEach(function(facet) {
-      facetsTotal[facet] = [];
-
-      faceted.forEach(function(i) {
-        if (typeof i.doc[facet] != "undefined") {
-          i.doc[facet].forEach(function(t) {
-            facetsTotal[facet].push(t);
-          });
-        }
-      });
-    });
-//    console.log(facetsTotal);
-    var facetsResults = {};
-
-    facets.forEach(function(facet) {
-      facetsResults[facet] = {};
-      facetsTotal[facet].forEach(function(i) {
-          facetsResults[facet][i] = (facetsResults[facet][i]||0)+1;
-      });
-    });
-
-    //TODO: save facetsResults.
-
-    // TODO: separate into func.
-    let facetsSorted = {};
-    facets.forEach(function(facet) {
-      facetsSorted[facet] = [];
-      facetsSorted[facet] = Object.entries(facetsResults[facet]).sort(function(a,b) {
-        return (a[1] > b[1]) ? -1 : ((b[1] > a[1]) ? 1 : 0)
-      });
-    });
-
-    // TODO:
-    let facetsPaged = {};
-    facets.forEach(function(facet) {
-      facetsPaged[facet] = facetsSorted[facet].slice(0, pageSizeFacets);
-    });
-
-//    yield put(searchResultsLoaded(items));
-    yield put(actionFacetResultsLoaded(facetsPaged));
+    if (facets) {
+        yield put(actionFacetResultsLoaded(loadFacets(facets, faceted)))
+    }
 
   } catch (err) {
     console.log("error?", err);
@@ -224,6 +249,7 @@ function alphaCompare(a,b) {
  * Root saga manages watcher lifecycle
  */
 export default function* searchData() {
+
   // Watches for LOAD_REPOS actions and calls getRepos when one comes in.
   // By using `takeLatest` only the result of the latest API call is applied.
   // It returns task descriptor (just like fork) so we can continue execution
@@ -231,5 +257,8 @@ export default function* searchData() {
   yield takeLatest(LOAD_SEARCH_RESULTS, getResults);
   yield takeLatest(UPDATE_SORT, sortResults);
   yield takeLatest(LOAD_FACETS, getFacets);
+//  yield takeLatest(LOAD_FACETS, loadFacetsFromResults);
+  yield takeLatest(LOAD_SEARCH_INDEX, loadIndex);
+
 
 }

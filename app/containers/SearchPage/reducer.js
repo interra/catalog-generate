@@ -6,10 +6,13 @@
 
 import { fromJS } from 'immutable';
 import {
+  CLEAR_RESULTS,
   LOAD_FACETS,
   LOAD_FACETS_SUCCESS,
   LOAD_FACETS_RESULTS,
   LOAD_FACETS_RESULTS_SUCCESS,
+  LOAD_SEARCH_INDEX,
+  LOAD_SEARCH_INDEX_SUCCESS,
   LOAD_SEARCH_RESULTS,
   LOAD_SEARCH_RESULTS_SUCCESS,
   LOAD_SEARCH_RESULTS_ERROR,
@@ -20,22 +23,28 @@ import {
 
 const initialState = fromJS({
   loading: true,
-  query: '*',
+  query: false,
   results: false,
   error: false,
   facets: false,
   resultsCount: false,
-  selectFacets: false,
+  selectedFacets: false,
   facetsResults: false,
   loadingFacets: false,
   loadingFacetsResults: true,
   sort: "alpha",
   facets: false,
+  index: false,
 });
 
 function searchPageReducer(state = initialState, action) {
   console.log(action.type);
   switch (action.type) {
+    case CLEAR_RESULTS:
+      return state
+        .set('results', false)
+        .set('query', false)
+        .set('selectedFacets', false);
     case LOAD_FACETS:
       return state
         .set('loadingFacets', true);
@@ -51,8 +60,10 @@ function searchPageReducer(state = initialState, action) {
       return state
         .set('loading', true)
         .set('query', action.query);
+    case LOAD_SEARCH_INDEX_SUCCESS:
+      return state
+        .set('index', action.index);
     case LOAD_SEARCH_RESULTS:
-      console.log("what the but");
       return state
         .set('loading', true)
         .set('loadingFacetsResults', true)
