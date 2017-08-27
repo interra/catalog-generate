@@ -29,6 +29,17 @@ module.exports = function (plop) {
                 message: 'Select storage',
                 name: 'storage',
                 choices: ['FileStorage', 'S3'],
+            },
+            {
+                type: 'input',
+                message: 'Enter Front Page Icon Collection',
+                name: 'front-page-icon-collection',
+                default: 'theme',
+            },
+            {
+                type: 'editor',
+                message: 'Enter Front Page Icons (as yml array of ids)',
+                name: 'front-page-icons',
             }
         ],
         actions: function (data) {
@@ -39,6 +50,8 @@ module.exports = function (plop) {
                 identifier: slug(data.name.toLowerCase()),
                 schema: data.schema,
                 description: data.description,
+                "front-page-icon-collection": data['front-page-icon-collection'],
+                "front-page-icons": data['front-page-icons'],
             };
             site.create(settings, (err, result) => {
                 if (err == 'Site already exists') {
