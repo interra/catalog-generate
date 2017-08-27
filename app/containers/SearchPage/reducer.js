@@ -38,7 +38,6 @@ const initialState = fromJS({
 });
 
 function searchPageReducer(state = initialState, action) {
-  console.log(action.type);
   switch (action.type) {
     case CLEAR_RESULTS:
       return state

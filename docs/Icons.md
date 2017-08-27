@@ -15,8 +15,7 @@ front-page-icons:
 For example:
 
 ```yml
-front-page-icon-collection:
-  - theme 
+front-page-icon-collection: theme 
 front-page-icons:
  - city-planning
  - finance-and-budgeting
@@ -43,4 +42,3 @@ Below is the default icon list:
 ![icon image 3](assets/fonts3.png)
 ![icon image 4](assets/fonts4.png)
 ![icon image 5](assets/fonts5.png)
-

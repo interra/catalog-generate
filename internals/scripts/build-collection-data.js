@@ -17,46 +17,55 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 
 function all(site) {
-    var siteInfo = new Site();
-    var schemaName = siteInfo.getConfigItem(site, 'schema');
-    var schema = new Schema(schemaName);
+  var siteInfo = new Site();
+  var schemaName = siteInfo.getConfigItem(site, 'schema');
+  var schema = new Schema(schemaName);
+  const map = schema.map(function(err, map) {
     var collections = schema.getConfigItem('collections');
     var buildDir = config.get('buildDir');
     var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
     siteInfo.createDirs(siteDir, collections);
-    collections = ["dataset"];
     _.each(collections, function(collection) {
-        const content = new Content[storage](site);
-        schema.dereference(collection, (err, collectionSchema) => {
-            if (err) {
-                console.log(chalk.red("Error for " + collection), err);
-                process.exit(1);
+      const content = new Content[storage](site);
+      schema.dereference(collection, (err, collectionSchema) => {
+        if (err) {
+          console.log(chalk.red("Error for " + collection), err);
+          process.exit(1);
+        }
+        content.findByCollection(collection, true, (err, results) => {
+          // TODO: Move to Async.
+          _.each(results, function(item) {
+            // If no id we create a slug from title.
+            if (!('identifier' in item)) {
+              // Not every schema has a title.
+              let titleName = 'title';
+              if (collection in map) {
+                Object.keys(map[collection]).forEach(function(key) {
+                  if (map[collection][key] == 'title') {
+                    titleName = key;
+                  }
+                });
+              }
+              item.identifier = slug(item[titleName]);
             }
 
-            content.findByCollection(collection, true, (err, results) => {
-                console.log(chalk.blue("Exporting " + collection));
-                console.log(err);
+            // TODO: Check if published.
+            console.log(chalk.blue("Creating file for " + item.identifier));
+            // TODO: Use Search model that includes Lunr or ES.
 
-                // TODO: Move to Async.
-                _.each(results, function(item) {
-                    // TODO: Check if published.
-                    console.log(chalk.yellow("Creating file for " + item.identifier));
-                    // TODO: Use Search model that includes Lunr or ES.
-
-                    content.exportOne(siteDir, slug(item.identifier), collection, item, (err,out) => {
-                        if (err) {
-                            console.log("Error creating " +  item.identifier);
-                        }
-                        else {
-                            //console.log(chalk.green("File created for " + item.identifier));
-                        }
-                    });
-                });
+            content.exportOne(siteDir, slug(item.identifier), collection, item, (err,out) => {
+              if (err) {
+                console.log("Error creating " +  item.identifier);
+              }
+              else {
+                //console.log(chalk.green("File created for " + item.identifier));
+              }
             });
-
+          });
         });
-
+      });
     });
+  });
 
 }
 

@@ -8,25 +8,25 @@ const chalk = require('chalk');
 class Schema {
 
   constructor(name) {
-      this.name = name;
-      this.dir = __dirname.replace("internals/models", "") + "schemas/" + name + "/";
-      this.Hook = require(this.dir + '/hooks/Schema.js');
+    this.name = name;
+    this.dir = __dirname.replace("internals/models", "") + "schemas/" + name + "/";
+    this.Hook = require(this.dir + '/hooks/Schema.js');
   }
 
   // Retrieves uiSchema.
   uiSchema(callback) {
-      const configFile = this.dir + "UISchema.yml";
-      YAML.load(configFile, function (data) {
-          return callback(null, data);
-      });
+    const configFile = this.dir + "UISchema.yml";
+    YAML.load(configFile, function (data) {
+      return callback(null, data);
+    });
   }
 
   // Retrieves map settings.
   map(callback) {
-      const configFile = this.dir + "map.yml";
-      YAML.load(configFile, function (data) {
-          return callback(null, data);
-      });
+    const configFile = this.dir + "map.yml";
+    YAML.load(configFile, function (data) {
+      return callback(null, data);
+    });
   }
 
     // Retrieves Schema as well as uiSchema and map for individual collection.

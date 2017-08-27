@@ -19,7 +19,6 @@ import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import H1 from 'components/H1';
 import PageContainer from 'components/PageContainer';
-import ReposList from 'components/ReposList';
 import messages from './messages';
 import { loadRepos } from '../App/actions';
 import { actionLoadCollection, actionLoadSchema, actionLeaveCollection } from './actions';
