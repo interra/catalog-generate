@@ -4,6 +4,7 @@ const dataJsonImport = require('./internals/scripts/datajson2yml');
 const Validate = require('./internals/scripts/validateSchema');
 const Build = require('./internals/scripts/build-collection-data');
 const BuildSchema = require('./internals/scripts/build-schema');
+const BuildConfig = require('./internals/scripts/build-config');
 const BuildSearch = require('./internals/scripts/build-search');
 const Schema = require('./internals/models/schema');
 const Site = require('./internals/models/site');
@@ -36,6 +37,12 @@ prog
     .argument('site', 'The site to build from')
     .action((args, options) => {
        BuildSchema.get(args.site);
+    })
+    .command('build-config')
+    .help('builds config file for a site')
+    .argument('site', 'The site to build from')
+    .action((args, options) => {
+       BuildConfig.get(args.site);
     })
     .command('build-search')
     .help('builds search index for a site')

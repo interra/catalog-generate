@@ -15,6 +15,8 @@ import {
   LOAD_SEARCH_RESULTS,
   LOAD_SEARCH_RESULTS_SUCCESS,
   LOAD_SEARCH_RESULTS_ERROR,
+  LOAD_HOME_PAGE_ICONS,
+  LOAD_HOME_PAGE_ICONS_SUCCESS,
   LOAD_QUERY,
   UPDATE_SORT,
   UPDATE_RESULTS_COUNT,
@@ -39,6 +41,19 @@ export function searchLoadIndex() {
   };
 }
 
+export function actionLoadHomePageIcons() {
+  return {
+    type: LOAD_HOME_PAGE_ICONS,
+  };
+}
+
+export function actionLoadHomePageIconsLoaded(homePageIcons) {
+  return {
+    type: LOAD_HOME_PAGE_ICONS_SUCCESS,
+    homePageIcons
+  };
+}
+
 export function actionLoadSearchResults(query, selectedFacets) {
   return {
     type: LOAD_SEARCH_RESULTS,
@@ -46,6 +61,7 @@ export function actionLoadSearchResults(query, selectedFacets) {
     selectedFacets,
   };
 }
+
 export function actionFacetResultsLoaded(facetsResults) {
   return {
     type: LOAD_FACETS_RESULTS_SUCCESS,

@@ -11,6 +11,8 @@ import {
   LOAD_FACETS_SUCCESS,
   LOAD_FACETS_RESULTS,
   LOAD_FACETS_RESULTS_SUCCESS,
+  LOAD_HOME_PAGE_ICONS,
+  LOAD_HOME_PAGE_ICONS_SUCCESS,
   LOAD_SEARCH_INDEX,
   LOAD_SEARCH_INDEX_SUCCESS,
   LOAD_SEARCH_RESULTS,
@@ -35,6 +37,8 @@ const initialState = fromJS({
   sort: "alpha",
   facets: false,
   index: false,
+  homePageIcons: false,
+  loadingHomePageIcons: false,
 });
 
 function searchPageReducer(state = initialState, action) {
@@ -55,6 +59,13 @@ function searchPageReducer(state = initialState, action) {
       return state
         .set('loadingFacetsResults', false)
         .set('facetsResults', action.facetsResults);
+    case LOAD_HOME_PAGE_ICONS:
+      return state
+        .set('loadingHomePageIcons', true);
+    case LOAD_HOME_PAGE_ICONS_SUCCESS:
+      return state
+        .set('loadingHomePageIcons', false)
+        .set('homePageIcons', action.homePageIcons);
     case LOAD_QUERY:
       return state
         .set('loading', true)

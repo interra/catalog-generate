@@ -1,14 +1,37 @@
 // import { take, call, put, select } from 'redux-saga/effects';
 
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, fetch } from 'redux-saga/effects';
 import { LOAD_REPOS } from 'containers/App/constants';
 
-import { LOAD_SEARCH_INDEX, LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS } from './constants';
-import { searchIndexLoaded, searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
+import { LOAD_HOME_PAGE_ICONS, LOAD_SEARCH_INDEX, LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS } from './constants';
+import { actionLoadHomePageIconsLoaded, searchIndexLoaded, searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
 
 import request from 'utils/request';
 import { makeSelectIndex, makeSelectQuery, makeSelectSort, makeSelectFacets, makeSelectResults } from 'containers/SearchPage/selectors';
 import elasticlunr from 'elasticlunr';
+
+export function* getIcons(action) {
+  const collection = interraConfig['front-page-icon-collection'];
+  const icons = interraConfig['front-page-icons'];
+  const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  console.log(collection);
+
+  try {
+
+    console.log(icons.map(p => url + '/collections/' + collection + '/' + p + '.json'));
+
+    const responses = yield icons.map(p => call(request, url + '/collections/' + collection + '/' + p + '.json'));
+    //const responses = yield call(request, "http://localhost:3000/collections/theme/city-planning.json");
+
+    console.log(responses);
+
+    yield put(actionLoadHomePageIconsLoaded(responses));
+    return responses;
+  } catch (err) {
+    console.log("error?", err);
+    return null;
+  }
+}
 
 export function* getFacets() {
 
@@ -54,13 +77,10 @@ export function* sortResults(action) {
     }
 }
 
-
 Object.filter = (obj, predicate) =>
   Object.keys(obj)
     .filter( key => predicate(obj[key]) )
     .reduce( (res, key) => (res[key] = obj[key], res), {} );
-
-
 
 /**
  * Get Search results.
@@ -254,6 +274,7 @@ export default function* searchData() {
   // By using `takeLatest` only the result of the latest API call is applied.
   // It returns task descriptor (just like fork) so we can continue execution
   // It will be cancelled automatically on component unmount
+  yield takeLatest(LOAD_HOME_PAGE_ICONS, getIcons);
   yield takeLatest(LOAD_SEARCH_RESULTS, getResults);
   yield takeLatest(UPDATE_SORT, sortResults);
   yield takeLatest(LOAD_FACETS, getFacets);

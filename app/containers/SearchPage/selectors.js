@@ -15,6 +15,16 @@ const makeSelectQuery = () => createSelector(
   (substate) => substate.get('query')
 );
 
+const makeSelectHomePageIcons = () => createSelector(
+  selectSearchPageDomain(),
+  (substate) => substate.get('homePageIcons')
+);
+
+const makeSelectLoadingHomePageIcons = () => createSelector(
+  selectSearchPageDomain(),
+  (substate) => substate.get('loadingHomePageIcons')
+);
+
 const makeSelectFacets = () => createSelector(
   selectSearchPageDomain(),
   (substate) => substate.get('facets')
@@ -79,4 +89,6 @@ export {
   makeSelectResultsCount,
   makeSelectResultsError,
   makeSelectSearchLoading,
+  makeSelectHomePageIcons,
+  makeSelectLoadingHomePageIcons,
 };

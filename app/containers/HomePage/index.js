@@ -15,10 +15,11 @@ import { withRouter } from 'react-router-dom'
 
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
-import { actionClearResults, searchLoadIndex, actionLoadSearchResults } from 'containers/SearchPage/actions';
-import { makeSelectIndex, makeSelectQuery, makeSelectResults } from 'containers/SearchPage/selectors';
+import { actionLoadHomePageIcons, actionClearResults, searchLoadIndex, actionLoadSearchResults } from 'containers/SearchPage/actions';
+import { makeSelectIndex, makeSelectQuery, makeSelectResults, makeSelectHomePageIcons, makeSelectLoadingHomePageIcons } from 'containers/SearchPage/selectors';
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import AutoCompSearchList from 'components/AutoCompSearchList';
+import HomePageIconList from 'components/HomePageIconList';
 
 import H2 from 'components/H2';
 import AtPrefix from './AtPrefix';
@@ -38,14 +39,18 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
    * when initial state username is not null, submit the form to load repos
    */
   componentDidMount() {
-    const { index, loadIndex, results, clearResults } = this.props;
+    const { index, loadIndex, results, clearResults, loadIcons, homePageIcons } = this.props;
 
     if (!index) {
-      loadIndex();
+//      loadIndex();
     }
     if (results) {
-      clearResults();
+  //      clearResults();
     }
+    if (!homePageIcons) {
+      loadIcons();
+    }
+
   }
 
   queryEnter(e) {
@@ -72,7 +77,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { query, results } = this.props;
+    const { query, results, homePageIcons, loadingHomePageIcons } = this.props;
 
     const loading = false;
     const error = false;
@@ -80,6 +85,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       results,
       loading,
       query,
+      error,
+    }
+
+    const HomePageIconListProps = {
+      homePageIcons,
+      loadingHomePageIcons,
       error,
     }
 
@@ -92,6 +103,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       <i className="glyphicon glyphicon-search"></i>
       </button>
     ));
+
+    console.log(homePageIcons);
+    console.log(loadingHomePageIcons);
 
     return (
       <article>
@@ -114,22 +128,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             <AutoCompSearchList {...AutoCompSearchListProps} />
           </div>
         </div>
-
         <div>
-          <CenteredSection>
-            <H2>
-              <FormattedMessage {...messages.startProjectHeader} />
-            </H2>
-            <p>
-              <FormattedMessage {...messages.startProjectMessage} />
-            </p>
-          </CenteredSection>
-          <Section>
-            <H2>
-              <FormattedMessage {...messages.trymeHeader} />
-            </H2>
-          </Section>
-            <i className="glyphicon glyphicon-search"></i>
+          <HomePageIconList {...HomePageIconListProps} />
         </div>
       </article>
     );
@@ -155,10 +155,15 @@ HomePage.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
+  homePageIcons: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
   // Dispatch.
   loadIndex: PropTypes.func,
   loadResults: PropTypes.func,
   clearResults: PropTypes.func,
+  loadIcons: PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -166,6 +171,7 @@ export function mapDispatchToProps(dispatch) {
     loadIndex: () => dispatch(searchLoadIndex()),
     clearResults: () => dispatch(actionClearResults()),
     loadResults: (query) => dispatch(actionLoadSearchResults(query)),
+    loadIcons: () => dispatch(actionLoadHomePageIcons()),
   };
 }
 
@@ -175,10 +181,16 @@ const mapStateToProps = createStructuredSelector({
   loading: makeSelectLoading(),
   error: makeSelectError(),
   results: makeSelectResults(),
+  homePageIcons: makeSelectHomePageIcons(),
+  loadingHomePageIcons: makeSelectLoadingHomePageIcons(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
+// TODO: We are using the search state so we can load the index only once and
+// use the same actions to search. Would like to use search state for search
+// and then home state for home actions but don't know how so am just using
+// search for now.
 const withReducer = injectReducer({ key: 'search', reducer });
 const withSaga = injectSaga({ key: 'search', saga });
 
