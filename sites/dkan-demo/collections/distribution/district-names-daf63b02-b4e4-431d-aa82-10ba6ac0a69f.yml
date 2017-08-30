@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/district_centerpoints_0.csv'
+mediaType: text/csv
+format: csv
+description: "<p>You can see this data plotted on a map, by clicking on 'Map' below. Individual data records can be seen by clicking on each point.</p>\n"
+title: 'District Names'
+identifier: district-names-daf63b02-b4e4-431d-aa82-10ba6ac0a69f
+interra-published: true

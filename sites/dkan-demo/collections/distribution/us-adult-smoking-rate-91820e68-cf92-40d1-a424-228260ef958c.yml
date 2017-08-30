@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/CDCSmokingRates.csv'
+mediaType: text/csv
+format: csv
+description: "<p>Source: Centers for Disease Control and Prevention, 2015</p>\n"
+title: 'U.S. Adult Smoking Rate'
+identifier: us-adult-smoking-rate-91820e68-cf92-40d1-a424-228260ef958c
+interra-published: true

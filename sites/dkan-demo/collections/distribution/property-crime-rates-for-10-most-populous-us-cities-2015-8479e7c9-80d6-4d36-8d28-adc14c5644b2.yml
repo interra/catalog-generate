@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/PropertyCrimeRates_1.csv'
+mediaType: text/csv
+format: csv
+description: "<p>Source: FBI Uniform Crime Report, 2014 (<a href=\"https://www.fbi.gov/about-us/cjis/ucr/ucr\">https://www.fbi.gov/about-us/cjis/ucr/ucr</a>)</p>\n"
+title: 'Property Crime Rates for 10 Most Populous US Cities (2015)'
+identifier: property-crime-rates-for-10-most-populous-us-cities-2015-8479e7c9-80d6-4d36-8d28-adc14c5644b2
+interra-published: true

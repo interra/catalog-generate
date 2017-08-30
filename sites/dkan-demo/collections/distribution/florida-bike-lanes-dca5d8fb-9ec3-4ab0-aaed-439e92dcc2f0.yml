@@ -1,0 +1,7 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/Bike_Lane.csv'
+mediaType: text/csv
+format: csv
+title: 'Florida Bike Lanes'
+identifier: florida-bike-lanes-dca5d8fb-9ec3-4ab0-aaed-439e92dcc2f0
+interra-published: true

@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/TobaccoTaxes2016_2_1.csv'
+mediaType: text/csv
+format: csv
+description: "<p>Source: The Campaign for Tobacco-Free Kids, April 2016: <a href=\"https://www.tobaccofreekids.org/research/factsheets/pdf/0097.pdf\">https://www.tobaccofreekids.org/research/factsheets/pdf/0097.pdf</a></p>\n"
+title: 'Tobacco Taxation by State as of April 2016'
+identifier: tobacco-taxation-by-state-as-of-april-2016-6517d90c-7e37-4c58-b823-677383d046f0
+interra-published: true

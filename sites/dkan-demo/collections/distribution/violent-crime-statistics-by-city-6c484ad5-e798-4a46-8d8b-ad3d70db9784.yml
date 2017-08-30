@@ -1,0 +1,7 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/NumbersByCity.csv'
+mediaType: text/csv
+format: csv
+title: 'Violent Crime Statistics by City '
+identifier: violent-crime-statistics-by-city-6c484ad5-e798-4a46-8d8b-ad3d70db9784
+interra-published: true

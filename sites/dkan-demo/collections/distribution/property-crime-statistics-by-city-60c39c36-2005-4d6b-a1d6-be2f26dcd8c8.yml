@@ -1,0 +1,7 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/PropertyCrimesByCity_3.csv'
+mediaType: text/csv
+format: csv
+title: 'Property Crime Statistics by City'
+identifier: property-crime-statistics-by-city-60c39c36-2005-4d6b-a1d6-be2f26dcd8c8
+interra-published: true

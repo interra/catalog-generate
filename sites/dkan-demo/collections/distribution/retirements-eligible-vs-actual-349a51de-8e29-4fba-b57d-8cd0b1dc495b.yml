@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/2015EligibleVsActual.csv'
+mediaType: text/csv
+format: csv
+description: "<p>This data, ranging from fiscal year 2011 to fiscal year 2015, depicts the percentage of the workforce that is eligible to retire compared to the percentage of the workforce who actually retired.</p>\n"
+title: 'Retirements: Eligible vs. Actual'
+identifier: retirements-eligible-vs-actual-349a51de-8e29-4fba-b57d-8cd0b1dc495b
+interra-published: true

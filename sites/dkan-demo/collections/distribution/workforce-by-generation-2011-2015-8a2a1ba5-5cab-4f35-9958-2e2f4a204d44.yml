@@ -1,0 +1,8 @@
+'@type': 'dcat:Distribution'
+downloadURL: 'http://demo.getdkan.com/sites/default/files/GenChart_0_0.csv'
+mediaType: text/csv
+format: csv
+description: "<p>Population of state employees broken down into Gen X, Gen Y, Baby Boomers and Over 65+.</p>\n"
+title: 'Workforce By Generation (2011-2015)'
+identifier: workforce-by-generation-2011-2015-8a2a1ba5-5cab-4f35-9958-2e2f4a204d44
+interra-published: true

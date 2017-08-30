@@ -1,0 +1,12 @@
+name: 'DKAN Demo'
+identifier: dkan-demo
+schema: pod-full
+description: 'this is a demo'
+front-page-icon-collection: theme
+front-page-icons:
+ - city-planning
+ - finance-and-budgeting
+ - health-care
+ - public-safety
+ - transportation
+ - education

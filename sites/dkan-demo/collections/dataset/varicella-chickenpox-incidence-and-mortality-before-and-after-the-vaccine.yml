@@ -1,0 +1,23 @@
+'@type': 'dcat:Dataset'
+accessLevel: public
+contactPoint:
+  fn: 'CDC INFO'
+  hasEmail: 'mailto:cdcinfo@cdc.gov'
+description: "<p>Centers for Disease Control and Prevention data regarding varicella (chickenpox) virus incidence and mortality rates.</p>\n<p><strong>Source:</strong> <a href=\"https://data.cdc.gov/NNDSS/NNDSS-Table-II-Varicella-to-West-Nile-virus-diseas/ig4m-ub43\">https://data.cdc.gov/NNDSS/NNDSS-Table-II-Varicella-to-West-Nile-virus-d...</a></p>\n<p><strong>Related Data Story: </strong><a href=\"/story/end-chickenpox-varicella-vaccines-success-story\">An End to Chickenpox: The Varicella Vaccine's Success Story</a></p>\n"
+distribution:
+  - {interra-reference: varicella-incidence-rates-after-vaccine-introduced-in-us-1995-2009-e25e9c8c-6abd-449d-aea9-20a77e702034}
+  - {interra-reference: varicella-mortality-by-age-group-1970-1994-e9d8c793-9b40-49d9-a3f6-dd2b4e0d56f4}
+  - {interra-reference: varicella-incidence-rates-after-vaccine-introduced-in-us-1995-2009-e25e9c8c-6abd-449d-aea9-20a77e702034}
+identifier: e1f2ebcd-ee23-454f-87b5-df0306658418
+issued: '2016-04-06'
+keyword:
+  - health
+landingPage: 'http://demo.getdkan.com/dataset/varicella-chickenpox-incidence-and-mortality-and-after-vaccine'
+license: 'http://opendefinition.org/licenses/cc-by-sa/'
+modified: '2017-08-25'
+publisher:
+  interra-reference: advisory-council-for-infectious-disease
+spatial: 'POLYGON ((-128.056640625 24.206889622398, -128.056640625 50.176898122001, -64.775390625 50.176898122001, -64.775390625 24.206889622398))'
+theme:
+  - 'Health Care'
+title: 'Varicella (Chickenpox) Incidence and Mortality, Before and After the Vaccine'
