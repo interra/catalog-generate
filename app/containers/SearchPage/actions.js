@@ -20,6 +20,7 @@ import {
   LOAD_QUERY,
   UPDATE_SORT,
   UPDATE_RESULTS_COUNT,
+  UPDATE_FACETS,
 } from './constants';
 
 export function searchIndexLoaded(index) {
@@ -80,6 +81,12 @@ export function actionUpdateSort(sort) {
   return {
     type: UPDATE_SORT,
     sort,
+  };
+}
+
+export function actionUpdateFacets() {
+  return {
+    type: UPDATE_FACETS
   };
 }
 

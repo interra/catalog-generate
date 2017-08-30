@@ -21,6 +21,7 @@ import {
   LOAD_QUERY,
   UPDATE_SORT,
   UPDATE_RESULTS_COUNT,
+  UPDATE_FACETS,
 } from './constants';
 
 const initialState = fromJS({
@@ -45,9 +46,15 @@ function searchPageReducer(state = initialState, action) {
   switch (action.type) {
     case CLEAR_RESULTS:
       return state
-        .set('results', false)
+        .set('loading', true)
         .set('query', false)
-        .set('selectedFacets', false);
+        .set('results', false)
+        .set('error', false)
+        .set('resultsCount', false)
+        .set('selectedFacets', false)
+        .set('facetsResults', false)
+        .set('loadingFacetsResults', true)
+        .set('loadingFacets', false);
     case LOAD_FACETS:
       return state
         .set('loadingFacets', true);

@@ -7,6 +7,7 @@ const Wrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 0 70px 0 10px;
+  z-index: 100;
 `;
 
 export default Wrapper;

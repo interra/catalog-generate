@@ -24,7 +24,6 @@ const initialState = fromJS({
 });
 
 function homeReducer(state = initialState, action) {
-  console.log(action.type);
   switch (action.type) {
 
     default:

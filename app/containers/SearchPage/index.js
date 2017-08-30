@@ -26,7 +26,7 @@ import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { actionClearResults, actionLoadSearchResults, actionUpdateSort, actionLoadFacets } from './actions';
+import { actionClearResults, actionLoadSearchResults, actionUpdateSort, actionLoadFacets, actionUpdateFacets } from './actions';
 import LoadingIndicator from 'components/LoadingIndicator';
 
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -84,14 +84,14 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
 
   componentWillMount() {
 
-    const { query, results, error, loadResults, selectedFacets, loadFacets } = this.props;
+    const { query, results, error, facets, loadResults, selectedFacets, loadFacets, updateFacets, facetsResults } = this.props;
+
 
     if (results === false && error === false && selectedFacets === false) {
-      loadFacets();
       loadResults();
     }
-    else if (results && selectedFacets === false) {
-      //loadFacets();
+    if (results && facetsResults === false) {
+      updateFacets();
     }
 
   }
@@ -108,6 +108,7 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
          resultmessage,
      };
 
+    // TODO: remove from render.
     const facetClick = this.facetUpdate.bind(this);
 
     const facetListProps = {
@@ -192,6 +193,7 @@ SearchPage.propTypes = {
   loadFacets: PropTypes.func,
   setSort: PropTypes.func,
   clearResults: PropTypes.func,
+  updateFacets: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -215,6 +217,7 @@ function mapDispatchToProps(dispatch) {
     loadFacets: () => dispatch(actionLoadFacets()),
     clearResults: () => dispatch(actionClearResults()),
     setSort: (query) => dispatch(actionUpdateSort(query)),
+    updateFacets: () => dispatch(actionUpdateFacets()),
   };
 }
 

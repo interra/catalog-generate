@@ -3,7 +3,7 @@
 import { call, put, select, takeLatest, fetch } from 'redux-saga/effects';
 import { LOAD_REPOS } from 'containers/App/constants';
 
-import { LOAD_HOME_PAGE_ICONS, LOAD_SEARCH_INDEX, LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS } from './constants';
+import { LOAD_HOME_PAGE_ICONS, LOAD_SEARCH_INDEX, LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS, UPDATE_FACETS } from './constants';
 import { actionLoadHomePageIconsLoaded, searchIndexLoaded, searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
 
 import request from 'utils/request';
@@ -14,16 +14,10 @@ export function* getIcons(action) {
   const collection = interraConfig['front-page-icon-collection'];
   const icons = interraConfig['front-page-icons'];
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
-  console.log(collection);
 
   try {
 
-    console.log(icons.map(p => url + '/collections/' + collection + '/' + p + '.json'));
-
     const responses = yield icons.map(p => call(request, url + '/collections/' + collection + '/' + p + '.json'));
-    //const responses = yield call(request, "http://localhost:3000/collections/theme/city-planning.json");
-
-    console.log(responses);
 
     yield put(actionLoadHomePageIconsLoaded(responses));
     return responses;
@@ -99,12 +93,15 @@ export function* loadIndex() {
  * Get Search results.
  */
 export function* loadFacetsFromResults() {
-  const facets = yield select(makeSelectFacets());
+  let facets = yield select(makeSelectFacets());
+  if (!facets) {
+    facets = yield getFacets();
+  }
   const results = yield select(makeSelectResults());
   yield put(actionFacetResultsLoaded(loadFacets(facets, results)))
 }
 
-function loadFacets(facets, faceted) {
+function loadFacets(facets, results) {
   const pageSizeFacets = 15;
 
   let facetsTotal = [];
@@ -112,7 +109,7 @@ function loadFacets(facets, faceted) {
   facets.forEach(function(facet) {
     facetsTotal[facet] = [];
 
-    faceted.forEach(function(i) {
+    results.forEach(function(i) {
       if (typeof i.doc[facet] != "undefined") {
         i.doc[facet].forEach(function(t) {
           facetsTotal[facet].push(t);
@@ -164,8 +161,7 @@ export function* getResults(action) {
   const currentPage = 0; // yield select(makeSelectCurrentPage());
   try {
     if (!index) {
-      index = yield call(loadIndex)
-
+      index = yield call(loadIndex);
     }
 
     var items = [];
@@ -220,7 +216,7 @@ export function* getResults(action) {
     const facets = yield getFacets();
 
     if (facets) {
-        yield put(actionFacetResultsLoaded(loadFacets(facets, faceted)))
+      yield put(actionFacetResultsLoaded(loadFacets(facets, faceted)))
     }
 
   } catch (err) {
@@ -278,7 +274,7 @@ export default function* searchData() {
   yield takeLatest(LOAD_SEARCH_RESULTS, getResults);
   yield takeLatest(UPDATE_SORT, sortResults);
   yield takeLatest(LOAD_FACETS, getFacets);
-//  yield takeLatest(LOAD_FACETS, loadFacetsFromResults);
+  yield takeLatest(UPDATE_FACETS, loadFacetsFromResults);
   yield takeLatest(LOAD_SEARCH_INDEX, loadIndex);
 
 

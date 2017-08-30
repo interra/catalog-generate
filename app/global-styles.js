@@ -4,9 +4,6 @@ import eot from 'fonts/dkan-topics.eot';
 import woff from 'fonts/dkan-topics.woff';
 import ttf from 'fonts/dkan-topics.ttf';
 
-console.log(svg);
-
-
 /* eslint no-unused-expressions: 0 */
 injectGlobal`
   html,

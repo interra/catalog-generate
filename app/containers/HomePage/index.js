@@ -15,7 +15,7 @@ import { withRouter } from 'react-router-dom'
 
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
-import { actionLoadHomePageIcons, actionClearResults, searchLoadIndex, actionLoadSearchResults } from 'containers/SearchPage/actions';
+import { actionLoadFacets, actionLoadHomePageIcons, actionClearResults, searchLoadIndex, actionLoadSearchResults } from 'containers/SearchPage/actions';
 import { makeSelectIndex, makeSelectQuery, makeSelectResults, makeSelectHomePageIcons, makeSelectLoadingHomePageIcons } from 'containers/SearchPage/selectors';
 import { makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import AutoCompSearchList from 'components/AutoCompSearchList';
@@ -42,10 +42,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     const { index, loadIndex, results, clearResults, loadIcons, homePageIcons } = this.props;
 
     if (!index) {
-//      loadIndex();
+      loadIndex();
     }
     if (results) {
-  //      clearResults();
+      clearResults();
     }
     if (!homePageIcons) {
       loadIcons();
@@ -76,8 +76,17 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     history.push('/search')
   }
 
+  letsGoToSearchWithFacet(e) {
+    const { loadResults } = this.props;
+    const facet = [['theme', e.target.getAttribute('data-facet-name')]];
+    loadResults(null, facet);
+  }
+
+
   render() {
     const { query, results, homePageIcons, loadingHomePageIcons } = this.props;
+
+    const facetClick = this.letsGoToSearchWithFacet.bind(this);
 
     const loading = false;
     const error = false;
@@ -92,20 +101,18 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       homePageIcons,
       loadingHomePageIcons,
       error,
+      facetClick,
     }
-
+    // TODO: I don't have to do this, can use this.props.history.push('/search');
     const Button = withRouter(({ history}) => (
       <button className="btn btn-info btn-lg"
         type='button'
         style={{"backgroundColor": "#030d17", height: "60px", width: "60px", "border": "#999"}}
         onClick={() => this.letsGoToSearch(history)}
       >
-      <i className="glyphicon glyphicon-search"></i>
+        <i className="glyphicon glyphicon-search"></i>
       </button>
     ));
-
-    console.log(homePageIcons);
-    console.log(loadingHomePageIcons);
 
     return (
       <article>
@@ -128,9 +135,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             <AutoCompSearchList {...AutoCompSearchListProps} />
           </div>
         </div>
-        <div>
-          <HomePageIconList {...HomePageIconListProps} />
-        </div>
+        <HomePageIconList {...HomePageIconListProps} />
       </article>
     );
   }
@@ -164,14 +169,16 @@ HomePage.propTypes = {
   loadResults: PropTypes.func,
   clearResults: PropTypes.func,
   loadIcons: PropTypes.func,
+  loadFacets: PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     loadIndex: () => dispatch(searchLoadIndex()),
     clearResults: () => dispatch(actionClearResults()),
-    loadResults: (query) => dispatch(actionLoadSearchResults(query)),
+    loadResults: (query, facets) => dispatch(actionLoadSearchResults(query, facets)),
     loadIcons: () => dispatch(actionLoadHomePageIcons()),
+    loadFacets: () => dispatch(actionLoadFacets()),
   };
 }
 

@@ -17,5 +17,6 @@ export const LOAD_SEARCH_RESULTS = 'app/SearchPage/LOAD_SEARCH_RESULTS';
 export const LOAD_SEARCH_RESULTS_SUCCESS = 'app/SearchPage/LOAD_SEARCH_RESULTS_SUCCESS';
 export const LOAD_SEARCH_RESULTS_ERROR = 'app/SearchPage/LOAD_SEARCH_RESULTS_ERROR';
 export const LOAD_QUERY = 'app/SearchPage/LOAD_QUERY';
+export const UPDATE_FACETS = 'app/SearchPage/UPDATE_FACETS';
 export const UPDATE_SORT = 'app/SearchPage/UPDATE_SORT';
 export const UPDATE_RESULTS_COUNT = 'app/SearchPage/UPDATE_RESULTS_COUNT';

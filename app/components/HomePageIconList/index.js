@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Wrapper from './Wrapper';
 
 import List from 'components/List';
 import ListItem from 'components/ListItem';
 import LoadingIndicator from 'components/LoadingIndicator';
 import HomePageIconListItem from 'containers/HomePageIconListItem';
 
-function HomePageIconList({ loading, error, loadingHomePageIcons, homePageIcons}) {
-
-  console.log(homePageIcons);
-  console.log(loadingHomePageIcons);
+function HomePageIconList({ loading, error, loadingHomePageIcons, homePageIcons, facetClick}) {
 
   const computeGrid = (numberOfItems) => {
     let number = 1;
@@ -46,10 +44,11 @@ function HomePageIconList({ loading, error, loadingHomePageIcons, homePageIcons}
     const items = homePageIcons.map(function(item) {
       item.ref = item.identifier;
       item.columnWidth = columnWidth;
+      item.click = facetClick;
       return item;
     });
 
-    return <List items={items} component={HomePageIconListItem} />;
+    return <Wrapper><List items={items} component={HomePageIconListItem} /></Wrapper>;
   }
 
   return null;
