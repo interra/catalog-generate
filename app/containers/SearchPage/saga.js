@@ -22,7 +22,7 @@ export function* getIcons(action) {
     yield put(actionLoadHomePageIconsLoaded(responses));
     return responses;
   } catch (err) {
-    console.log("error?", err);
+    console.log("error getting Icons", err);
     return null;
   }
 }
