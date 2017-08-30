@@ -33,8 +33,16 @@ function all(site) {
           process.exit(1);
         }
         content.findByCollection(collection, true, (err, results) => {
+          if (err) {
+            console.log(chalk.red("Error for " + collection), err);
+            process.exit(1);
+          }
           // TODO: Move to Async.
           _.each(results, function(item) {
+            if (!item) {
+              console.log(chalk.red("No results for collection: " + collection));
+              return;
+            }
             // If no id we create a slug from title.
             if (!('identifier' in item)) {
               // Not every schema has a title.
@@ -58,7 +66,7 @@ function all(site) {
                 console.log("Error creating " +  item.identifier);
               }
               else {
-                //console.log(chalk.green("File created for " + item.identifier));
+                console.log(chalk.green("File created for " + item.identifier));
               }
             });
           });
