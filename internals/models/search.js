@@ -63,6 +63,7 @@ class elasticLunr extends Search {
     }
 
     insertOne(item, callback) {
+        // Initially setup this logic to reduce the json file size.
         var doc = {
             identifier: item.identifier,
             title: item.title,
@@ -73,7 +74,8 @@ class elasticLunr extends Search {
             });
         }
         doc.all = stringify(item);
-        this.idx.addDoc(doc)
+        // Now just adding all items. Size difference is negligable.
+        this.idx.addDoc(item)
         return callback(null);
     }
 

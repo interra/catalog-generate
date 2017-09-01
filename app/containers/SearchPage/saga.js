@@ -49,11 +49,6 @@ export function* sortResults(action) {
     const results = yield select(makeSelectResults());
     const sort = yield select(makeSelectSort());
     const query = yield select(makeSelectQuery());
-    // Just temp until we have dates.
-    if (!query) {
-        yield put(searchResultsLoaded(results));
-        return;
-    }
 
     switch (sort) {
         case "relevance":
@@ -230,6 +225,7 @@ function relatize(items) {
 }
 
 function datetize(items) {
+  console.log('we are dating');
     return items.sort(dateCompare);
 }
 
@@ -245,10 +241,10 @@ function relatCompare(a,b) {
   return 0;
 }
 
-function alphaCompare(a,b) {
-  if (a.doc.modified < b.doc.modified)
-    return -1;
+function dateCompare(a,b) {
   if (a.doc.modified > b.doc.modified)
+    return -1;
+  if (a.doc.modified < b.doc.modified)
     return 1;
   return 0;
 }

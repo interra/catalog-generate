@@ -26,6 +26,7 @@ import { makeSelectUsername } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import Form from "react-jsonschema-form";
+import { Parser } from 'html-to-react';
 
 export class CollectionEntity extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   /**
@@ -61,25 +62,24 @@ export class CollectionEntity extends React.PureComponent { // eslint-disable-li
       error,
       repos,
     };
-    let formData = this.props.collection ? this.props.collection : null;
+    let data = this.props.collection ? this.props.collection : null;
     let schema = this.props.schema ? this.props.schema.schema.dataset : null;
-    let button = null;
-    if (schema && formData) {
+    let description = null;
+    if (schema && data) {
+      const parser = new Parser();
 
-      button = <Form schema={schema}
-            formData={formData} />;
+      description = parser.parse(this.props.collection.description);
+
     } else {
-      button = "";
+      description = "";
     }
 
     return (
       <PageContainer>
           <H1>{this.props.collection.title}</H1>
-          {this.props.collectionName}
 
-          {button}
+          {description}
 
-          This is not the end.
       </PageContainer>
     );
   }
