@@ -33,7 +33,7 @@ export function* getFacets() {
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
   const requestURL = url + '/schema.json';
   try {
-    // Call our request helper (see 'utils/request')
+    //  TODO: do this all on the server and export as the schema.
     const currentSchema = yield call(request, requestURL);
 
     yield put(actionFacetsLoaded(currentSchema.facets));
@@ -84,62 +84,99 @@ export function* loadIndex() {
   return index;
 }
 
-/**
- * Get Search results.
- */
+
+function getFacetValue(doc, facet, facets) {
+  let fields = facets[facet].field.split('.');
+  let docR = new Object();
+  let docRArray = [];
+  fields.forEach(function(field, i) {
+    // If we are at the end of the field array just return the value, otherwise
+    // we just get the entire array.
+    if (fields.length - 1 === i && Array.isArray(docR)) {
+      docRArray = docR;
+      docRArray.forEach(function(item, x) {
+        docR[x] = item[field];
+      });
+    }
+    else {
+      // Clone the object or array if the docR hasn't been recorded yet.
+      if (Array.isArray(doc[field])) {
+        docR = doc[field].slice(0);
+      }
+      else {
+        docR = Object.keys(docR).length === 0 ? Object.assign({}, doc[field]) : docR[field];
+      }
+    }
+  });
+  return docR;
+}
+
 export function* loadFacetsFromResults() {
   let facets = yield select(makeSelectFacets());
   if (!facets) {
     facets = yield getFacets();
   }
   const results = yield select(makeSelectResults());
-  yield put(actionFacetResultsLoaded(loadFacets(facets, results)))
+  const loadedFacets = yield loadFacets(facets, results);
+  yield put(actionFacetResultsLoaded(loadedFacets))
 }
 
-function loadFacets(facets, results) {
-  const pageSizeFacets = 15;
-
+// This confusing piece of junk loops through the results and facets and grabs
+// the values of the final facet value from the doc.
+// Facet fields can look like "distribution.format" hence the split.
+export function* getFacetInitialTotal(facets, results) {
   let facetsTotal = [];
-
-  facets.forEach(function(facet) {
-    facetsTotal[facet] = [];
-
-    results.forEach(function(i) {
-      if (typeof i.doc[facet] != "undefined") {
-        i.doc[facet].forEach(function(t) {
-          facetsTotal[facet].push(t);
+  results.forEach(function(result) {
+    for (var facet in facets) {
+      const docR = getFacetValue(result.doc, facet, facets);
+      facetsTotal[facet] = !facetsTotal[facet] ? [] : facetsTotal[facet];
+      // We want to flatten the results so there is one big array instead of a
+      // combo of array results.
+      if (Array.isArray(docR)) {
+        docR.forEach(function(item, x) {
+          facetsTotal[facet].push(item);
         });
       }
-    });
+      else {
+        if (docR && Object.keys(docR).length !== 0 ) {
+          facetsTotal[facet].push(docR);
+        }
+      }
+    }
   });
+  return facetsTotal;
+}
+
+export function* loadFacets(facets, results) {
+
+  const pageSizeFacets = 10;
+
+  const facetsTotal = yield getFacetInitialTotal(facets, results);
 
   var facetsResults = {};
 
-  facets.forEach(function(facet) {
+  for (var facet in facets) {
     facetsResults[facet] = {};
     facetsTotal[facet].forEach(function(i) {
         facetsResults[facet][i] = (facetsResults[facet][i]||0)+1;
     });
-  });
-
-  //TODO: save facetsResults.
+  };
 
   // TODO: separate into func.
   let facetsSorted = {};
-  facets.forEach(function(facet) {
+  for (var facet in facets) {
     facetsSorted[facet] = [];
     facetsSorted[facet] = Object.entries(facetsResults[facet]).sort(function(a,b) {
       return (a[1] > b[1]) ? -1 : ((b[1] > a[1]) ? 1 : 0)
     });
-  });
+  };
 
   // TODO:
   let facetsPaged = {};
-  facets.forEach(function(facet) {
+  for (var facet in facets) {
     facetsPaged[facet] = facetsSorted[facet].slice(0, pageSizeFacets);
-  });
+  };
   return facetsPaged;
-
 }
 
 /**
@@ -149,7 +186,7 @@ export function* getResults(action) {
 
   var query = action.query;// yield select(makeSelectQuery());
   var index = yield select(makeSelectIndex());
-  const selectedFacets = action.selectedFacets;
+  let selectedFacets = action.selectedFacets;
 
   const sort = yield select(makeSelectSort());
   const pageSize = 25;
@@ -158,7 +195,10 @@ export function* getResults(action) {
     if (!index) {
       index = yield call(loadIndex);
     }
-
+    let facets = yield select(makeSelectFacets());
+    if (!facets) {
+      facets = yield getFacets();
+    }
     var items = [];
 
     console.time("Querying index.");
@@ -167,17 +207,17 @@ export function* getResults(action) {
       items = index.search(query, {expand: true});
     }
     else {
-        const docs = index.documentStore.docs;
-        items = Object.keys(docs).map(function(index) {
-            var item = {
-                doc: docs[index],
-                ref: index,
-                score: 1
-            }
-            return item;
-        });
-        // Alphabetical by default if there is no query.
-        items = alphabetize(items);
+      const docs = index.documentStore.docs;
+      items = Object.keys(docs).map(function(index) {
+        var item = {
+          doc: docs[index],
+          ref: index,
+          score: 1
+        }
+        return item;
+      });
+      // Alphabetical by default if there is no query.
+      items = alphabetize(items);
     }
     console.timeEnd("Query Loaded");
 
@@ -185,16 +225,19 @@ export function* getResults(action) {
 
     if (selectedFacets) {
       selectedFacets.forEach(function(selectedFacet) {
+        let term = selectedFacet[0];
+        let value = selectedFacet[1];
         faceted = items.filter(function(item) {
-          if (item.doc[selectedFacet[0]] !== undefined) {
-            var evalItem = Object.filter(item.doc[selectedFacet[0]], facet => facet == selectedFacet[1]);
-            if (Object.keys(evalItem).length !== 0) {
+          let facetValue = getFacetValue(item.doc, term, facets);
+          if (Array.isArray(facetValue)) {
+            if (Object.values(facetValue).indexOf(value) > -1) {
               return true;
             }
-            else {
-              return false;
-            }
           }
+          else if (facetValue == value) {
+            return true;
+          }
+          return false;
         });
       })
     }
@@ -208,14 +251,14 @@ export function* getResults(action) {
 
     yield put(searchResultsLoaded(paged));
 
-    const facets = yield getFacets();
 
     if (facets) {
-      yield put(actionFacetResultsLoaded(loadFacets(facets, faceted)))
+      const preparedFacets = yield loadFacets(facets, faceted);
+      yield put(actionFacetResultsLoaded(preparedFacets))
     }
 
   } catch (err) {
-    console.log("error?", err);
+    console.log("error getResults?", err);
     yield put(searchResultsError(err));
   }
 }
@@ -225,7 +268,6 @@ function relatize(items) {
 }
 
 function datetize(items) {
-  console.log('we are dating');
     return items.sort(dateCompare);
 }
 

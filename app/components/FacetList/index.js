@@ -12,26 +12,26 @@ import StyledA from './StyledA';
 import FacetBlockDiv from './FacetBlockDiv';
 
 
-function FacetBlocks({ title, items, loading, click, selectedFacets }) {
+function FacetBlocks({ title, items, facetKey, loading, click, selectedFacets }) {
 
     if (loading) {
       return <FacetBlockDiv><h4>{title}</h4><List component={LoadingIndicator} /></FacetBlockDiv>;
     }
     let content = (<ul></ul>);
 
-    content = items[title].map(function callback(facet, i) {
+    content = items[facetKey].map(function callback(facet, i) {
       const name = facet[0];
       var value = "(" + facet[1] + ")";
       let active = false;
       if (selectedFacets) {
         selectedFacets.forEach(function(facet) {
-          if (title == facet[0] && name == facet[1]) {
+          if (facetKey == facet[0] && name == facet[1]) {
             active = 'active';
             value = ""
           }
         });
       }
-      return <LI key={`facet-${i}`}><StyledA data-facet-type={title} className={active} onClick={click} href={`#facet-${title}-${name}`}>{name} {value}</StyledA></LI>
+      return <LI key={`facet-${i}`}><StyledA data-facet-type={facetKey} className={active} onClick={click} href={`#facet-${title}-${name}`}>{name} {value}</StyledA></LI>
     });
 
     return <FacetBlockDiv><h4>{title}</h4><ul className="list-group" key="items">{content}</ul></FacetBlockDiv>;
@@ -48,10 +48,15 @@ function FacetList({ facets, loadingFacets, loadingFacetsResults, selectedFacets
   }
 
   if (facets !== false) {
-    content = facets.map((item) => (
-        <FacetBlocks title={item} key={item} selectedFacets={selectedFacets} items={facetsResults} click={facetClick} loading={loadingFacetsResults} />
+    let items = [];
+    for (var facet in facets) {
+      items.push(facet);
+    }
+    content = items.map((item) => (
+      <FacetBlocks title={facets[item].label} key={item} facetKey={item} selectedFacets={selectedFacets} items={facetsResults} click={facetClick} loading={loadingFacetsResults} />
     ));
-    return <div key="wtf">{content}</div>;
+
+    return <div key="facets">{content}</div>;
 
   }
 

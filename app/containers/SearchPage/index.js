@@ -172,7 +172,7 @@ SearchPage.propTypes = {
     PropTypes.bool,
   ]),
   facets: PropTypes.oneOfType([
-    PropTypes.array,
+    PropTypes.object,
     PropTypes.bool,
   ]),
   index: PropTypes.oneOfType([
