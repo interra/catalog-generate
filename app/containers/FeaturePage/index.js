@@ -23,7 +23,7 @@ export default class FeaturePage extends React.Component { // eslint-disable-lin
 
   render() {
     return (
-      <div style={{padding: "20px 50px", lineHeight: "2.5em", maxWidth: "700px", fontSize: "1.1em"}}>
+      <div style={{padding: "20px 50px", lineHeight: "2.5em", maxWidth: "700px"}}>
         <Helmet>
           <title>About</title>
           <meta name="description" content="About Interra Data" />

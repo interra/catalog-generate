@@ -1,0 +1,12 @@
+.swagger-ui .wrapper {
+  padding: 0;
+}
+.swagger-ui .info .title {
+  font-size: 28px;
+}
+.swagger-ui .info .title small pre {
+  display: inline;
+  padding: 0;
+  background: none;
+  border: none;
+}

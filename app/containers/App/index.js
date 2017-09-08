@@ -13,6 +13,8 @@ import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
+import SwaggerPage from 'containers/SwaggerPage/Loadable';
+
 import CollectionEntity from 'containers/CollectionEntity/Loadable';
 import SearchPage from 'containers/SearchPage/Loadable';
 
@@ -44,6 +46,7 @@ export default function App() {
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={FeaturePage} />
         <Route path="/search" component={SearchPage} />
+        <Route path="/api" component={SwaggerPage} />
         <Route path="" component={CollectionEntity} />
       </Switch>
       <Footer />

@@ -248,6 +248,7 @@
     "reselect": "3.0.1",
     "sanitize.css": "5.0.0",
     "styled-components": "2.0.0",
+    "swagger-ui": "^3.1.7",
     "warning": "3.0.0",
     "whatwg-fetch": "2.0.3"
   },

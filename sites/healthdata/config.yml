@@ -1,4 +1,5 @@
 name: HealthData
+url: healthdata-example.interra.io
 identifier: healthdata
 schema: pod-full
 description: 'This was a lot of work'

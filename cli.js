@@ -5,6 +5,7 @@ const Validate = require('./internals/scripts/validateSchema');
 const Build = require('./internals/scripts/build-collection-data');
 const BuildSchema = require('./internals/scripts/build-schema');
 const BuildConfig = require('./internals/scripts/build-config');
+const BuildSwagger = require('./internals/scripts/build-swagger');
 const BuildSearch = require('./internals/scripts/build-search');
 const Schema = require('./internals/models/schema');
 const Site = require('./internals/models/site');
@@ -49,6 +50,12 @@ prog
     .argument('site', 'The site to index from')
     .action((args, options) => {
        BuildSearch.all(args.site);
+    })
+    .command('build-swagger')
+    .help('builds swagger json file for a site')
+    .argument('site', 'The site to index from')
+    .action((args, options) => {
+       BuildSwagger.get(args.site);
     })
     .command('import-datajson')
     .argument('site', 'The site to import into')

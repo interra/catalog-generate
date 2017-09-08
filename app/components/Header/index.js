@@ -25,6 +25,9 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <HeaderLink to="/search">
             Search
           </HeaderLink>
+          <HeaderLink to="/api">
+            API
+          </HeaderLink>
         </NavBar>
       </div>
     );

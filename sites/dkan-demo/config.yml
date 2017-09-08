@@ -1,4 +1,5 @@
 name: 'DKAN Demo'
+url: dkan-demo-example.data.interra.io
 identifier: dkan-demo
 schema: pod-full
 description: 'this is a demo'
