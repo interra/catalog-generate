@@ -12,9 +12,9 @@ This includes a script to generate pages but there is also an express server if 
 
 This is built off of <a href="https://github.com/orgs/react-boilerplate">React Boilerplate (ssr branch)</a>
 
-## Pre Pre Pre Dev Version
+## Pre Dev Version
 
-This is not yet ready to even play around with. Updates soon.
+This is a couple of weeks away from a point where an MVP is documented and up and running. Currently have an early POC here: http://healthdata-example.interra.io/. Once I have the collection pages working, the build pipeline fully built (95% there) and the basic docs up and running I will share and start taking PRs.
 
 ## Getting Started
 
