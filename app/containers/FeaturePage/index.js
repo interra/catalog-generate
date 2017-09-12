@@ -28,7 +28,7 @@ export default class FeaturePage extends React.Component { // eslint-disable-lin
           <title>About</title>
           <meta name="description" content="About Interra Data" />
         </Helmet>
-        <H1 style={{paddingBottom: "20px"}}>
+        <H1>
           <FormattedMessage {...messages.header} />
         </H1>
         <FormattedMessage {...messages.esplain} />

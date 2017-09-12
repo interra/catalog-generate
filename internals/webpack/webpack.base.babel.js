@@ -14,7 +14,8 @@ const YAML = require('yamljs');
 process.noDeprecation = true;
 const site = process.env.SITE;
 
-let config = fs.readFileSync(path.resolve(process.cwd(), 'sites/' + site + '/config.yml'), 'utf8');
+// TODO: use the site model.
+const config = fs.readFileSync(path.resolve(process.cwd(), 'sites/' + site + '/config.yml'), 'utf8');
 
 module.exports = (options) => ({
   entry: options.entry,

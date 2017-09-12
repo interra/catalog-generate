@@ -2,11 +2,26 @@
   padding: 0;
 }
 .swagger-ui .info .title {
-  font-size: 28px;
+  font-size: 25px;
 }
 .swagger-ui .info .title small pre {
   display: inline;
   padding: 0;
   background: none;
   border: none;
+}
+.swagger-ui .scheme-container {
+  padding: 30px 20px;
+  display: none;
+}
+.swagger-ui .info .base-url {
+  background: none;
+  border: none;
+  padding: 10px 0 0;
+}
+#operations-tag-default {
+  display: none;
+}
+.swagger-ui .info {
+  margin: 35px 0;
 }

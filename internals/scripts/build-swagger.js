@@ -131,7 +131,7 @@ const swagger = {
   },
   definitions: {
   },
-  host: config.get('url'),
+  host: "",
   basePath:"/api/v1/",
   schemes:["https"]
 }
@@ -210,17 +210,14 @@ function get(site) {
                 delete collectionSchema['id'];
                 swagger.definitions[collection] = collectionSchema;
                 const collectionPathDef = setCollectionPathDef(collection);
-                console.log(collectionPathDef);
                 swagger.paths['/collections/' + collection + '.json'] = collectionPathDef;
                 swagger.paths['/collections/' + collection + '/{document}.json'] = setCollectionPathDocDef(collection, collectionPathDef)
-                console.log(collectionPathDef);
 
                 callback();
             });
         }
 
     }, function (err) {
-//      console.log(swagger);
       fs.outputJson(siteDir + '/swagger.json', swagger, err => {
           if (err) {
               console.log(err);

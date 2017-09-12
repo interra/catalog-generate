@@ -25,8 +25,10 @@ import H2 from 'components/H2';
 import AtPrefix from './AtPrefix';
 import CenteredSection from './CenteredSection';
 import Input from './Input';
-import Hero from 'components/Hero';
 import Section from './Section';
+import StyledHero from './Hero';
+import StyledSearchButton from './SearchButton';
+import StyledSearchContainer from './SearchContainer';
 import messages from './messages';
 import { loadRepos } from '../App/actions';
 import { changeUsername } from './actions';
@@ -105,13 +107,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     }
     // TODO: I don't have to do this, can use this.props.history.push('/search');
     const Button = withRouter(({ history}) => (
-      <button className="btn btn-info btn-lg"
+      <StyledSearchButton className="btn btn-info btn-lg"
         type='button'
-        style={{"backgroundColor": "#030d17", height: "60px", width: "60px", "border": "#999"}}
         onClick={() => this.letsGoToSearch(history)}
       >
         <i className="glyphicon glyphicon-search"></i>
-      </button>
+      </StyledSearchButton>
     ));
 
     return (
@@ -121,8 +122,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <meta name="description" content="A React.js Boilerplate application homepage" />
         </Helmet>
 
-        <div className="jumbotron" style={{padding: "140px 0", backgroundColor: "#1f3f5f"}}>
-          <div className="input-group col-md-10" style={{margin: "0 auto", position: "relative", backgroundColor: "rgba(255, 255, 255, 0.25)", padding: "10px", borderRadius: "6px", border: "1px solid #656565"}}>
+        <StyledHero className="jumbotron">
+          <StyledSearchContainer className="input-group col-md-10">
             <input type="text"
               onKeyPress={(e) => this.letsGoToSearchOnlyIfYouPressEnter(e)}
               onChange={this.queryEnter.bind(this)}
@@ -133,8 +134,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               <Button />
             </span>
             <AutoCompSearchList {...AutoCompSearchListProps} />
-          </div>
-        </div>
+          </StyledSearchContainer>
+        </StyledHero>
         <HomePageIconList {...HomePageIconListProps} />
       </article>
     );

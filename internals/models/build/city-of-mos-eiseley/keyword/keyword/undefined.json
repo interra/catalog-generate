@@ -1,5 +1,0 @@
-(err,out) => {
-                        if (err) {
-                            console.log("Error creating " +  results.identifier);
-                        }
-                    }

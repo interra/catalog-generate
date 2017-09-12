@@ -86,13 +86,20 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
 
     const { query, results, error, facets, loadResults, selectedFacets, loadFacets, updateFacets, facetsResults } = this.props;
 
-
+    console.log(results);
+    console.log(error);
+    console.log(selectedFacets);
+    console.log(facetsResults);
     if (results === false && error === false && selectedFacets === false) {
       loadResults();
     }
     if (results && facetsResults === false) {
       updateFacets();
     }
+    if (results === false & error == false && selectedFacets) {
+      loadResults(null,selectedFacets);
+    }
+
 
   }
 
