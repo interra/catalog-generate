@@ -23,7 +23,7 @@ function dllPluginsMiddleware(req, res) {
 
 module.exports = function addDevMiddlewares(app, webpackConfig, site) {
   app.use(compression());
-  const fromDir = ['build', site, 'static'].join('/');
+  const fromDir = ['build', site].join('/');
   webpackConfig.plugins.push(new CopyWebpackPlugin([{ from: fromDir }]));
   const compiler = webpack(webpackConfig);
   const middleware = createWebpackMiddleware(compiler, webpackConfig.output.publicPath);

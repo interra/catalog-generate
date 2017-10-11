@@ -1,0 +1,57 @@
+title: Datasets
+description: A simple dataset.
+type: object
+required:
+- title
+- identifier
+- created
+- modified
+properties:
+  title:
+    type: string
+    title: Title
+  id:
+    type: string
+    title: Identifier
+    description: Unique identifier for dataset.
+  description:
+    type: string
+    title: Description
+  organization:
+    type: object
+    title: Organization
+    $ref: organization.yml
+  tags:
+    title: Tags
+    description: "Tags are tags."
+    type: array
+    items:
+      $ref: tag.yml
+  created:
+    type: string
+    title: Created
+    format: date-time
+  modified:
+    type: string
+    title: Modified
+    format: date-time
+  resources:
+    type: array
+    title: Resources
+    items:
+      type: object
+      properties:
+        title:
+          type: string
+          title: Title
+        uri:
+          type: string
+          title: URI
+        type:
+          type: string
+          title: Type
+          enum:
+            - csv
+            - html
+            - xls
+            - pdf

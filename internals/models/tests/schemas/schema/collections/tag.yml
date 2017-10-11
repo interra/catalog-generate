@@ -1,0 +1,22 @@
+"$schema": "http://json-schema.org/draft-04/schema#"
+title: "Tag"
+description: "A descriptor for associating similar records."
+type: object
+required:
+  - title
+  - identifier
+  - modified
+properties:
+  title:
+    title: "Title"
+    type: string
+  identifier:
+    type: string
+    title: "Identifier"
+  modified:
+    type: string
+    title: Modified
+    format: date-time
+  icon:
+    type: string
+    title: icon

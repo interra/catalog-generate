@@ -46,35 +46,10 @@ class elasticLunr extends Search {
 
     init() {
         this.idx = elasticlunr(function(){});
-        this.addFields();
-    }
-
-    addFields() {
         this.idx.setRef('identifier');
-        if (this.schema.facets) {
-            const that = this;
-
-            this.schema.facets.forEach(function(facet) {
-                that.idx.addField(facet);
-            });
-        }
-        this.idx.addField('title');
-        this.idx.addField('body');
     }
 
     insertOne(item, callback) {
-        // Initially setup this logic to reduce the json file size.
-        var doc = {
-            identifier: item.identifier,
-            title: item.title,
-        }
-        if (this.schema.facets) {
-            this.schema.facets.forEach(function(facet) {
-                doc[facet] = item[facet];
-            });
-        }
-        doc.all = stringify(item);
-        // Now just adding all items. Size difference is negligable.
         this.idx.addDoc(item)
         return callback(null);
     }
@@ -82,7 +57,7 @@ class elasticLunr extends Search {
     push() {
         const config = new Config();
         const buildDir = config.get('buildDir');
-        const file = __dirname.replace("internals/models","") + buildDir + '/' + this.siteId + "/static/search-index.json";
+        const file = __dirname.replace("internals/models","") + buildDir + '/' + this.siteId + "/api/v1/search-index.json";
         fs.outputFile(file, JSON.stringify(this.idx), err => {
             if (err) {
                 console.log(err);

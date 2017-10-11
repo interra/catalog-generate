@@ -12,7 +12,7 @@ function get(site) {
     var siteInfo = new Site();
     var siteConfig = siteInfo.getConfig(site);
     var buildDir = config.get('buildDir');
-    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
+    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/api/v1';
     fs.outputJson(siteDir + '/config.json', siteConfig, err => {
         if (err) {
             console.log(err);

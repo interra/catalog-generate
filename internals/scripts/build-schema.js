@@ -16,14 +16,15 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 
 function get(site) {
+  console.log(chalk.blue("Building schema"));
     var siteInfo = new Site();
     var schemaName = siteInfo.getConfigItem(site, 'schema');
     var schema = new Schema(schemaName);
     var collections = schema.getConfigItem('collections');
     var facets = schema.getConfigItem('facets');
     var buildDir = config.get('buildDir');
-    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
-    var schemas = {
+    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/api/v1';
+     schemas = {
       collections: collections,
       schema: {},
       facets: facets,

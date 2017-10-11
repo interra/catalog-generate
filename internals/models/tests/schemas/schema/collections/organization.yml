@@ -1,0 +1,33 @@
+title: Organization
+description: A simple organization.
+type: object
+required:
+- title
+- identifier
+- created
+- refreshed
+properties:
+  name:
+    type: string
+    title: Title
+  identifier:
+    type: string
+    title: Identifier
+    description: Unique identifier for organization.
+  description:
+    type: string
+    title: Description
+  created:
+    type: string
+    title: Created
+    format: date-time
+  refreshed:
+    type: string
+    title: Last Refresh Date
+    format: date-time
+  interra:
+    type: object
+    properties:
+      path:
+        type: string
+        title: Path

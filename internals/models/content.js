@@ -5,12 +5,21 @@ const Site = require('./site');
 const Schema = require('./schema');
 const YAML = require('yamljs');
 const Async = require('async');
+// TODO: replace with Async.
 const _ = require('lodash');
 
 class Storage {
 
   constructor(siteId) {
       this.siteId = siteId;
+  }
+
+  requiredFields () {
+    return ['identifier', 'path', 'title', 'created', 'modified'];
+  }
+
+  addPath() {
+
   }
 
   init() {}
@@ -30,53 +39,228 @@ class Storage {
 
 class FileStorage extends Storage {
 
-    constructor(siteId) {
-        super(siteId);
-        var config = new Config();
-        var site = new Site();
-        var siteDir =  __dirname.replace("internals/models","") + config.get('sitesDir') + '/' + this.siteId;
-        this.directory = siteDir + '/collections';
-        this.schema = site.getConfigItem(siteId, 'schema');
-        var schema = new Schema(this.schema);
-        this.references = schema.getConfigItem('references');
-        // TODO: Export to function where we can see if file exists. Make hooks
-        // opt-in instead of mandatory.
-        this.Hook = require(__dirname.replace("internals/models","") + '/schemas/' + this.schema + '/hooks/Content.js');
+  // TODO: Remove Config(), Site() to make testing easier.
+  // TODO: invoke with generated params = directory, schema(need schemaMap + validate), references, hooksFile(optional)
+  constructor(siteId) {
+    super(siteId);
+    const config = new Config();
+    const site = new Site();
+    const siteDir =  __dirname.replace("internals/models","") + config.get('sitesDir') + '/' + this.siteId;
+    const schemaName = site.getConfigItem(siteId, 'schema');
+    const schema = new Schema(schemaName);
+    this.directory = siteDir + '/collections';
+    this.schemaMap = schema.mapSettings();
+    this.references = schema.getConfigItem('references');
+    // TODO: Export to function where we can see if file exists. Make hooks
+    // opt-in instead of mandatory.
+    this.Hook = require(__dirname.replace("internals/models","") + '/schemas/' + this.schema + '/hooks/Content.js');
+  }
 
+  // Ref, Deref, and Map are the functions that transform docs
+  // between states.
+  // A doc is stored in a referenced state, edited in a referenced and mapped
+  // state and viewed in a dereferenced and mapped state.
+
+  // Adds referenced data to collection using 'interra-reference' key.
+  Deref(item, callback) {
+    var that = this;
+    var referencedCollections = [];
+    if (!this.references) {
+      return callback(null, item);
     }
-
-    // Same as insertOne but outputs to json.
-    exportOne(directory, identifier, collection, content, callback) {
-        this.Hook.preOutput(identifier, collection, content, (err, identifier, collection, content) => {
-            let dir = directory + "/collections/" + collection;
-            let file = dir + '/' + identifier + '.json';
-            fs.writeJson(file, content, err => {
-                if (err) {
-                    console.log(err);
-                    return callback(err);
-                }
-                this.Hook.postOutput(content, (err, content) => {
-                    return callback(null, content);
-                });
+    that.Hook.preDereference(item,(err, pre) => {
+      // TODO: convert to async.
+      _.each(this.references, function(collection) {
+        _.each(collection, function(refType, field) {
+          if (field in pre) {
+            // 'interra-reference' can be applied to a string or
+            // array. Convert to array if string.
+            if (pre[field].length == undefined) {
+              pre[field] = [pre[field]];
+            }
+            var reference = {};
+            _.each(pre[field], function(item, val) {
+              if ('interra-reference' in item) {
+                reference[field] = refType + '/' + item['interra-reference'] + '.yml';
+                referencedCollections.push(reference);
+              }
             });
+            }
+          });
         });
+        Async.mapValues(referencedCollections, that.loadWithField.bind(that), function(err, results)  {
+          let i = 0;
+          _.each(results, function(result, n) {
+            // TODO: check the type from the schema.
+            if (Object.keys(result)[0] == 'publisher') {
+              pre[Object.keys(result)[0]] = Object.values(result)[0];
+            }
+            else {
+              // TODO: Group results by field.
+              pre[Object.keys(result)[0]][i] = Object.values(result)[0];
+              i++;
+            }
+          });
+
+          that.Hook.postDereference(pre,(err, post) => {
+            return callback(null, post);
+          });
+        });
+    });
+  }
+
+  // Adds references and required fields. Most schemas don't have a 1 to 1
+  // mapping with a catalog.
+  Ref(item, collection, routeCollections, map, callback) {
+    Async.map(this.references, function(reference, done) {
+      if (reference in item) {
+        if (reference == 'publisher') {
+          item[reference] = {'interra-reference' : createCollectionFileName(dataset[reference].name)}
+        }
+        else {
+          _.each(item[reference], function (dist, i) {
+            if ('title' in dist) {
+              dist.identifier = slug(dist.title.toLowerCase()) + '-' + uuidv4();
+            }
+            else {
+              dist.identifier = uuidv4();
+            }
+            item[reference][i] = {'interra-reference': createCollectionFileName(dist.identifier)}
+          })
+        }
     }
 
+    validateRequired(doc, collection, map) {
+      const fiveGoldenFields = this.requiredFields();
+      Async.each(fiveGoldenFields, function(field) {
+        if (!(field in doc)) {
+          if (collection in map) {
+            (!(field in map[collection])) {
+              throw new Error(field + " not found in document " + doc);
+            }
+          }
+          else {
+            throw new Error(field + " not found in document " + doc);
+          }
+        }
+      });
+    }
+
+
+
+    const fiveGoldenFields = ['identifier', 'path', 'title', 'created', 'modified', 'reference'];
+    Async.each(fiveGoldenFields, function(field) {
+      if (!(field in item)) {
+        if (!(collection in routeCollections) && field === 'path') {
+          // Only collections with routes need paths.
+        }
+        else if (collection in map) {
+          let mapValue = getMapValue(map[collection], item)
+          item[Object.key(map[collection])] = item[Object.value(map[collection])];
+        }
+        else {
+          // Required collection not in the item or map.
+          throw console.error('missing field');
+        }
+      }
+    }, function(err) {
+
+    });
+    // i-> when saving a file
+    if (!('identifier' in item)) {
+
+    }
+  }
+
+  findAll(collections, deref, callback) {
+    Async.each(collections, function(collection, done) {
+      collectionData[collection] = [];
+      content.findByCollection(collection, deref, (err, results) => {
+        collectionData[collection].push(results);
+        done();
+      });
+    }, function(err) {
+      callback(err, collectionData);
+    });
+  }
+
+
+
+    // Like insertOne but outputs to json.
+    exportOne(identifier, collection, content, callback) {
+      this.Hook.preOutput(identifier, collection, content, (err, identifier, collection, content) => {
+        let dir = this.directory + "/collections/" + collection;
+        let file = dir + '/' + identifier + '.json';
+        fs.writeJson(file, content, err => {
+          if (err) {
+            console.log(err);
+            return callback(err);
+          }
+          this.Hook.postOutput(content, (err, content) => {
+            return callback(null, content);
+          });
+        });
+      });
+    }
+
+    exportMany(contents, callback) {
+      Async.eachSeries(contents, function(content, done) {
+        exportOne(content.identifier, content.collection, content, (err, null) {
+          if (err) {
+            console.log(err);
+            return done(err);
+          }
+          else {
+            done(null,)
+          }
+        })
+      }, function(err) {
+        callback(err);
+      });
+    }
+
+    buildRoute(content) {
+      // add diff route options?
+      // what is defatult?
+      //[collection]/slug(identifier)
+      content['interra']['route'] = content.collection + '/' + slug(content.identifier);
+    }
+
+    // TODO: add route logic here.
     insertOne(identifier, collection, content, callback) {
-        this.Hook.preSave(identifier, collection, content, (err, identifier, collection, content) => {
-            let dir = this.directory + "/" + collection;
-            let file = dir + '/' + identifier + '.yml';
-            let yml = YAML.stringify(content);
-            fs.outputFile(file, yml, err => {
-                if (err) {
-                    return callback(err);
-                }
-                this.Hook.postSave(content, (err, content) => {
-                    return callback(null, content);
-                });
-            });
+      this.Hook.preSave(identifier, collection, content, (err, identifier, collection, content) => {
+        if (!content.hasOwnProperty(content.interra.route) {
+          // I'm mutating the content on purpose not usre if better than new.
+          buildRoute(content);
+        }
+        let dir = this.directory + "/" + collection;
+        let file = dir + '/' + identifier + '.yml';
+        let yml = YAML.stringify(content);
+        fs.outputFile(file, yml, err => {
+          if (err) {
+            return callback(err);
+          }
+          this.Hook.postSave(content, (err, content) => {
+            return callback(null, content);
+          });
         });
+      });
+    }
 
+    insertMany(contents, callback) {
+      Async.eachSeries(contents, function(content, done) {
+        insertOne(content.identifier, content.collection, content, (err, null) {
+          if (err) {
+            console.log(err);
+            return done(err);
+          }
+          else {
+            done(null,)
+          }
+        })
+      }, function(err) {
+        callback(err);
+      });
     }
 
     count(collection, callback) {
@@ -140,56 +324,17 @@ class FileStorage extends Storage {
         })
     }
 
-    // Adds referenced data to collection using 'interra-reference' key.
-    dereference(item, callback) {
-        var that = this;
-        var referencedCollections = [];
-        if (this.references) {
-            that.Hook.preDereference(item,(err, pre) => {
-                // TODO: convert to async.
-                _.each(this.references, function(collection) {
-                    _.each(collection, function(refType, field) {
-                        if (field in pre) {
-                            // 'interra-reference' can be applied to a string or
-                            // array. Convert to array if string.
-                            if (pre[field].length == undefined) {
-                                pre[field] = [pre[field]];
-                            }
-                            var reference = {};
-                            _.each(pre[field], function(item, val) {
-                                if ('interra-reference' in item) {
-                                    reference[field] = refType + '/' + item['interra-reference'] + '.yml';
-                                    referencedCollections.push(reference);
-                                }
-                            });
-                        }
-                    });
-                });
-
-                Async.mapValues(referencedCollections, that.loadWithField.bind(that), function(err, results)  {
-                    let i = 0;
-                    _.each(results, function(result, n) {
-                        // TODO: check the type from the schema.
-                        if (Object.keys(result)[0] == 'publisher') {
-                            pre[Object.keys(result)[0]] = Object.values(result)[0];
-                        }
-                        else {
-                            // TODO: Group results by field.
-                            pre[Object.keys(result)[0]][i] = Object.values(result)[0];
-                            i++;
-                        }
-                    });
-
-                    that.Hook.postDereference(pre,(err, post) => {
-                        return callback(null, post);
-                    });
-                });
-            });
-
-        }
-        else {
-            return callback(null, item);
-        }
+    getMapValue(mapObject, item) {
+      if (mapObject.includes("[")) {
+        let parts = Object.values(mapObject)[0].split("[");
+        //NEXT: add escapted \/ to parts
+        parts.each(function(part) {
+          item
+        })
+      }
+      else {
+        item[Object.keys(mapObject)[0]] = item[mapObject.values(mapObject)[0]];
+      }
     }
 
     // Load all data for a collection. If deref == true then dereference the
@@ -235,40 +380,6 @@ class FileStorage extends Storage {
                 return callback(err);
             }
             callback(null, results.readFiles);
-        });
-    }
-
-    titles(collection, callback) {
-        var that = this;
-        Async.auto({
-              load: function(done) {
-                  that.load(collection, function(err, list) {
-                      done(err, list);
-                  });
-              },
-              sort: ['load', function (results, done) {
-                  Async.sortBy(results.load, function(item, callback) {
-                      callback(null, item['title'].toLowerCase())
-                  }, function(err, items) {
-                      done(err, items);
-                  });
-              }],
-              fields: ['sort', function (results, done) {
-                  var newResults = [];
-                  Async.eachSeries(results.sort, function(item, callback) {
-                      var newItem = {};
-                      newItem['title'] = item['title'];
-                      newResults.push(newItem);
-                      callback();
-                  }, function(err) {
-                      done(err, newResults);
-                  });
-              }],
-        }, (err, results) => {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, results.fields);
         });
     }
 
@@ -427,6 +538,40 @@ class FileStorage extends Storage {
 
           });
       }
+
+    titles(collection, callback) {
+        var that = this;
+        Async.auto({
+              load: function(done) {
+                  that.load(collection, function(err, list) {
+                      done(err, list);
+                  });
+              },
+              sort: ['load', function (results, done) {
+                  Async.sortBy(results.load, function(item, callback) {
+                      callback(null, item['title'].toLowerCase())
+                  }, function(err, items) {
+                      done(err, items);
+                  });
+              }],
+              fields: ['sort', function (results, done) {
+                  var newResults = [];
+                  Async.eachSeries(results.sort, function(item, callback) {
+                      var newItem = {};
+                      newItem['title'] = item['title'];
+                      newResults.push(newItem);
+                      callback();
+                  }, function(err) {
+                      done(err, newResults);
+                  });
+              }],
+        }, (err, results) => {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, results.fields);
+        });
+    }
 }
 
 module.exports = {

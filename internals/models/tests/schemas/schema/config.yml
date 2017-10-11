@@ -1,0 +1,24 @@
+name: Example Schema
+api: 1
+jsonSchemaVersion: 4
+collections:
+  - datasets
+  - organization
+  - tag
+facets:
+    keyword:
+      label: Tags
+      field: tag
+    publisher:
+      label: Organization
+      field: publisher.name
+    format:
+      label: format
+      field: datasets.resources.format
+references:
+  dataset:
+      org: organization
+      tags: tag
+routeCollections:
+  - datasets
+  - organization
