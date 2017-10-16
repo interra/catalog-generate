@@ -1,129 +1,76 @@
 //
+const Content = require('../content');
 const Schema = require('../schema');
 
 
-const schema = new Schema(__dirname + '/schemas/schema');
+const schemaDir = __dirname + '/schemas/test-schema';
+const siteDir = __dirname + '/sites/test-site';
 
-test("instantiates schema", () => {
-  expect(schema.dir).toContain("schema");
-  expect(schema.configFile).toContain("config.yml");
-})
+const content = new Content['FileStorage'](siteDir, schemaDir);
 
-test("loads UISchema file", () => {
-  const UISchema = schema.uiSchema();
-  expect(UISchema.datasets.description["ui:widget"]).toBe("textarea");
-});
 
-test("loads map file", () => {
-  const map = schema.mapSettings();
-  expect(map.datasets.id).toBe("identifier");
-});
-
-test("loads collection schema", done => {
-  schema.load("datasets", (err, datasetSchema) => {
-    expect(datasetSchema.description).toBe("A simple dataset.");
-    expect(datasetSchema.properties.tags.items["$ref"]).toBe("tag.yml");
+test("Get list of docs from tags collection", done => {
+  content.list('tags', (err, result) => {
+    expect(result).toContain("tags/health-care.yml");
     done();
   });
 });
 
-test("loads collection schema with a load hook", done => {
-  // Hook.preLoad looks for "tag" collection.
-  schema.load("tag", (err, tagSchema) => {
-    expect(tagSchema.properties.created.title).toBe("Created");
+test("Get list of docs from organization collection", done => {
+  content.list('organization', (err, result) => {
+    expect(result).toContain("organization/bad-org.yml");
     done();
   });
 });
 
-test("Validates correct schema", () => {
-  const goodSchema = {
-    "properties": {
-      "foo": { "type": "string" },
-      "bar": { "type": "number", "maximum": 3 }
-    }
-  };
-  const valid = schema.validateCollectionSchema(goodSchema);
-  expect(valid).toBeTruthy();
-});
-
-test("Rejects invalid schema", () => {
-  const badSchema = {
-    "properties": {
-      "foo": { "type": "strin" },
-      "bar": { "type": "number", "maximum": 3 }
-    }
-  };
-  expect(() => {
-    schema.validateCollectionSchema(badSchema);
-  }).toThrowError("Schema is not valid.");
-});
-
-test("Validates collection item", () => {
-  const goodSchema = {
-    "properties": {
-      "foo": { "type": "string" },
-      "bar": { "type": "number", "maximum": 3 }
-    }
-  };
-  const item = {
-    "foo": "yes",
-    "bar": 2
-  }
-  const valid = schema.validateCollectionItem(goodSchema, item);
-  expect(valid).toBe(true);
-});
-
-test("Rejects invalid collection item", () => {
-  const goodSchema = {
-    "properties": {
-      "foo": { "type": "string" },
-      "bar": { "type": "number", "maximum": 3 }
-    }
-  };
-  const item = {
-    "foo": "yes",
-    "bar": "no"
-  }
-  const rejection = [{
-    keyword: 'type',
-    dataPath: '.bar',
-    schemaPath: '#/properties/bar/type',
-    params: { type: 'number' },
-    message: 'should be number'
-  }]
-  const valid = schema.validateCollectionItem(goodSchema, item);
-  expect(valid).toMatchObject(rejection);
-});
-
-test("Dereferences schema", done => {
-
-  schema.dereference("datasets", (err, dereferenced) => {
-    expect(dereferenced.properties.organization.properties.identifier.description).toBe("Unique identifier for organization.");
-    expect(dereferenced.properties.tags.items.properties.icon.title).toBe("icon");
-
+test("Get count of docs from tags collection", done => {
+  content.count('tags', (err, result) => {
+    expect(result).toBe(6);
     done();
   });
 });
 
-test("Get config", () => {
-  const config = schema.getConfig();
-  expect(config.api).toBe(1);
-});
-
-test("Get config item", () => {
-  const api = schema.getConfigItem('api');
-  expect(api).toBe(1);
-});
-
-test("Get list", done => {
-  schema.list((err,list) => {
-    console.log(list);
-    console.log(err);
+test("Get count of docs from organization collection", done => {
+  content.count('organization', (err, result) => {
+    expect(result).toBe(2);
     done();
-  })
+  });
 });
 
-// -> dereference
-// -> each Hook
-// -> validateFullSchema
-// -> story of how the the schema works (done!)
+test("Get count of docs from tags collection", done => {
+  content.count('tags', (err, result) => {
+    expect(result).toBe(6);
+    done();
+  });
+});
+
+test("Load specific file", done => {
+  content.load('organization/good-org.yml', (err, result) => {
+    expect(result.identifier).toBe("good-org");
+    done();
+  });
+});
+
+test("Retrieve all files of a group of collection", done => {
+  content.findAll(['organization', 'tags'], false, (err, result) => {
+    expect(result.organization[1].identifier).toBe("good-org");
+    done();
+  });
+});
+
+test("Retrieve all files of a collection", done => {
+  content.findByCollection('organization', false, (err, result) => {
+    expect(result[1].identifier).toBe("good-org");
+    done();
+  });
+});
+
+test("Retrieve all files of a collection dereferenced", done => {
+  content.findByCollection('datasets', true, (err, result) => {
+    expect(result[0].org.identifier).toBe("good-org");
+    expect(result[0].tags[1].title).toBe("Health Care");
+    expect(result[0].resources[0].type).toBe("csv");
+    expect(result[0].resources[0].type).toBe("csv");
+    done();
+  });
+});

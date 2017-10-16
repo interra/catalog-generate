@@ -5,13 +5,12 @@ const Site = require('./site');
 const Schema = require('./schema');
 const YAML = require('yamljs');
 const Async = require('async');
-// TODO: replace with Async.
-const _ = require('lodash');
 
 class Storage {
 
-  constructor(siteId) {
-      this.siteId = siteId;
+  constructor(siteDir, schemaDir) {
+      this.siteDir = siteDir;
+      this.schemaDir = schemaDir;
   }
 
   requiredFields () {
@@ -39,73 +38,107 @@ class Storage {
 
 class FileStorage extends Storage {
 
-  // TODO: Remove Config(), Site() to make testing easier.
-  // TODO: invoke with generated params = directory, schema(need schemaMap + validate), references, hooksFile(optional)
-  constructor(siteId) {
-    super(siteId);
-    const config = new Config();
-    const site = new Site();
-    const siteDir =  __dirname.replace("internals/models","") + config.get('sitesDir') + '/' + this.siteId;
-    const schemaName = site.getConfigItem(siteId, 'schema');
-    const schema = new Schema(schemaName);
+  constructor(siteDir, schemaDir) {
+    super(siteDir, schemaDir);
+    this.schema = new Schema(schemaDir);
     this.directory = siteDir + '/collections';
-    this.schemaMap = schema.mapSettings();
-    this.references = schema.getConfigItem('references');
+    this.loadedSchema = [];
+    this.schemaMap = this.schema.mapSettings();
+    this.references = this.schema.getConfigItem('references');
+
     // TODO: Export to function where we can see if file exists. Make hooks
     // opt-in instead of mandatory.
-    this.Hook = require(__dirname.replace("internals/models","") + '/schemas/' + this.schema + '/hooks/Content.js');
+    this.Hook = require(schemaDir + '/hooks/Content.js');
   }
 
   // Ref, Deref, and Map are the functions that transform docs
   // between states.
-  // A doc is stored in a referenced state, edited in a referenced and mapped
-  // state and viewed in a dereferenced and mapped state.
+  // A doc is:
+  // * stored in a referenced state
+  // * edited in a referenced and mapped state
+  // * viewed in a dereferenced and mapped state.
 
-  // Adds referenced data to collection using 'interra-reference' key.
-  Deref(item, callback) {
+  /**
+   * Adds referenced data to collection using 'interra-reference' key.
+   * @param {object} doc Doc to dereference.
+   * @return {object} dereferenced doc.
+   */
+  Deref(doc, callback) {
     var that = this;
     var referencedCollections = [];
     if (!this.references) {
-      return callback(null, item);
+      return callback(null, doc);
     }
-    that.Hook.preDereference(item,(err, pre) => {
-      // TODO: convert to async.
-      _.each(this.references, function(collection) {
-        _.each(collection, function(refType, field) {
+    that.Hook.preDereference(doc,(err, pre) => {
+      let refNum = 0;
+      Async.eachSeries(this.references, function(collections, done) {
+        Async.eachOfSeries(collections, function(collection, field, fin) {
+          let refCollection = Object.keys(that.references)[refNum];
+
           if (field in pre) {
             // 'interra-reference' can be applied to a string or
             // array. Convert to array if string.
             if (pre[field].length == undefined) {
               pre[field] = [pre[field]];
             }
-            var reference = {};
-            _.each(pre[field], function(item, val) {
+            Async.eachOfSeries(pre[field], function(item, val, over) {
+              let reference = {};
               if ('interra-reference' in item) {
-                reference[field] = refType + '/' + item['interra-reference'] + '.yml';
+                reference[field] = collection + '/' + item['interra-reference'] + '.yml'
                 referencedCollections.push(reference);
+                over();
               }
+            }, function(err) {
+              if (!(refCollection in that.loadedSchema)) {
+                that.schema.load(refCollection, function(err, schema) {
+                  that.loadedSchema[refCollection] = schema;
+                });
+              }
+              // Reset field so we can put dereferenced values in.
+              let type = that.loadedSchema[refCollection].properties[field].type;
+              if (type === 'array') {
+                pre[field] = [];
+              }
+              else if (type === 'object') {
+                pre[field] = {};
+              }
+              else {
+                pre[field] = '';
+              }
+              fin();
             });
+          }
+        }, function(err) {
+          refNum++;
+          done();
+        });
+      });
+      Async.mapValuesSeries(referencedCollections, that.loadWithField.bind(that), function(err, results)  {
+        Async.eachSeries(results, function(result, over) {
+          let refNum = 0;
+          let field = Object.keys(result)[0];
+          let value = Object.values(result)[0];
+          Async.eachSeries(that.references, function(collections, done) {
+            let refCollection = Object.keys(that.references)[refNum];
+            if (field in that.loadedSchema[refCollection].properties) {
+              let type = that.loadedSchema[refCollection].properties[field].type;
+              if (type === 'array') {
+                pre[field].push(value);
+              }
+              else {
+                pre[field] = value;
+              }
+              refNum++;
+              done();
             }
+          }, function (err) {
+          over();
           });
         });
-        Async.mapValues(referencedCollections, that.loadWithField.bind(that), function(err, results)  {
-          let i = 0;
-          _.each(results, function(result, n) {
-            // TODO: check the type from the schema.
-            if (Object.keys(result)[0] == 'publisher') {
-              pre[Object.keys(result)[0]] = Object.values(result)[0];
-            }
-            else {
-              // TODO: Group results by field.
-              pre[Object.keys(result)[0]][i] = Object.values(result)[0];
-              i++;
-            }
-          });
-
-          that.Hook.postDereference(pre,(err, post) => {
-            return callback(null, post);
-          });
+        that.Hook.postDereference(pre,(err, post) => {
+          return callback(null, post);
         });
+      });
     });
   }
 
@@ -118,7 +151,7 @@ class FileStorage extends Storage {
           item[reference] = {'interra-reference' : createCollectionFileName(dataset[reference].name)}
         }
         else {
-          _.each(item[reference], function (dist, i) {
+          Async.eachOfSeries(item[reference], function(dist, i,  done) {
             if ('title' in dist) {
               dist.identifier = slug(dist.title.toLowerCase()) + '-' + uuidv4();
             }
@@ -126,28 +159,31 @@ class FileStorage extends Storage {
               dist.identifier = uuidv4();
             }
             item[reference][i] = {'interra-reference': createCollectionFileName(dist.identifier)}
-          })
+            done();
+          });
         }
-    }
+      }
+    });
+  }
 
-    validateRequired(doc, collection, map) {
-      const fiveGoldenFields = this.requiredFields();
-      Async.each(fiveGoldenFields, function(field) {
-        if (!(field in doc)) {
-          if (collection in map) {
-            (!(field in map[collection])) {
-              throw new Error(field + " not found in document " + doc);
-            }
-          }
-          else {
+  validateRequired(doc, collection, map) {
+    const fiveGoldenFields = this.requiredFields();
+    Async.each(fiveGoldenFields, function(field) {
+      if (!(field in doc)) {
+        if (collection in map) {
+          if (!(field in map[collection])) {
             throw new Error(field + " not found in document " + doc);
           }
         }
-      });
-    }
+        else {
+          throw new Error(field + " not found in document " + doc);
+        }
+      }
+    });
+  }
 
 
-
+/**
     const fiveGoldenFields = ['identifier', 'path', 'title', 'created', 'modified', 'reference'];
     Async.each(fiveGoldenFields, function(field) {
       if (!(field in item)) {
@@ -171,19 +207,27 @@ class FileStorage extends Storage {
 
     }
   }
+*/
 
+  /**
+   * Wrapper for findByCollection allows passing multiple collections.
+   * @param {array} collections An array of collections to retrieve.
+   * @param {boolean} deref Whether or not to dereference the docs.
+   * @param {function} callback Callback with err, result params.
+   */
   findAll(collections, deref, callback) {
+    let collectionData = [];
+    const that = this;
     Async.each(collections, function(collection, done) {
       collectionData[collection] = [];
-      content.findByCollection(collection, deref, (err, results) => {
-        collectionData[collection].push(results);
+      that.findByCollection(collection, deref, (err, results) => {
+        collectionData[collection] = results;
         done();
       });
     }, function(err) {
       callback(err, collectionData);
     });
   }
-
 
 
     // Like insertOne but outputs to json.
@@ -205,13 +249,13 @@ class FileStorage extends Storage {
 
     exportMany(contents, callback) {
       Async.eachSeries(contents, function(content, done) {
-        exportOne(content.identifier, content.collection, content, (err, null) {
+        exportOne(content.identifier, content.collection, content, (err, item) => {
           if (err) {
             console.log(err);
             return done(err);
           }
           else {
-            done(null,)
+            done(null);
           }
         })
       }, function(err) {
@@ -229,7 +273,7 @@ class FileStorage extends Storage {
     // TODO: add route logic here.
     insertOne(identifier, collection, content, callback) {
       this.Hook.preSave(identifier, collection, content, (err, identifier, collection, content) => {
-        if (!content.hasOwnProperty(content.interra.route) {
+        if (!content.hasOwnProperty(content.interra.route)) {
           // I'm mutating the content on purpose not usre if better than new.
           buildRoute(content);
         }
@@ -249,13 +293,13 @@ class FileStorage extends Storage {
 
     insertMany(contents, callback) {
       Async.eachSeries(contents, function(content, done) {
-        insertOne(content.identifier, content.collection, content, (err, null) {
+        insertOne(content.identifier, content.collection, content, (err, items) => {
           if (err) {
             console.log(err);
             return done(err);
           }
           else {
-            done(null,)
+            done(null)
           }
         })
       }, function(err) {
@@ -263,66 +307,63 @@ class FileStorage extends Storage {
       });
     }
 
-    count(collection, callback) {
-        if (collection) {
-            this.processGetFiles(collection, function(err, list) {
-                var len = list ? list.length : 0;
-                callback(err, len);
-            });
-        }
-        else {
-            var that = this;
-            fs.readdir(that.directory, function(err, list) {
-                Async.map(list, that.processGetFiles.bind(that), function(err, result) {
-                    var files = [];
-                    for(var i = 0; i < result.length; i++) {
-                        files = files.concat(result[i]);
-                    }
-                    callback(null, files.length);
-                })
-            });
-        }
-    }
+  /**
+   * Counts number of docs in a collection.
+   * @param {string} collection The collection to query.
+   */
+  count(collection, callback) {
+    this.list(collection, function(err, list) {
+      const len = list ? list.length : 0;
+      callback(err, len);
+    });
+  }
 
-    // Retrieves list of files by collecion.
-    list(collection, callback) {
-        var dir = this.directory + '/' + collection;
-        fs.readdir(dir, function(err, items) {
-            var t;
-            // eghhh.
-            for (t in items) {
-                items[t] = collection + '/' + items[t];
-            }
-            callback(null, items);
-       });
-    }
+  /**
+   * Retrieves list of files by collecion.
+   * @param {string} collection The collection to query.
+   * @return {array} list of documents.
+   */
+  list(collection, callback) {
+    var dir = this.directory + '/' + collection;
+    fs.readdir(dir, function(err, items) {
+      var t;
+      // eghhh.
+      for (t in items) {
+        items[t] = collection + '/' + items[t];
+      }
+      callback(null, items);
+    });
+  }
 
     // Item is an object with a field name key and filename val.
     // item = {[field]: [collection]/[file-name].yml};
     loadWithField(item, key, callback) {
-        this.load(Object.values(item)[0], (err, result) => {
-            if (err) {
-                return callback(err);
-            }
-            var output = [];
-            output[Object.keys(item)[0]] = result;
-            return callback(null, output);
-        })
+      this.load(Object.values(item)[0], (err, result) => {
+        if (err) {
+            return callback(err);
+        }
+        var output = [];
+        output[Object.keys(item)[0]] = result;
+        return callback(null, output);
+      });
     }
 
-    // Retrieves individual collection.
-    // file = [collection]/[file-name].yml
-    load(file, callback) {
-        var that = this;
-        var dir = this.directory + '/' + file;
-        that.Hook.preLoad(dir,(err, result) => {
-            YAML.load(result, function(data) {
-                that.Hook.postLoad(data, (err, output) => {
-                    return callback(null, output);
-                });
-           });
-        })
-    }
+  /**
+   * Retrieves individual collection.
+   * @param {string} file Location of file, ie [collection]/[file-name].yml
+   * @return {object} A referenced document.
+   */
+  load(file, callback) {
+    var that = this;
+    var dir = this.directory + '/' + file;
+    that.Hook.preLoad(dir,(err, result) => {
+      const data = fs.readFileSync(result, 'utf8');
+      const yml = YAML.parse(data);
+      that.Hook.postLoad(yml, (err, output) => {
+        return callback(null, output);
+      });
+    })
+  }
 
     getMapValue(mapObject, item) {
       if (mapObject.includes("[")) {
@@ -337,51 +378,54 @@ class FileStorage extends Storage {
       }
     }
 
-    // Load all data for a collection. If deref == true then dereference the
-    // data.
-    findByCollection(collection, deref, callback) {
-        var contents = [];
-        var that = this;
-        Async.auto({
-            getCollections: function (done) {
-                if (collection) {
-                    done(null, [collection]);
-                }
-                else {
-                    fs.readdir(that.directory, function(err, list) {
-                        done(null, list);
-                    });
-                }
-            },
-            getFiles: ['getCollections', function (list, done) {
-                Async.map(list.getCollections, that.list.bind(that), function(err, result) {
-                    done(null, result);
-                })
-            }],
-            readFiles: ['getFiles', function (results, done) {
-                var files = [];
-                for(var i = 0; i < results.getFiles.length; i++) {
-                    files = files.concat(results.getFiles[i]);
-                }
-                Async.map(files, that.load.bind(that), function(err, result) {
-                    if (deref && collection in that.references) {
-                        Async.map(result, that.dereference.bind(that), function (err, dereferenced) {
-                            done(null, dereferenced);
-                        });
-
-                    }
-                    else {
-                        done(null, result);
-                    }
-                });
-            }]
-        }, (err, results) => {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, results.readFiles);
+  /**
+   * Load all data for a collection. If deref == true then dereference the data.
+   * @param {string} collection The collection to retrieve.
+   * @param {boolean} deref Whether or not to dereference the docs.
+   * @return {array} An array of docs.
+    */
+  findByCollection(collection, deref, callback) {
+    let contents = [];
+    let that = this;
+    Async.auto({
+      getCollections: function (done) {
+        if (collection) {
+          done(null, [collection]);
+        }
+        else {
+          fs.readdir(that.directory, function(err, list) {
+            done(null, list);
+          });
+        }
+      },
+      getFiles: ['getCollections', function (list, done) {
+        Async.map(list.getCollections, that.list.bind(that), function(err, result) {
+          done(null, result);
+        })
+      }],
+      readFiles: ['getFiles', function (results, done) {
+        let files = [];
+        for(var i = 0; i < results.getFiles.length; i++) {
+          files = files.concat(results.getFiles[i]);
+        }
+        Async.map(files, that.load.bind(that), function(err, result) {
+          if (deref && collection in that.references) {
+            Async.map(result, that.Deref.bind(that), function (err, dereferenced) {
+              done(null, dereferenced);
+            });
+          }
+          else {
+            done(null, result);
+          }
         });
-    }
+      }]
+    }, (err, results) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, results.readFiles);
+    });
+  }
 
     findByIdentifier(identifier, collection, callback) {
         let dir = this.directory + "/" + collection;

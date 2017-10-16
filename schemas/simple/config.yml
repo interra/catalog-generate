@@ -1,4 +1,4 @@
 name: Simple Specification
-collections:
-  - datasets
-  - organizations
+  collections:
+    - datasets
+    - organizations

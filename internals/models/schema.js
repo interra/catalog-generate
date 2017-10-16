@@ -1,5 +1,4 @@
 'use strict';
-const Async = require('async');
 const fs = require('fs-extra');
 const YAML = require('yamljs');
 const refParser = require('json-schema-ref-parser');
@@ -89,7 +88,11 @@ class Schema {
     });
   }
 
-  // Retrieves Schema for an individual collection.
+  /**
+   * Retrieves Schema for an individual collection.
+   * @param {string} collection Collection to load schema from.
+   * @return {object} The loaded schema.
+   */
   load(collection, callback) {
     let that = this;
     const file = that.dir + '/collections/' + collection + ".yml";
@@ -144,9 +147,12 @@ class Schema {
     return items[item];
   }
 
+  /**
+   * Lists available schemas.
+   * @return {array} Array of schemas.
+   */
   list(callback) {
-    console.log(this.dir)
-    fs.readdir(this.dir + '../.', function (err, data) {
+    fs.readdir(this.dir + '/../.', function (err, data) {
       if (err) {
         return callback(err);
       }

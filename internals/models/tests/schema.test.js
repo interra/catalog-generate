@@ -1,8 +1,7 @@
 //
 const Schema = require('../schema');
 
-
-const schema = new Schema(__dirname + '/schemas/schema');
+const schema = new Schema(__dirname + '/schemas/test-schema');
 
 test("instantiates schema", () => {
   expect(schema.dir).toContain("schema");
@@ -117,8 +116,7 @@ test("Get config item", () => {
 
 test("Get list", done => {
   schema.list((err,list) => {
-    console.log(list);
-    console.log(err);
+    expect(list[0]).toBe("test-schema");
     done();
   })
 });

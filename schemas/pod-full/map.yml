@@ -1,4 +1,8 @@
 organization:
-  name: title
+  title: name
+  path: /organization\/[title]
 dataset:
   created: issued
+  path: /dataset\/[title]
+distribution:
+  path: /[identifier]

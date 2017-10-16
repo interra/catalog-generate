@@ -1,0 +1,14 @@
+title: Dataset One
+id: dataset-one
+description: First test dataset
+org:
+  - interra-reference: good-org
+tags:
+  - interra-reference: education
+  - interra-reference: health-care
+created: '2017-08-01'
+modified: '2017-08-10'
+resources:
+  - title: CSV of Data
+    uri: http://example.com/csv
+    type: csv

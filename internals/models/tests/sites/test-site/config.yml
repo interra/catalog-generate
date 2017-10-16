@@ -1,0 +1,12 @@
+name: Test Site
+description: 'A site for tests.'
+identifier: test-site
+schema: test-schema
+front-page-icon-collection: tags
+front-page-icons:
+ - city-planning
+ - finance-and-budgeting
+ - health-care
+ - public-safety
+ - transportation
+ - education

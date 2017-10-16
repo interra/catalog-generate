@@ -17,7 +17,7 @@ properties:
   description:
     type: string
     title: Description
-  organization:
+  org:
     type: object
     title: Organization
     $ref: organization.yml

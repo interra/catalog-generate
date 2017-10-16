@@ -4,11 +4,11 @@ jsonSchemaVersion: 4
 collections:
   - datasets
   - organization
-  - tag
+  - tags
 facets:
     keyword:
       label: Tags
-      field: tag
+      field: tags
     publisher:
       label: Organization
       field: publisher.name
@@ -16,9 +16,9 @@ facets:
       label: format
       field: datasets.resources.format
 references:
-  dataset:
+  datasets:
       org: organization
-      tags: tag
+      tags: tags
 routeCollections:
   - datasets
   - organization

@@ -115,7 +115,7 @@ properties:
     description: "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users."
     type: array
     items:
-      type: string
+      $ref: keyword.yml
   landingPage:
     title: "Homepage URL"
     description: "Alternative landing page used to redirect user to a contextual, Agency-hosted “homepage” for the Dataset or API when selecting this resource from the Data.gov user interface."
@@ -187,7 +187,7 @@ properties:
     description: "Main thematic category of the dataset."
     type: array
     items:
-      type: string
+      $ref: theme.yml
       minLength: 1
       minItems: 1
     uniqueItems: true

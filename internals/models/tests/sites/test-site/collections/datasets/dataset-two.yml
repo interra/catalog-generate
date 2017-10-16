@@ -1,0 +1,13 @@
+title: Dataset Two
+id: dataset-two
+description: Second test dataset
+org:
+  - interra-reference: bad-org
+tags:
+  - interra-reference: education
+created: '2017-09-01'
+modified: '2017-09-14'
+resources:
+  - title: XLS of Data
+    uri: http://example.com/xls
+    type: xls
