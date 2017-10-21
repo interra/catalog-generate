@@ -2,7 +2,6 @@ const YAML = require('yamljs');
 const fs = require('fs-extra');
 const path = require('path');
 const Schema = require('./schema');
-const _ = require('lodash');
 const Async = require('async');
 
 /**

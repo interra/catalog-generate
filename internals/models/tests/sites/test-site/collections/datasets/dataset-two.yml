@@ -2,7 +2,7 @@ title: Dataset Two
 id: dataset-two
 description: Second test dataset
 org:
-  - interra-reference: bad-org
+  interra-reference: bad-org
 tags:
   - interra-reference: education
 created: '2017-09-01'

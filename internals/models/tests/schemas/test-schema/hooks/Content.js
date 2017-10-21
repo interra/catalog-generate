@@ -20,6 +20,13 @@ module.exports = {
     postDereference: function(data, callback) {
         return callback(null, data);
     },
+    // Reference.
+    preReference: function(data, callback) {
+        return callback(null, data);
+    },
+    postReference: function(data, callback) {
+        return callback(null, data);
+    },
     // Output.
     preOutput: function(identifier, collection, content, callback) {
         return callback(null, identifier, collection, content);

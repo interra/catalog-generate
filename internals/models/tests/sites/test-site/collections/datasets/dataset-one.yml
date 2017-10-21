@@ -2,7 +2,7 @@ title: Dataset One
 id: dataset-one
 description: First test dataset
 org:
-  - interra-reference: good-org
+  interra-reference: good-org
 tags:
   - interra-reference: education
   - interra-reference: health-care

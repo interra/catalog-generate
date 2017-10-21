@@ -26,7 +26,7 @@ properties:
     description: "Tags are tags."
     type: array
     items:
-      $ref: tag.yml
+      $ref: tags.yml
   created:
     type: string
     title: Created
