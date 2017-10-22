@@ -1,5 +1,5 @@
 title: Dataset One
-id: dataset-one
+id: http://example.com/view/dataset-one
 description: First test dataset
 org:
   interra-reference: good-org
@@ -13,4 +13,4 @@ resources:
     uri: http://example.com/csv
     type: csv
 interra:
-  id: dataset-one
+  id: datasetone

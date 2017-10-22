@@ -243,7 +243,7 @@ test("Find all with multiple collections", done => {
 });
 
 test("Find by route", done => {
-  content.findByRoute("city-planning", "tags", (err, result) => {
+  content.findByInterraId("city-planning", "tags", (err, result) => {
     expect(result.title).toBe("City Planning");
     done();
   });
@@ -300,6 +300,47 @@ test("Delete a doc", done => {
     done();
   })
 });
+
+test("Build registry", done => {
+  const reg = { "http://example.com/view/dataset-one": "datasetone", "dataset-two": "dataset-two" };
+  content.buildRegistry("datasets", (err, result) => {
+    expect(result).toMatchObject(reg);
+    done();
+  })
+});
+
+test("Add to registry", () => {
+  const reg = {
+    "http://example.com/view/dataset-one": "datasetone",
+    "dataset-two": "dataset-two",
+    "a": "b"
+  };
+  expect(content.addToRegistry({"a": "b"}, "datasets")).toMatchObject(reg);
+});
+
+test("Remove from registry", () => {
+  const reg = {
+    "http://example.com/view/dataset-one": "datasetone",
+    "dataset-two": "dataset-two"
+  };
+  expect(content.removeFromRegistry("a", "datasets")).toMatchObject(reg);
+});
+
+test("Check unique with existing", done => {
+  content.validateUnique('dataset-two', 'datasets', (err, result) => {
+    expect(result).toBe('dataset-two');
+    done();
+  });
+});
+
+test("Check unique with new", done => {
+  content.validateUnique('dataset-three', 'datasets', (err, result) => {
+    expect(result).toBe(null);
+    done();
+  });
+});
+
+
 
 /**
 test("Save two docs", done => {

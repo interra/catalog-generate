@@ -8,6 +8,8 @@ const Async = require('async');
 const slug = require('slug');
 const Ajv = require('ajv');
 const ajv = new Ajv();
+const merge = require('lodash.merge');
+
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 class Storage {
@@ -308,7 +310,25 @@ class FileStorage extends Storage {
     });
   }
 
-  validateUnique(doc, collection) {
+  /**
+   * Checks whether item with same identifier exists.
+   * @param {string} identifier - {@link identifier} to check.
+   * @param {string} collection - {@link collection} to use.
+   * @return {string} Returns interra id for identifier if it exists.
+   */
+  validateUnique(identifier, collection, callback) {
+    const that = this;
+    this.buildRegistry(collection, (err, result) => {
+      console.log(that.registry[collection][identifier]);
+      if (identifier in that.registry[collection]) {
+        console.log(that.registry[collection][identifier]);
+        return callback(null, that.registry[collection][identifier]);
+      }
+      else {
+        return callback(null, null);
+      }
+    });
+
     // if (collection in this.registry) {
     // this.buildRegistry(collection)
     //}
@@ -441,27 +461,70 @@ class FileStorage extends Storage {
     return null;
   }
 
+  /**
+   * Builds registry for a collection with a "identifier" : "interra-id" object.
+   * @param {string} collection - A {@link collection}.
+   * @return {object} A built registry.
+   */
   buildRegistry(collection, callback) {
-
-    // 1. Add schema for id + route
-    // need internal id b/c identifer doesn't work for file system and route c
-
-    let identifer = 'identifier';
+    let that = this;
+    let identifier = 'identifier';
     if (collection in this.map) {
-      if (Object.values(this.map[collection]).indexOf("indentifer") !== '-1') {
-        identifier = Object.keys(this.map[collection])[Object.values(this.map[collection]).indexOf("indentifer")];
+      if (Object.values(this.map[collection]).indexOf("identifier") !== '-1') {
+        identifier = Object.keys(this.map[collection])[Object.values(this.map[collection]).indexOf("identifier")];
       }
     }
     this.findByCollection(collection, false, (err, result) => {
-      this.registry[collection] = {};
+      that.registry[collection] = {};
       Async.each(result, (doc, done) => {
-        this.registry[collection][doc[identifier]] = doc.interra.id;
+        that.registry[collection][doc[identifier]] = doc.interra.id;
+        done();
+      }, function(err) {
+        if (err) {
+          return callback(err);
+        }
+        else {
+          return callback(null, that.registry[collection]);
+        }
       });
     });
   }
 
-  updateOne(route, collection, doc, dif, callback) {
+  /**
+   * Adds item to the registry. Updates existing value if exists.
+   * @param {object} item - Object with "identifier" : "interra-id" pair.
+   * @param {string} collection - A {@link collection}.
+   * @return {object} An updated registry for that collection.
+   */
+  addToRegistry(item, collection) {
+    const identifier = Object.keys(item)[0];
+    this.registry[collection][identifier] = Object.values(item)[0];
+    return this.registry[collection];
+  }
 
+  /**
+   * Removes item from the registry.
+   * @param {string} identifier - Identifier for item to remove.
+   * @param {string} collection - A {@link collection}.
+   * @return {object} An updated registry for that collection.
+   */
+  removeFromRegistry(identifier, collection) {
+    delete this.registry[collection][identifier];
+    return this.registry[collection];
+  }
+
+  /**
+   * Updates an existing document.
+   */
+  updateOne(interraId, collection, doc, dif, callback) {
+    this.findByInterraId(interraId, collection, (err, existingDoc) => {
+      if (err) return callback(err);
+      const newDoc = merge(existingDoc, doc);
+      this.insertOne(interraId, collection, newDoc, (err, result) => {
+        if (err) return callback(err);
+        return callback(null, result);
+      });
+    });
   }
 
   /**
@@ -470,8 +533,8 @@ class FileStorage extends Storage {
    * @param {string} collection - The {@link collection}
    * @return {boolean} True if the file is removed.
    */
-  deleteOne(route, collection, callback) {
-    const file = this.directory + '/' + collection + '/' + route + '.yml';
+  deleteOne(interraId, collection, callback) {
+    const file = this.directory + '/' + collection + '/' + interraId + '.yml';
     fs.unlink(file, (err) => {
       if (err) {
         return callback(err);
@@ -488,7 +551,7 @@ class FileStorage extends Storage {
    * @param {object} doc The doc.
    * @return {boolean} True if file saves correctly.
    */
-  insertOne(route, collection, doc, callback) {
+  insertOne(interraId, collection, doc, callback) {
     // Validate required.
     this.validateRequired(doc, (err, result) => {
       if (err) {
@@ -501,8 +564,8 @@ class FileStorage extends Storage {
         return callback(err);
       }
     });
-    this.Hook.preSave(route, collection, doc, (err, route, collection, doc) => {
-      const file = this.directory + '/' + collection + '/' + route + '.yml';
+    this.Hook.preSave(interraId, collection, doc, (err, interraId, collection, doc) => {
+      const file = this.directory + '/' + collection + '/' + interraId + '.yml';
       const yml = YAML.stringify(doc);
       fs.outputFile(file, yml, err => {
         if (err) {
@@ -682,14 +745,15 @@ class FileStorage extends Storage {
    * @param {string} collection The doc collection.
    * @return {doc} Doc.
    */
-  findByRoute(route, collection, callback) {
-    let dir = this.directory + "/" + collection;
-    let file = dir + '/' + route + '.yml';
-    fs.readFile(file, 'utf8', (err, data) => {
+  findByInterraId(interraId, collection, callback) {
+    const file = collection + '/' + interraId + '.yml'
+    this.load(file, (err, result) => {
       if (err) {
-        return callback(err);
+        callback (err);
       }
-      return callback(null, YAML.parse(data));
+      else {
+        callback(null, result);
+      }
     });
   }
 
