@@ -12,3 +12,5 @@ resources:
   - title: CSV of Data
     uri: http://example.com/csv
     type: csv
+interra:
+  id: dataset-one

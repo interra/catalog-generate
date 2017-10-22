@@ -4,7 +4,7 @@ module.exports = {
     return callback(null, file);
   },
   postLoad: function(collection, schema, callback) {
-    if (collection === 'tag') {
+    if (collection === 'tags') {
       schema.properties.created = {
         "type": "string",
         "title": "Created",

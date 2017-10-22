@@ -11,3 +11,5 @@ resources:
   - title: XLS of Data
     uri: http://example.com/xls
     type: xls
+interra:
+  id: dataset-two

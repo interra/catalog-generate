@@ -4,4 +4,4 @@ description: A very organization
 created: 2017-09-12
 refreshed: 2017-09-13
 interra:
-  path: organizations/good-org
+  id: good-org

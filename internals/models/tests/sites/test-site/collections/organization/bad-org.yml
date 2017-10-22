@@ -4,4 +4,4 @@ description: A bad organization. The baddies.
 created: 2017-09-12
 refreshed: 2017-09-13
 interra:
-  path: organizations/bad-org
+  id: bad-org

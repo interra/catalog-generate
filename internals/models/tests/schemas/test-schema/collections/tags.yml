@@ -8,7 +8,7 @@ required:
   - modified
 properties:
   title:
-    title: "Title"
+    title: Title
     type: string
   identifier:
     type: string

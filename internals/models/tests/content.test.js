@@ -274,7 +274,7 @@ test("Build safe routes", () => {
   expect(content.buildSafeRoute('test-route_2-2a', routes)).toBe('test-route_2-2a-0');
 })
 
-test("Save a file", done => {
+test("Save a doc", done => {
   const doc = {
     "title": "Dataset One",
     "identifier": "dataset-one",
@@ -288,12 +288,48 @@ test("Save a file", done => {
       console.log(err);
     }
     const file = __dirname + '/sites/test-site/collections/datasets/test-dataset.yml';
-    console.log(file);
     expect(fs.existsSync(file)).toBe(true);
     expect(true).toBe(true);
     done();
   })
 });
+
+test("Delete a doc", done => {
+  content.deleteOne('test-dataset', 'datasets', (err, result) => {
+    expect(result).toBe(true);
+    done();
+  })
+});
+
+/**
+test("Save two docs", done => {
+  const doc1 = {
+    "title": "Dataset One",
+    "identifier": "dataset-one",
+    "description": "First test dataset",
+    "created": "2017-08-01T21:22:48.2698750Z",
+    "modified": "2017-08-10T21:22:48.2698750Z",
+    "errant-field": "shouldn't be here"
+  };
+  const doc2 = {
+    "title": "Dataset two",
+    "identifier": "dataset-one",
+    "description": "First test dataset",
+    "created": "2017-08-01T21:22:48.2698750Z",
+    "modified": "2017-08-10T21:22:48.2698750Z",
+    "errant-field": "shouldn't be here"
+  };
+  content.insertOne('test-dataset', 'datasets', doc, (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    const file = __dirname + '/sites/test-site/collections/datasets/test-dataset.yml';
+    expect(fs.existsSync(file)).toBe(true);
+    expect(true).toBe(true);
+    done();
+  })
+});
+*/
 
 // TODO: Need to validate content better. Org didn't match
 // TODO: Need to decide when to use map.

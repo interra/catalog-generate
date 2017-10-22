@@ -47,6 +47,7 @@ class FileStorage extends Storage {
     this.schema = new Schema(schemaDir);
     this.directory = siteDir + '/collections';
     this.loadedSchema = [];
+    this.registry = [];
     this.schemaMap = this.schema.mapSettings();
     this.references = this.schema.getConfigItem('references');
     //this.collections = this.schema.getConfigItem('collections');
@@ -289,6 +290,12 @@ class FileStorage extends Storage {
     });
   }
 
+  /**
+   * Validates doc based on schema. The schema is determined by the collection.
+   * @param {object} doc - The {@link doc}.
+   * @param {string} collection - The {@link collection};
+   * @return {boolean} True if the {@link doc} is valid.
+   */
   validateDoc(doc, collection, callback) {
     this.schema.dereference(collection, (err, schema) => {
       const valid = ajv.validate(schema, doc);
@@ -299,6 +306,15 @@ class FileStorage extends Storage {
         return callback(false, true);
       }
     });
+  }
+
+  validateUnique(doc, collection) {
+    // if (collection in this.registry) {
+    // this.buildRegistry(collection)
+    //}
+    // this.Map()
+    // return this.checkRegistry()
+
   }
 
   /**
@@ -425,17 +441,43 @@ class FileStorage extends Storage {
     return null;
   }
 
-  buildRegistry(collection) {
+  buildRegistry(collection, callback) {
 
+    // 1. Add schema for id + route
+    // need internal id b/c identifer doesn't work for file system and route c
+
+    let identifer = 'identifier';
+    if (collection in this.map) {
+      if (Object.values(this.map[collection]).indexOf("indentifer") !== '-1') {
+        identifier = Object.keys(this.map[collection])[Object.values(this.map[collection]).indexOf("indentifer")];
+      }
+    }
+    this.findByCollection(collection, false, (err, result) => {
+      this.registry[collection] = {};
+      Async.each(result, (doc, done) => {
+        this.registry[collection][doc[identifier]] = doc.interra.id;
+      });
+    });
   }
 
   updateOne(route, collection, doc, dif, callback) {
 
   }
 
-  deleteOne(route, collection) {
-
-
+  /**
+   * Deletes doc.
+   * @param {string} route - The {@link route}
+   * @param {string} collection - The {@link collection}
+   * @return {boolean} True if the file is removed.
+   */
+  deleteOne(route, collection, callback) {
+    const file = this.directory + '/' + collection + '/' + route + '.yml';
+    fs.unlink(file, (err) => {
+      if (err) {
+        return callback(err);
+      }
+      return callback(false, true);
+    })
   }
 
   /**
@@ -476,8 +518,13 @@ class FileStorage extends Storage {
     });
   }
 
-  insertMany(contents, callback) {
-    Async.eachSeries(contents, function(content, done) {
+  /**
+   * Saves multiple docs.
+   * @param {array} docs An Array of <doc>.
+   * @return {boolean} True if succesful.
+   */
+  insertMany(docs, callback) {
+    Async.eachSeries(docs, function(content, done) {
       insertOne(content.identifier, content.collection, content, (err, items) => {
         if (err) {
           console.log(err);
@@ -488,7 +535,12 @@ class FileStorage extends Storage {
         }
       })
     }, function(err) {
-      callback(err);
+      if (err) {
+        return callback(err);
+      }
+      else {
+        return callback(null, true);
+      }
     });
   }
 

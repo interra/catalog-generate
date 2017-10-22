@@ -30,7 +30,7 @@ This test schema exhibits some of the options and constraints for creating schem
 
 ## Required fields
 
-To function as a catalog Interra requires several fields: ``title``, ``identifier``, ``created``, and ``modified``. Interra doesn't require that you add all of these fields to your schemas because most schemas have their own ways of describing these fields. Interra tries to reduce the amount of changes to schemas as possible.
+To function as a catalog Interra requires several fields: ``title``, ``identifier``, ``created``, and ``modified``. Interra doesn't require that you add all of these fields to your schemas because most schemas have their own ways of describing these fields. Interra tries to reduce the amount of changes to schemas as much as possible.
 
 ### Interra Object
 

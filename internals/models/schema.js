@@ -96,9 +96,11 @@ class Schema {
   load(collection, callback) {
     let that = this;
     const file = that.dir + '/collections/' + collection + ".yml";
+    const interraSchemaFile = __dirname + '/../../schemas/interra.yml';
     that.Hook.preLoad(file,(err, file) => {
       const collectionFile = fs.readFileSync(file, 'utf8');
-      const data = YAML.parse(collectionFile);
+      const interraSchema = fs.readFileSync(interraSchemaFile, 'utf8');
+      const data = Object.assign(YAML.parse(collectionFile), {interra: YAML.parse(interraSchema)});
       that.Hook.postLoad(collection, data, (err, output) => {
         if (data) {
           return callback(null, data);

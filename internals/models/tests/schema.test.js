@@ -21,14 +21,14 @@ test("loads map file", () => {
 test("loads collection schema", done => {
   schema.load("datasets", (err, datasetSchema) => {
     expect(datasetSchema.description).toBe("A simple dataset.");
-    expect(datasetSchema.properties.tags.items["$ref"]).toBe("tag.yml");
+    expect(datasetSchema.properties.tags.items["$ref"]).toBe("tags.yml");
     done();
   });
 });
 
 test("loads collection schema with a load hook", done => {
   // Hook.preLoad looks for "tag" collection.
-  schema.load("tag", (err, tagSchema) => {
+  schema.load("tags", (err, tagSchema) => {
     expect(tagSchema.properties.created.title).toBe("Created");
     done();
   });
@@ -95,11 +95,9 @@ test("Rejects invalid collection item", () => {
 });
 
 test("Dereferences schema", done => {
-
   schema.dereference("datasets", (err, dereferenced) => {
-    expect(dereferenced.properties.organization.properties.identifier.description).toBe("Unique identifier for organization.");
+    expect(dereferenced.properties.org.properties.identifier.description).toBe("Unique identifier for organization.");
     expect(dereferenced.properties.tags.items.properties.icon.title).toBe("icon");
-
     done();
   });
 });
