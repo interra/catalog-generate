@@ -13,4 +13,4 @@ resources:
     uri: http://example.com/csv
     type: csv
 interra:
-  id: datasetone
+  id: dataset-one
