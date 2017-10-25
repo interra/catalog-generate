@@ -1,10 +1,11 @@
 //
 const Content = require('../content');
 const Schema = require('../schema');
-const fs = require('fs');
+const fs = require('fs-extra');
 const schemaDir = __dirname + '/schemas/test-schema';
 const siteDir = __dirname + '/sites/test-site';
 const content = new Content['FileStorage'](siteDir, schemaDir);
+const YAML = require('yamljs');
 
 test("Get list of docs from tags collection", done => {
   content.list('tags', (err, result) => {
@@ -55,18 +56,20 @@ test("Retrieve all files of a group of collection", done => {
   });
 });
 
-test("Retrieve all files of a collection", done => {
-  content.findByCollection('organization', false, (err, result) => {
-    expect(result[1].identifier).toBe("good-org");
-    done();
-  });
-});
-
 test("Retrieve all files of a collection dereferenced", done => {
   content.findByCollection('datasets', true, (err, result) => {
     expect(result[0].org.identifier).toBe("good-org");
     expect(result[0].tags[1].title).toBe("Health Care");
     expect(result[0].resources[0].type).toBe("csv");
+    expect(1).toBe(1);
+    done();
+  });
+});
+
+test("Retrieve all files of a collection", done => {
+  content.findByCollection('organization', false, (err, result) => {
+    expect(result[1].identifier).toBe("good-org");
+
     done();
   });
 });
@@ -199,11 +202,11 @@ describe("Validates fields required by interra", () => {
   test("modified missing from doc", done => {
     const doc = {
       "title": "Dataset One",
-      "identifier": "dataset-one",
+      "id": "dataset-one",
       "description": "First test dataset",
       "created": "2017-08-01",
     };
-    content.validateRequired(doc, (err, result) => {
+    content.validateRequired(doc, "datasets", (err, result) => {
       if (err) {
         expect(err).toBe("modified field is required.");
         done();
@@ -212,12 +215,12 @@ describe("Validates fields required by interra", () => {
   });
   test("Title missing from doc", done => {
     const doc = {
-      "identifier": "dataset-one",
+      "id": "dataset-one",
       "description": "First test dataset",
       "created": "2017-08-01",
       "modified": "2017-08-10"
     };
-    content.validateRequired(doc, (err, result) => {
+    content.validateRequired(doc, "datasets", (err, result) => {
       if (err) {
         expect(err).toBe("title field is required.");
         done();
@@ -277,19 +280,18 @@ test("Build safe routes", () => {
 test("Save a doc", done => {
   const doc = {
     "title": "Dataset One",
-    "identifier": "dataset-one",
+    "id": "dataset-one",
     "description": "First test dataset",
     "created": "2017-08-01T21:22:48.2698750Z",
     "modified": "2017-08-10T21:22:48.2698750Z",
-    "errant-field": "shouldn't be here"
+    "errant-field": "shouldn't be here",
+    "interra": {
+      "id": "test-dataset"
+    }
   };
   content.insertOne('test-dataset', 'datasets', doc, (err, result) => {
-    if (err) {
-      console.log(err);
-    }
     const file = __dirname + '/sites/test-site/collections/datasets/test-dataset.yml';
     expect(fs.existsSync(file)).toBe(true);
-    expect(true).toBe(true);
     done();
   })
 });
@@ -302,7 +304,7 @@ test("Delete a doc", done => {
 });
 
 test("Build registry", done => {
-  const reg = { "http://example.com/view/dataset-one": "datasetone", "dataset-two": "dataset-two" };
+  const reg = { "http://example.com/view/dataset-one": "dataset-one", "dataset-two": "dataset-two" };
   content.buildRegistry("datasets", (err, result) => {
     expect(result).toMatchObject(reg);
     done();
@@ -311,7 +313,7 @@ test("Build registry", done => {
 
 test("Add to registry", () => {
   const reg = {
-    "http://example.com/view/dataset-one": "datasetone",
+    "http://example.com/view/dataset-one": "dataset-one",
     "dataset-two": "dataset-two",
     "a": "b"
   };
@@ -320,7 +322,7 @@ test("Add to registry", () => {
 
 test("Remove from registry", () => {
   const reg = {
-    "http://example.com/view/dataset-one": "datasetone",
+    "http://example.com/view/dataset-one": "dataset-one",
     "dataset-two": "dataset-two"
   };
   expect(content.removeFromRegistry("a", "datasets")).toMatchObject(reg);
@@ -340,6 +342,100 @@ test("Check unique with new", done => {
   });
 });
 
+test("Create revision", () => {
+  const doc = {
+    "title": "Dataset One More",
+    "identifier": "dataset-one",
+    "description": "First test dataset edidte",
+    "created": "2017-08-01T21:22:48.2698750Z",
+    "modified": "2017-09-10T21:22:48.2698750Z",
+    "errant-field": "shouldn't be here",
+    "interra": {
+      "id": "dataset-one"
+    }
+  };
+  expect(content.createRevision("datasets", doc)[0]).toMatchObject(doc);
+  const file = fs.readJsonSync(content.directory + '/datasets/rev/dataset-one.json');
+  expect(file[0]).toMatchObject(doc);
+  fs.removeSync(content.directory + '/datasets/rev/dataset-one.json');
+});
+
+test("Validate doc", done => {
+  const doc = {
+    "title": "Dataset One More",
+    "id": "dataset-one",
+    "description": "First test dataset edidte",
+    "created": "2017-08-01T21:22:48.2698750Z",
+    "modified": "2017-09-10T21:22:48.2698750Z",
+    "errant-field": "shouldn't be here",
+    "interra": {
+      "id": "dataset-one"
+    }
+  };
+  const collection = 'datasets'
+  content.validateDoc(doc, collection, (err, result) => {
+    expect(result).toBe(true);
+    done();
+
+  });
+});
+
+test("Reject invalid doc", done => {
+  const doc = {
+    "title": "Dataset One More",
+    "description": "First test dataset edidte",
+    "created": "2017-08-01T21:22:48.2698750Z",
+    "modified": "2017-09-10T21:22:48.2698750Z",
+    "errant-field": "shouldn't be here",
+    "interra": {
+      "id": "dataset-one"
+    }
+  };
+  const rejection = {
+    "keyword": 'required',
+    "dataPath": '',
+    "schemaPath": '#/required',
+    "params": { "missingProperty": 'id' },
+    "message": 'should have required property \'id\''
+  }
+  const collection = 'datasets'
+  content.validateDoc(doc, collection, (err, result) => {
+    expect(err[0]).toMatchObject(rejection);
+    done();
+  });
+});
+
+test("Read Dataset One before update", done => {
+  content.findByFieldValue('id', 'datasets', 'http://example.com/view/dataset-one', (err, result) => {
+    expect(result.title).toBe("Dataset One");
+    done();
+  });
+});
+
+test("Update existing doc", done => {
+  const update = {
+    "title": "New title",
+    "description": "new description"
+  }
+  content.updateOne("dataset-one", "datasets", update, (err, result) => {
+    expect(result.title).toBe("New title");
+    expect(result.interra.id).toBe("dataset-one");
+    done();
+  });
+});
+
+test("Revert doc", done => {
+  content.revertOne("dataset-one", "datasets", 0, (err, result) => {
+    expect(result.title).toBe("Dataset One");
+    done();
+  });
+});
+
+/*
+test("Replace existing doc", done => {
+
+});
+*/
 
 
 /**
@@ -360,7 +456,7 @@ test("Save two docs", done => {
     "modified": "2017-08-10T21:22:48.2698750Z",
     "errant-field": "shouldn't be here"
   };
-  content.insertOne('test-dataset', 'datasets', doc, (err, result) => {
+  content.insertMany('test-dataset', 'datasets', doc, (err, result) => {
     if (err) {
       console.log(err);
     }
@@ -372,17 +468,16 @@ test("Save two docs", done => {
 });
 */
 
-// TODO: Need to validate content better. Org didn't match
+// TODO: How to stop saving something that is dereffed? !important
 // TODO: Need to decide when to use map.
-// TODO: Validate if Ref references exist.
-// TODO: Create functions for Store, Edit, View.
-// TODO: Have better logic for references. Are they paths or identifiers?
 
-// insertOne() -
-// updateOne()
-// _writeDoc()
+
+// TODO: Create functions for Store, Edit, View.
+
 // exportOne().
 // exportMany().
 // loadWithField()?
 // findByIdentifier()
 // pagedFind().
+// validateCollection (for content)
+// validateAll (all content )

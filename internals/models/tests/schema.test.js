@@ -45,6 +45,15 @@ test("Validates correct schema", () => {
   expect(valid).toBeTruthy();
 });
 
+test("Dereferences schema", done => {
+  schema.dereference("datasets", (err, result) => {
+    console.log(result);
+    expect(1).toBe(1);
+    done();
+  });
+});
+
+
 test("Rejects invalid schema", () => {
   const badSchema = {
     "properties": {

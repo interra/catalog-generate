@@ -1,0 +1,383 @@
+[{
+	"id": "usda.gov",
+	"remote": "http://www.usda.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"keyword": ["health"]
+	},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["US Department of Agriculture"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["US Department of Agriculture"]
+	}
+}, {
+	"id": "data.mo.gov",
+	"remote": "https://data.mo.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health"]
+	},
+	"excludes": {
+		"accessURL": ["https://data.mo.gov/api/file_data/Q_A5PzJ6KjRSU6UpxbrdgR5-AV8bx6EarjcJavFYWog?filename=Letter+%26+Registration+Form+with+Map+smoke+with+classroom+date.pdf"]
+	},
+	"defaults": {
+		"publisher.name": ["State of Missouri"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["State of Missouri"],
+		"programCode": [""],
+		"bureauCode": [""]
+	}
+}, {
+	"id": "data.hawaii.gov",
+	"remote": "https://data.hawaii.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health"]
+	},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["State of Hawaii"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["State of Hawaii"],
+		"programCode": [""],
+		"bureauCode": [""]
+	}
+}, {
+	"id": "data.oregon.gov",
+	"remote": "https://data.oregon.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health & Human Services"]
+	},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["State of Oregon"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["State of Oregon"],
+		"programCode": [""],
+		"bureauCode": [""]
+	}
+}, {
+	"id": "data.ok.gov",
+	"remote": "https://data.ok.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"keyword": ["health"]
+	},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["State of Oklahoma"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["State of Oklahoma"],
+		"programCode": [""],
+		"bureauCode": [""]
+	}
+}, {
+	"id": "data.illinois.gov",
+	"remote": "http://data.illinois.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Public Health", "Medicaid", "Social/Healthcare"]
+	},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["State of Illinois"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["State of Illinois"],
+		"programCode": [""],
+		"bureauCode": [""]
+	}
+}, {
+	"id": "chronicdata.cdc.gov",
+	"remote": "https://chronicdata.cdc.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["Centers for Disease Control and Prevention"],
+		"bureauCode": ["009:20"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["Centers for Disease Control and Prevention"]
+	}
+}, {
+	"id": "www.cdc.gov",
+	"remote": "http://www.cdc.gov/wcms/opendata/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["Centers for Disease Control and Prevention"],
+		"bureauCode": ["009:20"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["Centers for Disease Control and Prevention"]
+	}
+}, {
+	"id": "data.cdc.gov",
+	"remote": "https://data.cdc.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["Centers for Disease Control and Prevention"],
+		"bureauCode": ["009:20"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["Centers for Disease Control and Prevention"]
+	}
+}, {
+	"id": "chhs.data.ca.gov",
+	"remote": "https://chhs.data.ca.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"overrides": {
+		"author": "State of California",
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["State of California"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.michigan.gov",
+	"remote": "https://data.michigan.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health & Wellness"]
+	},
+	"excludes": {},
+	"overrides": {
+		"author": "State of Michigan",
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["State of Michigan"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.sfgov.org",
+	"remote": "https://data.sfgov.org/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health and Social Services"]
+	},
+	"excludes": {},
+	"overrides": {
+		"publisher.name": ["City of San Francisco"],
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["City of San Francisco"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.cityofboston.gov",
+	"remote": "https://data.cityofboston.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health"]
+	},
+	"excludes": {},
+	"overrides": {
+		"publisher.name": ["City of Boston"],
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["City of Boston"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.cityofchicago.org",
+	"remote": "https://data.cityofchicago.org/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health & Human Services"]
+	},
+	"excludes": {},
+	"overrides": {
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["City of Chicago"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "health.data.ny.gov",
+	"remote": "https://health.data.ny.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health"]
+	},
+	"excludes": {},
+	"overrides": {
+		"publisher.name": ["State of New York"],
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["State of New York"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "open.fda.gov",
+	"remote": "https://open.fda.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"keyword": ["health", "human drugs", "community health"]
+	},
+	"excludes": {},
+	"overrides": {
+		"publisher.name": ["Department of Health & Human Services"]
+	},
+	"defaults": {
+		"publisher.name": ["Department of Health & Human Services"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.medicare.gov",
+	"remote": "https://data.medicare.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"overrides": {
+		"publisher.name": ["Centers for Medicare & Medicaid Services"]
+	},
+	"defaults": {
+		"publisher.name": ["Centers for Medicare & Medicaid Services"],
+		"bureauCode": ["009:38"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.wa.gov",
+	"remote": "https://data.wa.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health"]
+	},
+	"excludes": {},
+	"overrides": {
+		"publisher.name": ["State of Washington"],
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["State of Washington"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.maryland.gov",
+	"remote": "https://data.maryland.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health and Human Services"]
+	},
+	"excludes": {},
+	"overrides": {
+		"publisher.name": ["State of Maryland"],
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["State of Maryland"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "data.colorado.gov",
+	"remote": "https://data.colorado.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"theme": ["Health"]
+	},
+	"excludes": {
+		"accessURL": [
+			"/^https?://([^/]+\\.)?(nih|healthindicators|ahrq|cdc).gov//",
+			"http://www.cha.com/CHA/_Resources/New%20DataBank.aspx"
+		]
+	},
+	"overrgides": {
+        "publisher.name": ["State of Colorado"],
+		"programCode": [""],
+		"bureauCode": [""]
+	},
+	"defaults": {
+		"publisher.name": ["State of Colorado"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	}
+}, {
+	"id": "cms.gov",
+	"remote": "https://dnav.cms.gov/api/healthdata",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["Centers for Medicare & Medicaid Services"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["Centers for Medicare & Medicaid Services"]
+	}
+}, {
+	"id": "ed.gov",
+	"remote": "http://www2.ed.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {
+		"keyword": ["Health"]
+	},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["US Department of Education"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["US Department of Education"]
+	}
+}, {
+	"id": "data.medicaid.gov",
+	"remote": "https://data.medicaid.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["Centers for Medicare & Medicaid Services"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["Centers for Medicare & Medicaid Services"]
+	}
+}, {
+	"id": "datafiles.samhsa.gov",
+	"remote": "http://datafiles.samhsa.gov/data.json",
+	"type": "datajson_v1_1_json",
+	"filters": {},
+	"excludes": {},
+	"defaults": {
+		"publisher.name": ["Substance Abuse & Mental Health Services Administration"],
+		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+	},
+	"overrides": {
+		"publisher.name": ["Substance Abuse & Mental Health Services Administration"]
+	}
+}]

@@ -2,7 +2,7 @@ title: Organization
 description: A simple organization.
 type: object
 required:
-- title
+- name
 - identifier
 - created
 - refreshed

@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const YAML = require('yamljs');
 const refParser = require('json-schema-ref-parser');
 const chalk = require('chalk');
+const Async = require('async');
 const Ajv = require('ajv');
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
@@ -19,6 +20,8 @@ class Schema {
       throw new Error("Schema config file " + this.configFile + " does not exist.")
     }
     this.Hook = require(this.dir + '/hooks/Schema.js');
+    this.schemas = {};
+    this.refSchemas = {};
   }
 
   // Validate that the schema is in proper json-schema.
@@ -100,7 +103,8 @@ class Schema {
     that.Hook.preLoad(file,(err, file) => {
       const collectionFile = fs.readFileSync(file, 'utf8');
       const interraSchema = fs.readFileSync(interraSchemaFile, 'utf8');
-      const data = Object.assign(YAML.parse(collectionFile), {interra: YAML.parse(interraSchema)});
+//      const data = Object.assign(YAML.parse(collectionFile), {interra: YAML.parse(interraSchema)});
+      const data = YAML.parse(collectionFile);
       that.Hook.postLoad(collection, data, (err, output) => {
         if (data) {
           return callback(null, data);
@@ -112,26 +116,79 @@ class Schema {
     });
   }
 
+  /**
+   * Provides schema that includes "interra-reference" for validating stored docs.
+   */
+  reference(collection, callback) {
+    if (collection in this.refSchemas) {
+      return callback(null, this.refSchemas[collection]);
+    }
+    const that = this;
+    this.load(collection, (err, schema) => {
+      const references = this.getConfigItem('references');
+      if (collection in references) {
+        Async.eachOf(references[collection], (ref, field, done) => {
+          if (schema.properties[field]['type'] == 'object') {
+            schema.properties[field] = {
+              "type": "object",
+              "title": "interra reference",
+              "required": ["interra-reference"],
+              "properties": {
+                "interra-reference": {
+                  "type": "string",
+                  "title":  "Interra reference"
+                }
+              }
+            }
+          }
+          else {
+            schema.properties[field] = {
+              "type": "array",
+              "title": "interra reference",
+              "items": {
+                "required": ["interra-reference"],
+                "properties": {
+                  "interra-reference": {
+                    "type": "string",
+                    "title":  "Interra reference"
+                  }
+                }
+              }
+            }
+          }
+          done();
+        }, function(err) {
+          that.refSchemas[collection] = schema;
+          callback(err, schema);
+        });
+
+      }
+    });
+  }
+
   dereference(collection, callback) {
-    var that = this;
+    if (collection in this.schemas) {
+      return callback(null, this.schemas[collection]);
+    }
+    const that = this;
     this.load(collection, (err, schema) => {
       if (err) {
         return callback(err);
       }
       that.Hook.preDereference(schema,(err, schema) => {
 
-        var dir = __dirname;
-        var schemaDir = this.dir + '/collections';
+        const dir = __dirname;
+        const schemaDir = this.dir + '/collections';
         process.chdir(schemaDir);
         refParser.dereference(schema)
           .then(function(derefSchema) {
             process.chdir(dir);
             that.Hook.postDereference(derefSchema,(err, derefSchema) => {
+              that.schemas[collection] = derefSchema;
               return callback(null, derefSchema);
             });
           })
           .catch(function(err) {
-            console.log(err);
             process.chdir(dir);
             return callback(err, null);
           });
@@ -140,12 +197,12 @@ class Schema {
     }
 
   getConfig() {
-    var data = fs.readFileSync(this.dir + "/config.yml", 'utf8');
+    const data = fs.readFileSync(this.configFile, 'utf8');
     return YAML.parse(data);
   }
 
   getConfigItem(item) {
-    var items = this.getConfig(item);
+    const items = this.getConfig(item);
     return items[item];
   }
 

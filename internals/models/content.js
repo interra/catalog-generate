@@ -52,7 +52,6 @@ class FileStorage extends Storage {
     this.registry = [];
     this.schemaMap = this.schema.mapSettings();
     this.references = this.schema.getConfigItem('references');
-    //this.collections = this.schema.getConfigItem('collections');
     this.map = this.schema.mapSettings();
 
     // TODO: Export to function where we can see if file exists. Make hooks
@@ -138,9 +137,7 @@ class FileStorage extends Storage {
           }
         });
       }, function(err) {
-        if (err) {
-          return callback(err, null);
-        }
+        if (err) return callback(err, null);
       });
       Async.mapValuesSeries(referencedCollections, that.loadWithField.bind(that), function(err, results)  {
         Async.eachSeries(results, function(result, over) {
@@ -273,9 +270,17 @@ class FileStorage extends Storage {
    * @param {boolean} routeCollection Whether doc is part of collection with routes.
    * @return {boolean} True if doc validates.
    */
-  validateRequired(doc, callback) {
+  validateRequired(doc, collection, callback) {
+    const that = this;
     const fiveGoldenFields = this.requiredFields();
     Async.each(fiveGoldenFields, function(field, done) {
+      if (collection in that.map) {
+        if (Object.values(that.map[collection]).indexOf(field) !== -1) {
+          let values = Object.values(that.map[collection]);
+          let keys = Object.keys(that.map[collection]);
+          field = keys[values.indexOf(field)];
+        }
+      }
       if (!(field in doc)) {
         return done(field + " field is required.");
       }
@@ -300,6 +305,26 @@ class FileStorage extends Storage {
    */
   validateDoc(doc, collection, callback) {
     this.schema.dereference(collection, (err, schema) => {
+      if (err) return callback(err);
+      const valid = ajv.validate(schema, doc);
+      if (!valid) {
+         return callback(ajv.errors);
+      }
+      else {
+        return callback(false, true);
+      }
+    });
+  }
+
+  /**
+   * Validates doc based on schema that includes "interra-reference"..
+   * @param {object} doc - The {@link doc}.
+   * @param {string} collection - The {@link collection};
+   * @return {boolean} True if the {@link doc} is valid.
+   */
+  validateDocToStore(doc, collection, callback) {
+    this.schema.reference(collection, (err, schema) => {
+      if (err) return callback(err);
       const valid = ajv.validate(schema, doc);
       if (!valid) {
          return callback(ajv.errors);
@@ -319,22 +344,13 @@ class FileStorage extends Storage {
   validateUnique(identifier, collection, callback) {
     const that = this;
     this.buildRegistry(collection, (err, result) => {
-      console.log(that.registry[collection][identifier]);
       if (identifier in that.registry[collection]) {
-        console.log(that.registry[collection][identifier]);
         return callback(null, that.registry[collection][identifier]);
       }
       else {
         return callback(null, null);
       }
     });
-
-    // if (collection in this.registry) {
-    // this.buildRegistry(collection)
-    //}
-    // this.Map()
-    // return this.checkRegistry()
-
   }
 
   /**
@@ -346,11 +362,9 @@ class FileStorage extends Storage {
       let dir = this.directory + "/collections/" + collection;
       let file = dir + '/' + identifier + '.json';
       fs.writeJson(file, content, err => {
-        if (err) {
-          console.log(err);
-          return callback(err);
-        }
+        if (err) return callback(err);
         this.Hook.postOutput(content, (err, content) => {
+          if (err) return callback(err);
           return callback(null, content);
         });
       });
@@ -360,13 +374,8 @@ class FileStorage extends Storage {
   exportMany(contents, callback) {
     Async.eachSeries(contents, function(content, done) {
       exportOne(content.identifier, content.collection, content, (err, item) => {
-        if (err) {
-          console.log(err);
-          return done(err);
-        }
-        else {
-          done(null);
-        }
+        if (err) return done(err);
+        done(null);
       })
     }, function(err) {
       callback(err);
@@ -516,8 +525,10 @@ class FileStorage extends Storage {
   /**
    * Updates an existing document.
    */
-  updateOne(interraId, collection, doc, dif, callback) {
+  updateOne(interraId, collection, doc, callback) {
+    const that = this;
     this.findByInterraId(interraId, collection, (err, existingDoc) => {
+      this.createRevision(collection, existingDoc);
       if (err) return callback(err);
       const newDoc = merge(existingDoc, doc);
       this.insertOne(interraId, collection, newDoc, (err, result) => {
@@ -525,6 +536,55 @@ class FileStorage extends Storage {
         return callback(null, result);
       });
     });
+  }
+
+  /**
+   * Replaces an existing document.
+   */
+  replaceOne(interraId, collection, doc, callback) {
+    this.findByInterraId(interraId, collection, (err, existingDoc) => {
+      this.createRevision(collection, existingDoc);
+      if (err) return callback(err);
+      this.insertOne(interraId, collection, doc, (err, result) => {
+        if (err) return callback(err);
+        return callback(null, result);
+      });
+    });
+  }
+
+  /**
+   * Reverts doc to revision.
+   */
+  revertOne(interraId, collection, revisionId, callback) {
+    const file = this.directory + '/' + collection + '/rev/' + interraId + '.json';
+    let revisions = fs.readJsonSync(file);
+    const revision = revisions[revisionId];
+    delete revisions[revisionId];
+    if (revision.length) {
+        fs.outputFileSync(file, revision);
+    }
+    else {
+      fs.unlink(file);
+    }
+    this.insertOne(interraId, collection, revision, (err, doc) => {
+      callback(err, doc);
+    });
+  }
+
+  /**
+   * Creates revision.
+   */
+  createRevision(collection, doc) {
+    const interraId = doc.interra.id;
+    // Temp using json until this lands https://github.com/jeremyfa/yaml.js/pull/99
+    const file = this.directory + '/' + collection + '/rev/' + interraId + '.json';
+    let revisions = [];
+    if (fs.existsSync(file)) {
+      revisions = fs.readJsonSync(file);
+    }
+    revisions.push(doc);
+    fs.writeJsonSync(file, revisions);
+    return revisions;
   }
 
   /**
@@ -536,9 +596,7 @@ class FileStorage extends Storage {
   deleteOne(interraId, collection, callback) {
     const file = this.directory + '/' + collection + '/' + interraId + '.yml';
     fs.unlink(file, (err) => {
-      if (err) {
-        return callback(err);
-      }
+      if (err) return callback(err);
       return callback(false, true);
     })
   }
@@ -553,29 +611,21 @@ class FileStorage extends Storage {
    */
   insertOne(interraId, collection, doc, callback) {
     // Validate required.
-    this.validateRequired(doc, (err, result) => {
-      if (err) {
-        return callback(err);
-      }
+    this.validateRequired(doc, collection, (err, result) => {
+      if (err) return callback(err);
     });
     // Validate schema.
-    this.validateDoc(doc, collection, (err, result) => {
-      if (err) {
-        return callback(err);
-      }
+    this.validateDocToStore(doc, collection, (err, result) => {
+      if (err) return callback(err);
     });
     this.Hook.preSave(interraId, collection, doc, (err, interraId, collection, doc) => {
       const file = this.directory + '/' + collection + '/' + interraId + '.yml';
-      const yml = YAML.stringify(doc);
+      const yml = YAML.stringify(doc, 20, 2);
       fs.outputFile(file, yml, err => {
-        if (err) {
-          return callback(err);
-        }
+        if (err) return callback(err);
         this.Hook.postSave(doc, (err, doc) => {
-          if (err) {
-            return callback(err);
-          }
-          return callback(null, true);
+          if (err) return callback(err);
+          return callback(null, doc);
         });
       });
     });
@@ -589,21 +639,12 @@ class FileStorage extends Storage {
   insertMany(docs, callback) {
     Async.eachSeries(docs, function(content, done) {
       insertOne(content.identifier, content.collection, content, (err, items) => {
-        if (err) {
-          console.log(err);
-          return done(err);
-        }
-        else {
-          done(null)
-        }
+        if (err) return done(err);
+        done(null);
       })
     }, function(err) {
-      if (err) {
-        return callback(err);
-      }
-      else {
-        return callback(null, true);
-      }
+      if (err) return callback(err);
+      return callback(null, true);
     });
   }
 
@@ -627,11 +668,14 @@ class FileStorage extends Storage {
     var dir = this.directory + '/' + collection;
     fs.readdir(dir, function(err, items) {
       var t;
-      // eghhh.
+      let output = [];
       for (t in items) {
-        items[t] = collection + '/' + items[t];
+        // Folder may contain rev folder for revisions.
+        if (items[t] !== 'rev') {
+          output.push(collection + '/' + items[t]);
+        }
       }
-      callback(null, items);
+      return callback(null, output);
     });
   }
 
@@ -644,9 +688,7 @@ class FileStorage extends Storage {
    */
   loadWithField(item, key, callback) {
     this.load(Object.values(item)[0], (err, result) => {
-      if (err) {
-        return callback(err);
-      }
+      if (err) return callback(err);
       let output = [];
       output[Object.keys(item)[0]] = result;
       return callback(null, output);
@@ -661,11 +703,12 @@ class FileStorage extends Storage {
   load(file, callback) {
     var that = this;
     var dir = this.directory + '/' + file;
-    that.Hook.preLoad(dir,(err, result) => {
-      const data = fs.readFileSync(result, 'utf8');
-      const yml = YAML.parse(data);
-      that.Hook.postLoad(yml, (err, output) => {
-        return callback(null, output);
+    that.Hook.preLoad(dir,(err, ymlFile) => {
+      if (err) return callback(err);
+      const data = fs.readFileSync(ymlFile, 'utf8');
+      const doc = YAML.parse(data);
+      that.Hook.postLoad(doc, (err, output) => {
+        return callback(err, output);
       });
     })
   }
@@ -732,10 +775,8 @@ class FileStorage extends Storage {
         });
       }]
     }, (err, results) => {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, results.readFiles);
+      if (err) return callback(err);
+      return callback(null, results.readFiles);
     });
   }
 
@@ -748,12 +789,8 @@ class FileStorage extends Storage {
   findByInterraId(interraId, collection, callback) {
     const file = collection + '/' + interraId + '.yml'
     this.load(file, (err, result) => {
-      if (err) {
-        callback (err);
-      }
-      else {
-        callback(null, result);
-      }
+      if (err) return callback(err);
+      return callback(null, result);
     });
   }
 
@@ -797,12 +834,8 @@ class FileStorage extends Storage {
       Async.auto({
             load: function(done) {
                 that.load(null, function(err, list) {
-                    if (err) {
-                        done(err);
-                    }
-                    else {
-                        done(null, list);
-                    }
+                    if (err) done(err);
+                    done(null, list);
                 });
             },
             query: ['load', function (results, done) {
@@ -927,38 +960,38 @@ class FileStorage extends Storage {
     }
 
   titles(collection, callback) {
-        var that = this;
-        Async.auto({
-              load: function(done) {
-                  that.load(collection, function(err, list) {
-                      done(err, list);
-                  });
-              },
-              sort: ['load', function (results, done) {
-                  Async.sortBy(results.load, function(item, callback) {
-                      callback(null, item['title'].toLowerCase())
-                  }, function(err, items) {
-                      done(err, items);
-                  });
-              }],
-              fields: ['sort', function (results, done) {
-                  var newResults = [];
-                  Async.eachSeries(results.sort, function(item, callback) {
-                      var newItem = {};
-                      newItem['title'] = item['title'];
-                      newResults.push(newItem);
-                      callback();
-                  }, function(err) {
-                      done(err, newResults);
-                  });
-              }],
-        }, (err, results) => {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, results.fields);
+    var that = this;
+    Async.auto({
+      load: function(done) {
+        that.loadByCollection(collection, function(err, list) {
+          done(err, list);
         });
-    }
+      },
+      sort: ['load', function (results, done) {
+        Async.sortBy(results.load, function(item, callback) {
+          callback(null, item['title'].toLowerCase())
+        }, function(err, items) {
+          done(err, items);
+        });
+      }],
+      fields: ['sort', function (results, done) {
+        var newResults = [];
+        Async.eachSeries(results.sort, function(item, callback) {
+          var newItem = {};
+          newItem['title'] = item['title'];
+          newResults.push(newItem);
+          callback();
+          }, function(err) {
+              done(err, newResults);
+          });
+      }],
+    }, (err, results) => {
+          if (err) {
+              return callback(err);
+          }
+          callback(null, results.fields);
+      });
+  }
 }
 
 module.exports = {
