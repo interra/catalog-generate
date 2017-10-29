@@ -4,6 +4,14 @@ const path = require('path');
 const Schema = require('./schema');
 const Async = require('async');
 
+  /** Required fields for site settings. */
+  const required = [ "name", "description", "identifier", "schema"];
+
+  /** Optional fields for site settings. */
+  const optional = [ "front-page-icons", "front-page-icon-collection", "fontConfig"];
+
+
+
 /**
  * Class for managing sites.
  */
@@ -16,12 +24,6 @@ class Site {
   constructor(sitesDir) {
     this.sitesDir = sitesDir;
   }
-
-  /** Required fields for site settings. */
-  static required = [ "name", "description", "identifier", "schema"];
-
-  /** Optional fields for site settings. */
-  static optional = [ "front-page-icons", "front-page-icon-collection", "fontConfig"];
 
   /**
    * jQuery's inArray.

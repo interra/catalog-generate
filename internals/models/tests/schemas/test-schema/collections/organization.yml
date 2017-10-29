@@ -25,9 +25,3 @@ properties:
     type: string
     title: Last Refresh Date
     format: date-time
-  interra:
-    type: object
-    properties:
-      path:
-        type: string
-        title: Path
