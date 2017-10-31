@@ -503,7 +503,7 @@ class FileStorage extends Storage {
    * Retrieves a field by the field it is being mapped to.
    * @param {string} collection Collection of the field.
    * @param {string} field Field value to search.
-   * @return {string} Mapped field.
+   * @return {string} Mapped field or original value.
    */
   getMapFieldByValue(collection, field) {
     if (collection in this.map) {
@@ -512,7 +512,7 @@ class FileStorage extends Storage {
         return Object.keys(this.map[collection])[fields.indexOf(field)];
       }
     }
-    return null;
+    return field;
   }
 
   getIdentifierField(collection) {
@@ -549,11 +549,12 @@ class FileStorage extends Storage {
 
   getRegistryCollection(registry, collection, callback) {
     Async.reduce(registry, {},(memo, item, done) => {
+      console.log(item);
       if (collection in item) {
         done(null, item[collection]);
       }
       else {
-        done();
+        done(null, memo);
       }
     }, function(err, results) {
       callback(null, results);

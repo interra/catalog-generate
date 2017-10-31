@@ -102,54 +102,76 @@ harvest.load((err, docsGroup) => {
                 const collection = references[primaryCollection][field];
                 const identifier = content.getIdentifierField(collection);
                 const type = harvest._toType(values);
+                console.log(collection, registryFull);
                 content.getRegistryCollection(registryFull, collection, (err, registry) => {
+                  const title = content.getMapFieldByValue(collection, 'title');
                   if (type === 'array') {
-                    Async.each(values, (value, valdone) => {
+                    doc[field] = [];
+                    console.log('zzzzzzzzzzzzzzzz', doc[field]);
+                    Async.eachSeries(values, (value, valdone) => {
                       if (!(identifier) in value) {
                         throw new Error("Ref missing identifier field " + value);
                       }
                       if (value[identifier] in registry) {
                         content.UpdateOne(registry[value[identifier]], collection, value, (err, res) => {
+                          doc[field].push({'interra-reference': interraId});
+                          valdone();
                         });
                       }
                       else {
                         const interraId = content.buildInterraIdSafe(content.buildInterraId(value.title), Object.values(registry));
                         content.insertOne(interraId, collection, value, (err, res) => {
-                          registry = content.addToRegistry({[interraId]: value[identifier]}, collection);
+                          doc[field].push({'interra-reference': interraId});
+                          content.addToRegistry({[interraId]: value[identifier]}, collection);
+                          valdone();
                         });
                       }
+                    }, function(err) {
+                      fin();
                     });
                   }
                   else if (type === 'object') {
-                    if (!(identifier) in values) {
-                      throw new Error("Ref missing identifier field " + values);
-                    }
-                    if (true) {
-                      console.log('yes field', values);
+                    doc[field] = {};
+                    console.log("we shouldhave a registry", registry);
+                    if (false) {
+                      content.UpdateOne(registry[values[identifier]], collection, values, (err, res) => {
+                        doc[field]['interra-reference'] = registry[values[identifier]];
+                        fin();
+                      });
                     }
                     else {
-                      console.log('no field', field);
+                      console.log(collection, registry);
+                      const interraId = content.buildInterraIdSafe(content.buildInterraId(values[title]), Object.values(registry));
+                      content.insertOne(interraId, collection, values, (err, res) => {
+                        doc[field]['interra-reference'] = interraId;
+                        // TODO: fix.
+                        content.addToRegistry({[interraId]: values[identifier]}, collection);
+                        fin();
+                      });
                     }
                   }
                   else {
-
+                    fin();
                   }
-              fin();
-
                 });
-  //              console.log(registry);
 
-    //            if (Object.values(registry[collection]).indexOf(doc[identifierField])) {
-
-      //          }
-                // Need to save the collection--->
-                // Need to return the reference id?
-            //    const field = that.content(primaryCollection, refField);
-    //          console.log(field);
             }
           }, function(err) {
-          done();
-
+            content.getRegistryCollection(registryFull, primaryCollection, (err, registry) => {
+              if (doc[identifierField] in registry) {
+                content.UpdateOne(doc[identifierField], collection, value, (err, res) => {
+                  done();
+                });
+              }
+              else {
+                const title = content.getMapFieldByValue(primaryCollection, 'title');
+                const interraId = content.buildInterraIdSafe(content.buildInterraId(doc.title), Object.values(registry));
+                content.insertOne(interraId, primaryCollection, doc, (err, res) => {
+                  content.addToRegistry({[interraId]: doc[identifierField]}, primaryCollection);
+                  done();
+                });
+              }
+            });
           });
           });
         });
