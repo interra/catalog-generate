@@ -5,6 +5,7 @@ collections:
   - datasets
   - organization
   - tags
+primaryCollection: datasets
 facets:
     keyword:
       label: Tags

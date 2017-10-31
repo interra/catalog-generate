@@ -37,7 +37,13 @@
 			"id": "516f7ea3-f6c4-4df8-bc03-14fc28df21e2"
 		},
 		"defaults": {
-			"org.name": ["Planet of Hoth"],
+			"org": {
+        "name": "Planet of Hoth Federation",
+        "identifier": "planet-hoth-group",
+        "description": "Imperial Planet coordination group.",
+        "created": "Fri Apr 10 1970 11:53:04 GMT+0000 (UTC)",
+        "refreshed": "Wed Oct 15 1975 14:53:30 GMT+0000 (UTC)"
+      },
 			"license": ["http://opendefinition.org/licenses/odc-odbl/"]
 		}
 	}

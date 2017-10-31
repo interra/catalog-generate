@@ -46,6 +46,7 @@ const doc = {
   "title": "Quilk"
 }
 
+//console.log(doc);
 const testSources = {
   "hothplanet": {
 		"id": "hothplanet",
@@ -58,47 +59,104 @@ const testSources = {
 			"id": "516f7ea3-f6c4-4df8-bc03-14fc28df21e2"
 		},
 		"defaults": {
-			"org.name": ["Planet of Hoth"],
-			"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+		"org": {
+      "name": "Planet of Hoth Federation",
+      "identifier": "planet-hoth-group",
+      "description": "Imperial Planet coordination group.",
+      "created": "Fri Apr 10 1970 11:53:04 GMT+0000 (UTC)",
+      "refreshed": "Wed Oct 15 1975 14:53:30 GMT+0000 (UTC)"
+    },
+    "license": ["http://opendefinition.org/licenses/odc-odbl/"]
 		}
 	}
 }
+/*
+harvest.load((err, results) => {
+  harvest._flattenResults(results, (err, docs) => {
+    console.log(docs);
+    console.log(docs.length);
 
-harvest._getObjValue(doc, ["tags", "title"], (err, result) => {
-  console.log(result);
+  });
 });
-
-harvest._getObjValue(doc, ["org", "name"], (err, result) => {
-  console.log(result);
-});
-
-harvest._getObjValue(doc, ["id"], (err, result) => {
-  console.log(result);
-});
-
-harvest._getObjValue(doc, ["ids"], (err, result) => {
+*/
+content.buildFullRegistry((err, result) => {
   console.log(result);
 });
 
-harvest._getObjValue(doc, ["org", "ids"], (err, result) => {
-  console.log(result);
+harvest.load((err, docsGroup) => {
+  const references = content.references;
+    harvest._flattenResults(docsGroup, (err, docs) => {
+      const primaryCollection = content.schema.getConfigItem('primaryCollection');
+      content.buildFullRegistry((err, registryFull) => {
+        Async.each(docs, (doc, done) => {
+          const identifierField = content.getIdentifierField(primaryCollection);
+          if (!(identifierField) in doc) {
+            throw new Error("Doc missing identifier field " + doc);
+          }
+          content.refCollections(doc, primaryCollection, (err, fields) => {
+            Async.eachOf(fields, (values, field, fin) => {
+              if (!values) {
+                fin();
+              }
+              else {
+                const collection = references[primaryCollection][field];
+                const identifier = content.getIdentifierField(collection);
+                const type = harvest._toType(values);
+                content.getRegistryCollection(registryFull, collection, (err, registry) => {
+                  if (type === 'array') {
+                    Async.each(values, (value, valdone) => {
+                      if (!(identifier) in value) {
+                        throw new Error("Ref missing identifier field " + value);
+                      }
+                      if (value[identifier] in registry) {
+                        content.UpdateOne(registry[value[identifier]], collection, value, (err, res) => {
+                        });
+                      }
+                      else {
+                        const interraId = content.buildInterraIdSafe(content.buildInterraId(value.title), Object.values(registry));
+                        content.insertOne(interraId, collection, value, (err, res) => {
+                          registry = content.addToRegistry({[interraId]: value[identifier]}, collection);
+                        });
+                      }
+                    });
+                  }
+                  else if (type === 'object') {
+                    if (!(identifier) in values) {
+                      throw new Error("Ref missing identifier field " + values);
+                    }
+                    if (true) {
+                      console.log('yes field', values);
+                    }
+                    else {
+                      console.log('no field', field);
+                    }
+                  }
+                  else {
+
+                  }
+              fin();
+
+                });
+  //              console.log(registry);
+
+    //            if (Object.values(registry[collection]).indexOf(doc[identifierField])) {
+
+      //          }
+                // Need to save the collection--->
+                // Need to return the reference id?
+            //    const field = that.content(primaryCollection, refField);
+    //          console.log(field);
+            }
+          }, function(err) {
+          done();
+
+          });
+          });
+        });
+      });
+    });
 });
 
-harvest._getObjValue(doc, ["org"], (err, result) => {
-  console.log(result);
-});
-
-harvest._searchObj(doc, "tags.title", ["health"], (err, result) => {
-  console.log(result);
-});
-harvest._searchObj(doc, "tags.title", ["healths"], (err, result) => {
-  console.log(result);
-});
-
-harvest._filter(testSources, {"hothplanet": [doc]}, (err, result) => {
-  console.log(result);
-});
-
-harvest._exclude(testSources, {"hothplanet": [doc]}, (err, result) => {
-  console.log(result);
-});
+//content.refCollections(doc, "datasets", (err, result) => {
+  //console.log('should be different', result);
+//});

@@ -1,7 +1,4 @@
 const fs = require('fs-extra');
-const Config = require('./config');
-const Site = require('./site');
-const Schema = require('./schema');
 const YAML = require('yamljs');
 const Async = require('async');
 const slug = require('slug');
@@ -9,6 +6,7 @@ const axios = require('axios');
 const Ajv = require('ajv');
 const HarvestSource = require('./harvestsource');
 const isEqual = require('lodash.isequal');
+const defaults = require('lodash.defaults');
 
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
@@ -97,32 +95,59 @@ class Harvest {
     });
   }
 
-  prepare(docs, callback) {
+  /**
+   * @param {object} docsGroup Object of docs loaded from sources with source
+   * id as initial key.
+   * @return {object} Object of docs with the same structure.
+   */
+  prepare(docsGroup, callback) {
     const that = this;
-    // I ♥ callbacks.
-    that._filter(this.sources, docs, (err, filtered) => {
+    // I ♥ callbacks. I promise to fix this.
+    that._filter(this.sources, docsGroup, (err, filtered) => {
       that._exclude(this.sources, filtered, (err, excluded) => {
-        callback(err, excluded);
+        that._defaults(this.sources, excluded, (err, defaulted) => {
+          that._overrides(this.sources, defaulted, (err, over) => {
+            callback(err, over);
+          });
+        });
       });
     });
-    // _excludes(this.sources, docs);
-    // _defaults(this.sources, docs);
-    // _overrides(this.source, docs)
   }
 
-  /**
-   * Gets type. Yeah JS. From https://stackoverflow.com/questions/7390426/better-way-to-get-type-of-a-javascript-variable .
-   * @param {lol} item Item to get the type of.
-   * @return {string} Enum 'string', 'array', 'object'.
-   */
-  _toType(item) {
-    return ({}).toString.call(item).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
-  }
-
-  _exclude(sources, unexcluded, callback) {
-    const excludedDocs = unexcluded;
+  _overrides(sources, docsGroup, callback) {
     const that = this;
-    Async.eachOfSeries(unexcluded, (docs, id, docsCallback) => {
+    Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
+      Async.eachOfSeries(docs, (doc, i, docCallback) => {
+        if ('overrides' in sources[id]) {
+          docsGroup[id][i] = Object.assign(docsGroup[id][i], sources[id].overrides);
+        }
+        docCallback();
+      });
+      docsCallback();
+    }, function(err) {
+      callback(err, docsGroup);
+    });
+  }
+
+  _defaults(sources, docsGroup, callback) {
+    const that = this;
+    Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
+      Async.eachOfSeries(docs, (doc, i, docCallback) => {
+        if ('defaults' in sources[id]) {
+          docsGroup[id][i] = defaults(docsGroup[id][i], sources[id].defaults);
+        }
+        docCallback();
+      });
+      docsCallback();
+    }, function(err) {
+      callback(err, docsGroup);
+    });
+  }
+
+  _exclude(sources, docsGroup, callback) {
+    const excludedDocs = docsGroup;
+    const that = this;
+    Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
       Async.eachOfSeries(docs, (doc, i, docCallback) => {
         let docPass = false;
         if ('excludes' in sources[id]) {
@@ -148,10 +173,10 @@ class Harvest {
     });
   }
 
-  _filter(sources, unfiltered, callback) {
+  _filter(sources, docsGroup, callback) {
     const filteredDocs = {};
     const that = this;
-    Async.eachOfSeries(unfiltered, (docs, id, docsCallback) => {
+    Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
       filteredDocs[id] = [];
       Async.eachSeries(docs, (doc, docCallback) => {
         let docPass = false;
@@ -189,51 +214,46 @@ class Harvest {
    */
   _getObjValue(doc, field, callback) {
     const length = field.length;
-    let i = 0;
-    let inception = doc;
+    const inception = Object.assign({}, doc);
     const that = this;
-    let found = false;
-    Async.eachSeries(field, (fragment, done) => {
-      found = false;
-      const docType = that._toType(inception);
+    Async.reduce(field, inception, (memo, item, done) => {
+      const docType = that._toType(memo);
       if (docType === 'array') {
-        Async.each(inception, (item, fin) => {
-          const itemType = that._toType(item);
-          if (itemType === 'array') {
-            if (item.indexOf(fragment) !== -1) {
-              inception = inception[fragment][item];
-              found = true;
+        Async.reduce(memo, [], (col, val, valdone) => {
+          const valType = that._toType(val);
+          if (valType === 'array') {
+            if (val.indexOf(item) !== -1) {
+              col.push(val[item]);
+              valdone(null, col);
             }
           }
-          else if (itemType === 'object') {
-            if (fragment in item) {
-              inception.push(item[fragment]);
-              found = true;
+          else if (valType === 'object') {
+            if (item in val) {
+              col.push(val[item]);
+              valdone(null, col)
             }
           }
           else {
-            found = true;
+            valdone(null, null)
           }
-          fin();
-        });
+        }, function(err, res) {
+          done(null, res);
+        })
       }
       else if (docType === 'object') {
-        if (fragment in inception) {
-          inception = inception[fragment];
-          found = true;
+        if (item in memo) {
+          done(null, memo[item]);
+        }
+        else {
+          done(null, null);
         }
       }
       else {
-        found = true;
+        done(null, memo);
+        // Do nothing, a string is a thing too.
       }
-      done();
-    }, function (err) {
-      if (found) {
-        callback(null, inception);
-      }
-      else {
-        callback(null, null);
-      }
+    }, function(err, result) {
+      callback(null, result);
     });
   }
 
@@ -300,9 +320,78 @@ class Harvest {
     });
   }
 
-  store() {
+  /**
+   * Gets type. Yeah JS. From https://stackoverflow.com/questions/7390426/better-way-to-get-type-of-a-javascript-variable .
+   * @param {lol} item Item to get the type of.
+   * @return {string} Enum 'string', 'array', 'object'.
+   */
+  _toType(item) {
+    return ({}).toString.call(item).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+  }
+
+  _flattenResults(docsGroup, call) {
+    const that = this;
+    Async.reduce(docsGroup, [], (memo, item, done) => {
+      memo = memo.concat(item)
+      done(null, memo);
+    }, function (err, result) {
+      call(null, result);
+    });
+  }
+
+  /**
+   *
+  store(docsGroup, callback) {
+    const that = this;
+    this._flattenResults(docsGroup, (err, docs) => {
+      const primaryCollection = this.content.schema.getConfigItem('primaryCollection');
+      this.content.buildFullRegistry((err, registry) => {
+        Async.each(docs, (doc, done) => {
+            const identifierField = content.getIdentifierField(primaryCollection);
+            if (!(identifierField) in doc) {
+              throw new Error("Doc missing identifier field " + doc);
+            }
+            that.content.refCollections(doc, (err, fields) => {
+              Async.eachOf(fields, (collection, value, fin) => {
+                // Need to save the collection--->
+                // Need to return the reference id?
+            //    const field = that.content(primaryCollection, refField);
+
+
+              });
+            });
+
+          // refCollections
+          //    - figure out if they already exist, use title?
+          //      - if identifier use that - otherwise slug title
+          // Ref
+          //
+            if (doc[identifierField] in registry) {
+              that.content.updateOne(registry[doc[identifierField]], primaryCollection, doc, (err, result) => {
+                done(err, result);
+              });
+            }
+            else {
+              const interraId = that.content.buildInterraId(doc[identifierField], (err, result) => {
+                that.content.buildInterraIdSafe(interraId, Object.values(registry), (err, id) => {
+                  that.content.insertOne(id, primaryCollection, doc, (err, result => ) {
+
+                  });
+                });
+              });
+            }
+          });
+        };
+      })
+    });
+
+// 1. Get current registry.
+// 2. buildInterraId
+// 3. NEED TO REF Docs!
+
 
   }
+   */
 
   run() {
     // do all

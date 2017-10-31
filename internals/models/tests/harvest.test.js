@@ -47,6 +47,32 @@ const testDoc = {
   "title": "Quilk"
 }
 
+const testDocNoOrg = {
+  "tags": [
+    {
+      "icon": "education",
+      "modified": "Sat Jan 06 1979 15:46:03 GMT+0000 (UTC)",
+      "identifier": "d6fec7ca-38ab-4331-b6c9-e15ca4534c6e",
+      "title": "health"
+    },
+    {
+      "icon": "education",
+      "modified": "Thu Feb 20 1997 13:37:52 GMT+0000 (UTC)",
+      "identifier": "0feb40ec-9d0c-476d-bf8a-411389ab8837",
+      "title": "ut"
+    },
+    {
+      "icon": "city-planning",
+      "modified": "Sat Jun 02 1984 17:47:01 GMT+0000 (UTC)",
+      "identifier": "d8ab825e-242b-4584-a311-58d2326a37bc",
+      "title": "fugiat"
+    }
+  ],
+  "id": "516f7ea3-f6c4-4df8-bc03-14fc28df21e2",
+  "description": "Sit irure culpa pariatur ad laboris ut.",
+  "title": "Quilk"
+}
+
 const testSources = {
   "hothplanet": {
 		"id": "hothplanet",
@@ -59,9 +85,19 @@ const testSources = {
 			"id": "516f7ea3-f6c4-4df8-bc03-14fc28df21e2"
 		},
 		"defaults": {
-			"org.name": ["Planet of Hoth"],
-			"license": ["http://opendefinition.org/licenses/odc-odbl/"]
-		}
+  		"org": {
+        "name": "Planet of Hoth Federation",
+        "identifier": "planet-hoth-group",
+        "description": "Imperial Planet coordination group.",
+        "created": "Fri Apr 10 1970 11:53:04 GMT+0000 (UTC)",
+        "refreshed": "Wed Oct 15 1975 14:53:30 GMT+0000 (UTC)"
+      },
+	    "license": ["http://opendefinition.org/licenses/odc-odbl/"],
+      "description": "Hold my beer"
+		},
+    "overrides": {
+      "title": "A different title"
+    }
 	}
 }
 
@@ -152,9 +188,25 @@ test("Tests _filter", done => {
   })
 });
 
-test("Tests _filter", done => {
+test("Tests _exclude", done => {
   harvest._exclude(testSources, {"hothplanet": [testDoc]}, (err, result) => {
     expect(result.hothplanet.length).toBe(0);
+    done();
+  });
+});
+
+test("Tests _defaults", done => {
+  harvest._defaults(testSources, {"hothplanet": [testDocNoOrg]}, (err, result) => {
+    expect(result.hothplanet[0].org.name).toBe("Planet of Hoth Federation");
+    // Should not change the description since one exists.
+    expect(result.hothplanet[0].description).toBe("Sit irure culpa pariatur ad laboris ut.");
+    done();
+  });
+});
+
+test("Tests _overrides", done => {
+  harvest._overrides(testSources, {"hothplanet": [testDoc]}, (err, result) => {
+    expect(result.hothplanet[0].title).toBe("A different title");
     done();
   });
 });

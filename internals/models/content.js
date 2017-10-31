@@ -49,9 +49,10 @@ class FileStorage extends Storage {
     this.schema = new Schema(schemaDir);
     this.directory = siteDir + '/collections';
     this.loadedSchema = [];
-    this.registry = [];
+    this.registry = {};
     this.schemaMap = this.schema.mapSettings();
     this.references = this.schema.getConfigItem('references');
+    this.collections = this.schema.getConfigItem('collections');
     this.map = this.schema.mapSettings();
 
     // TODO: Export to function where we can see if file exists. Make hooks
@@ -171,9 +172,10 @@ class FileStorage extends Storage {
   /**
    * Adds references identified in the schema config.yml file.
    * @param {object} doc Doc to add references.
+   * @param {object} refs Object with key as collection and value as ref ids.
    * @return {object} Doc with 'interra-reference' internal references.
    */
-  Ref(doc, callback) {
+  Ref(doc, refs, callback) {
     let that = this;
     if (!this.references) {
       return callback(null, doc);
@@ -183,6 +185,7 @@ class FileStorage extends Storage {
       Async.eachSeries(this.references, function(collections, done) {
         Async.eachOfSeries(collections, function(collection, field, fin) {
           let refCollection = Object.keys(that.references)[refNum];
+          const ref = collection in ref ? ref[collection] : {};
           if (field in pre) {
             if (!(refCollection in that.loadedSchema)) {
               that.schema.load(refCollection, function(err, schema) {
@@ -195,12 +198,22 @@ class FileStorage extends Storage {
               let items = pre[field];
               pre[field] = [];
               Async.eachOfSeries(items, function(item, val, over) {
-                pre[field].push({'interra-reference' : that.createCollectionFileName(item.identifier)});
+                if (field in ref && refField.indexOf(val) !== -1) {
+                  pre[field] = {'interra-reference': ref[field][val]};
+                }
+                else {
+                  pre[field].push({'interra-reference' : that.createCollectionFileName(item.identifier)});
+                }
                 over();
               });
             }
             else if (type === 'object') {
-              pre[field] = {'interra-reference' : that.createCollectionFileName(pre[field].identifier)};
+              if (field in ref) {
+                pre[field] = {'interra-reference': ref[field]}
+              }
+              else {
+                pre[field] = {'interra-reference' : that.createCollectionFileName(pre[field].identifier)};
+              }
             }
           }
           fin();
@@ -220,6 +233,38 @@ class FileStorage extends Storage {
           return callback(null, pre);
         }
       });
+    });
+  }
+
+  getRefField(collection, field) {
+    if (collection in this.references) {
+      if (field in this.references[field]) {
+        return this.references[field];
+      }
+    }
+    return field;
+  }
+
+  /**
+   * Gets the reference fields and values from a doc. Use with Ref if importing.
+   * @param {object} doc Doc to retrieve references.
+   * @return {object} Object with keys for collections and field value for refs.
+   */
+  refCollections(doc, collection, callback) {
+    let that = this;
+    if (!this.references || !(collection in this.references)) {
+      return callback(null, {});
+    }
+    const references = this.references[collection];
+    Async.mapValues(references, (ref, key, done) => {
+      if (key in doc) {
+        done(null, doc[key]);
+      }
+      else {
+        done();
+      }
+    }, function(err, result) {
+      callback(err, result);
     });
   }
 
@@ -387,12 +432,12 @@ class FileStorage extends Storage {
    * @param {string} routeString String to apply rules. Suggest title or identifier.
    * @return {string} A route.
    */
-  buildRoute(routeString) {
-    if (buildRoute in this.Hook) {
-      return this.Hook.buildRoute(routeString);
+  buildInterraId(idString) {
+    if ('buildInterraId' in this.Hook) {
+      return this.Hook.buildInterraId(idString);
     }
     else {
-      return slug(routeString).substring(0,10);
+      return slug(idString).substring(0,10);
     }
   }
 
@@ -403,30 +448,30 @@ class FileStorage extends Storage {
    * @param {array} routes Routes to check against.
    * @return {string} Route that does not exist in routes.
    */
-  buildSafeRoute(route, routes) {
+  buildInterraIdSafe(id, ids) {
     let safe = false;
-    let safeRoute = route;
+    let safeId = id;
     let counter = 0;
     let last = '';
     while (!safe) {
-      // safeRoute not in routes so current safeRoute is safe.
-      if (routes.indexOf(safeRoute) === -1) {
+      // safeId not in routes so current safeRoute is safe.
+      if (ids.indexOf(safeId) === -1) {
         safe = true;
       }
       else {
-        if (safeRoute.lastIndexOf('-')) {
-          last = safeRoute.substring(safeRoute.lastIndexOf('-') + 1, safeRoute.length);
+        if (safeId.lastIndexOf('-')) {
+          last = safeId.substring(safeId.lastIndexOf('-') + 1, safeId.length);
           // Javascript's isNumeric().
           if (!isNaN(last)) {
             last = Number(last) + 1;
-            safeRoute = safeRoute.substring(0, safeRoute.lastIndexOf('-')) + '-' + last;
+            safeId = safeId.substring(0, safeId.lastIndexOf('-')) + '-' + last;
           }
           else {
-            safeRoute = safeRoute + '-' + 0;
+            safeId = safeId + '-' + 0;
           }
         }
         else {
-          safeRoute = safeRoute + '-' + 0;
+          safeId = safeId + '-' + 0;
         }
       }
       // To prevent a race condition.
@@ -435,7 +480,7 @@ class FileStorage extends Storage {
         safe = true;
       }
     }
-    return safeRoute;
+    return safeId;
   }
 
   /**
@@ -470,19 +515,58 @@ class FileStorage extends Storage {
     return null;
   }
 
+  getIdentifierField(collection) {
+    if (collection in this.map) {
+      const fields = Object.values(this.map[collection]);
+      if (fields.indexOf("identifier") !== -1) {
+        return Object.keys(this.map[collection])[fields.indexOf("identifier")];
+      }
+    }
+    return 'identifier';
+  }
+
+  /**
+   * Builds fulll registry.
+   * @return {object} Keyed by collections with {identifier: interraId} objects.
+   */
+  buildFullRegistry(callback) {
+    const collections = this.collections;
+    const that = this;
+    Async.map(collections, (collection, fin) => {
+      const identifier = this.getIdentifierField(collection);
+      this.findByCollection(collection, false, (err, docs) => {
+        Async.map(docs, (doc, done) => {
+          done(null, { [doc[identifier]]: doc.interra.id });
+        }, function(err, result) {
+          fin(null, {[collection]: result});
+        });
+      });
+    }, function(err, results) {
+      that.registry = results;
+      callback(err, results);
+    });
+  }
+
+  getRegistryCollection(registry, collection, callback) {
+    Async.reduce(registry, {},(memo, item, done) => {
+      if (collection in item) {
+        done(null, item[collection]);
+      }
+      else {
+        done();
+      }
+    }, function(err, results) {
+      callback(null, results);
+    });
+  }
   /**
    * Builds registry for a collection with a "identifier" : "interra-id" object.
    * @param {string} collection - A {@link collection}.
    * @return {object} A built registry.
    */
   buildRegistry(collection, callback) {
-    let that = this;
-    let identifier = 'identifier';
-    if (collection in this.map) {
-      if (Object.values(this.map[collection]).indexOf("identifier") !== '-1') {
-        identifier = Object.keys(this.map[collection])[Object.values(this.map[collection]).indexOf("identifier")];
-      }
-    }
+    const that = this;
+    const identifier = this.getIdentifierField(collection);
     this.findByCollection(collection, false, (err, result) => {
       that.registry[collection] = {};
       Async.each(result, (doc, done) => {
@@ -506,6 +590,12 @@ class FileStorage extends Storage {
    * @return {object} An updated registry for that collection.
    */
   addToRegistry(item, collection) {
+    if (!(collection in this.registry)) {
+      this.registry[collection] = {};
+
+    }
+    console.log(Object.keys(item)[0]);
+    console.log(Object.values(item)[0]);
     const identifier = Object.keys(item)[0];
     this.registry[collection][identifier] = Object.values(item)[0];
     return this.registry[collection];
