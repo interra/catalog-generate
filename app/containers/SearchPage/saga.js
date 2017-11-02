@@ -17,7 +17,7 @@ export function* getIcons(action) {
 
   try {
 
-    const responses = yield icons.map(p => call(request, url + '/collections/' + collection + '/' + p + '.json'));
+    const responses = yield icons.map(p => call(request, url + '/api/v1/collections/' + collection + '/' + p + '.json'));
 
     yield put(actionLoadHomePageIconsLoaded(responses));
     return responses;
@@ -31,7 +31,7 @@ export function* getFacets() {
 
   // This breaks staic compilation. Lets fix that later :).
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
-  const requestURL = url + '/schema.json';
+  const requestURL = url + '/api/v1/schema.json';
   try {
     //  TODO: do this all on the server and export as the schema.
     const currentSchema = yield call(request, requestURL);
@@ -75,7 +75,7 @@ Object.filter = (obj, predicate) =>
  * Get Search results.
  */
 export function* loadIndex() {
-  const url = window.location.origin + '/search-index.json';
+  const url = window.location.origin + '/api/v1/search-index.json';
   console.time("Loading index.");
   let index = yield call(request, url);
   index = elasticlunr.Index.load(index);

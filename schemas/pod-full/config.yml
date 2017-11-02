@@ -1,4 +1,5 @@
 name: Project Open Data Full Specification
+api: 1
 collections:
   - dataset
   - organization
@@ -19,8 +20,15 @@ facets:
     format:
       label: format
       field: distribution.format
+# TODO: remove and autodiscover from collections. This saves looking this up
+# every time.
 references:
   dataset:
-      # field: referenced collection
       publisher: organization
       distribution: distribution
+      keyword: keyword
+      theme: theme
+routeCollections:
+  - dataset
+  - organization
+  - distribution

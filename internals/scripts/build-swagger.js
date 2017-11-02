@@ -133,7 +133,7 @@ const swagger = {
   },
   host: "",
   basePath:"/api/v1/",
-  schemes:["https"]
+  schemes:["https","http"]
 }
 
 function setCollectionPathDocDef(collection, collectionPathDef) {
@@ -180,7 +180,7 @@ function get(site) {
     var schema = new Schema(schemaName);
     var collections = schema.getConfigItem('collections');
     var buildDir = config.get('buildDir');
-    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
+    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/api/v1';
 
     Async.each(collections, function(collection, callback) {
         if (collection == 'dataset') {

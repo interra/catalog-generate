@@ -1,0 +1,14 @@
+title: Interra Object
+description: Interra schema describes properties used or required by the catalog.
+type: object
+required:
+- id
+properties:
+  id:
+    type: string
+    description: Internal identifier unique to the collection.
+    title: ID
+  route:
+    type: string
+    title: Route
+    descript: The route that the item should be available at in the catalog.

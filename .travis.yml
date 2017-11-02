@@ -3,12 +3,14 @@ language: node_js
 node_js:
   - 7
   - 6
-  - 5
 
 script:
-  - node ./internals/scripts/generate-templates-for-linting
-  - npm run test
-  - npm run build
+#  - node ./internals/scripts/generate-templates-for-linting
+#  - npm run test
+#  - npm run build
+  - node_modules/.bin/jest content.test.js
+  - node_modules/.bin/jest harvest.test.js
+
 
 before_install:
   - export CHROME_BIN=chromium-browser

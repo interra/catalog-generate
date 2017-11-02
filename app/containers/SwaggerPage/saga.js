@@ -12,7 +12,7 @@ export function* getSwagger() {
 
   // This breaks staic compilation. Lets fix that later :).
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
-  const requestURL = url + '/swagger.json';
+  const requestURL = url + '/api/v1/swagger.json';
 
   try {
     //  TODO: do this all on the server and export as the schema.

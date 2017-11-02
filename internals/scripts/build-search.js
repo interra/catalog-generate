@@ -18,11 +18,12 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 
 function all(site) {
+    console.log(chalk.blue("Building search"));
     const siteInfo = new Site();
     const schemaName = siteInfo.getConfigItem(site, 'schema');
     const schema = new Schema(schemaName);
     const buildDir = config.get('buildDir');
-    const siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/static';
+    const siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/api/v1';
     const search = new Search[searchEngine](site);
     const content = new Content[storage](site);
 
@@ -32,20 +33,19 @@ function all(site) {
         load: function(done) {
             schema.dereference("dataset", (err, collectionSchema) => {
                 content.findByCollection("dataset", true, (err, results) => {
-                    console.log(chalk.blue("Indexing datasets"));
                     done(err, results);
                 });
             });
         },
         index: ['load', function (results, done) {
             Async.eachSeries(results.load, function(item, callback) {
+                console.log(item.title);
                 search.insertOne(item, (err, out) => {
                     if (err) {
                         console.log("Error indexing " +  item.identifier);
                     }
                     else {
-                        console.log(chalk.green("Indexing " + item.identifier));
-                        callback();
+                        callback(null);
                     }
                 });
             }, function(err) {

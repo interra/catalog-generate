@@ -1,0 +1,50 @@
+{
+
+	"cityofmoseisleygov": {
+		"id": "cityofmoseisleygov",
+		"source": "file://harvest/test-harvest-source-moseisly.json",
+		"type": "Test",
+		"filters": {
+			"tags.title": ["education"]
+		},
+		"excludes": {
+      "id": "b0889ec9-c202-469a-8fe5-8fb7c24b0e5d"
+    },
+		"overrides": {
+			"org.name": ["City of Mos Eiesely"]
+		}
+	},
+	"moonendor": {
+		"id": "moonendor",
+		"source": "file://harvest/test-harvest-source-moseisly.json",
+		"type": "Test",
+		"filters": {
+			"id": "cc0f33b0-04e1-4c23-b6b3-45592ce66d73",
+      "org.name": "do"
+		},
+		"overrides": {
+			"org.name": ["City of Mos Eiesely"]
+		}
+	},
+  "hothplanet": {
+		"id": "hothplanet",
+		"source": "file://harvest/test-harvest-source-hoth.json",
+		"type": "Test",
+		"filters": {
+			"tags.title": ["snow", "cold", "space", "health"]
+		},
+		"excludes": {
+			"id": "516f7ea3-f6c4-4df8-bc03-14fc28df21e2"
+		},
+		"defaults": {
+			"org": {
+        "name": "Planet of Hoth Federation",
+        "identifier": "planet-hoth-group",
+        "description": "Imperial Planet coordination group.",
+        "created": "Fri Apr 10 1970 11:53:04 GMT+0000 (UTC)",
+        "refreshed": "Wed Oct 15 1975 14:53:30 GMT+0000 (UTC)"
+      },
+			"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+		}
+	}
+}

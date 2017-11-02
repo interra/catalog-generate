@@ -1,10 +1,12 @@
 "$schema": "http://json-schema.org/draft-04/schema#"
-title: "Theme"
-description: "A keyword and icon"
+title: "Category"
+description: "Main thematic category of the dataset."
 type: object
 required:
   - title
   - identifier
+  - created
+  - modified
 properties:
   title:
     title: "Title"
