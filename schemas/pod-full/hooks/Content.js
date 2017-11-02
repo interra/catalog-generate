@@ -31,7 +31,7 @@ module.exports = {
   },
   postMap: function(data, callback) {
     return callback(null, data);
-  }
+  },
   // Output.
   preOutput: function(identifier, collection, content, callback) {
     return callback(null, identifier, collection, content);
