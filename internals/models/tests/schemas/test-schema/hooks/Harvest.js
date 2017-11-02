@@ -1,6 +1,18 @@
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 module.exports = {
   // Converts harvested schema to native.
-  convertToSchema: function(type, doc, callback) {
+  Store: function(doc, type, callback) {
+
     if (type === 'DataJSON') {
       const converted = {};
       converted.title = doc.title;
@@ -16,7 +28,14 @@ module.exports = {
       return callback(null, converted);
     }
     else if (type === 'Test') {
-      return callback(null, doc);
+      const created = formatDate(doc.created);
+      const modified = formatDate(doc.modified);
+      const update = {
+        'created': created,
+        'modified': modified
+      }
+      const formattedDoc = Object.assign(doc, update);
+      return callback(null, formattedDoc);
     }
     else {
       return callback("Schema not supported for harvesting.");

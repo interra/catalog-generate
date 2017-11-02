@@ -450,7 +450,7 @@ class FileStorage extends Storage {
    */
   buildInterraIdSafe(id, ids) {
     let safe = false;
-    let safeId = id;
+    let safeId = id.trim();
     let counter = 0;
     let last = '';
     while (!safe) {
@@ -530,15 +530,18 @@ class FileStorage extends Storage {
    * @return {object} Keyed by collections with {identifier: interraId} objects.
    */
   buildFullRegistry(callback) {
-    const collections = this.collections;
+    const collections = this.collections.reduce((acc, cur, i) => {
+      acc = Object.assign(acc, {[cur]: []});
+      return acc;
+    }, {});
     const that = this;
-    Async.map(collections, (collection, fin) => {
+    Async.mapValues(collections, (i, collection, fin) => {
       const identifier = this.getIdentifierField(collection);
       this.findByCollection(collection, false, (err, docs) => {
         Async.map(docs, (doc, done) => {
           done(null, { [doc[identifier]]: doc.interra.id });
         }, function(err, result) {
-          fin(null, {[collection]: result});
+          fin(null, result);
         });
       });
     }, function(err, results) {
@@ -549,7 +552,6 @@ class FileStorage extends Storage {
 
   getRegistryCollection(registry, collection, callback) {
     Async.reduce(registry, {},(memo, item, done) => {
-      console.log(item);
       if (collection in item) {
         done(null, item[collection]);
       }
@@ -560,8 +562,9 @@ class FileStorage extends Storage {
       callback(null, results);
     });
   }
+
   /**
-   * Builds registry for a collection with a "identifier" : "interra-id" object.
+   * Builds registry for a collection with a "identifier" : "interraId" object.
    * @param {string} collection - A {@link collection}.
    * @return {object} A built registry.
    */
@@ -586,20 +589,16 @@ class FileStorage extends Storage {
 
   /**
    * Adds item to the registry. Updates existing value if exists.
-   * @param {object} item - Object with "identifier" : "interra-id" pair.
+   * @param {object} item - Object with "identifier" : "interraId" pair.
    * @param {string} collection - A {@link collection}.
    * @return {object} An updated registry for that collection.
    */
   addToRegistry(item, collection) {
     if (!(collection in this.registry)) {
-      this.registry[collection] = {};
-
+      this.registry[collection] = [];
     }
-    console.log(Object.keys(item)[0]);
-    console.log(Object.values(item)[0]);
-    const identifier = Object.keys(item)[0];
-    this.registry[collection][identifier] = Object.values(item)[0];
-    return this.registry[collection];
+    this.registry[collection].push(item);
+    return true;
   }
 
   /**
@@ -792,8 +791,8 @@ class FileStorage extends Storage {
    * @return {object} A referenced document.
    */
   load(file, callback) {
-    var that = this;
-    var dir = this.directory + '/' + file;
+    const that = this;
+    const dir = this.directory + '/' + file;
     that.Hook.preLoad(dir,(err, ymlFile) => {
       if (err) return callback(err);
       const data = fs.readFileSync(ymlFile, 'utf8');

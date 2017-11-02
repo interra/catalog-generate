@@ -66,6 +66,7 @@ class Harvest {
     if (!valid) {
       throw new Error("Sources file is not valid: " + JSON.stringify(validator.errors));
     }
+    this.Hook = require(this.content.schemaDir + '/hooks/Harvest.js');
   }
 
   /**
@@ -340,64 +341,144 @@ class Harvest {
   }
 
   /**
-   *
+   * Saves harvest files.
+   * @param {object} docsGroup An object returned from harvest.load().
+   * @return boolean True if succesful.
+   */
   store(docsGroup, callback) {
+    const references = this.content.references.slice();
     const that = this;
     this._flattenResults(docsGroup, (err, docs) => {
-      const primaryCollection = this.content.schema.getConfigItem('primaryCollection');
-      this.content.buildFullRegistry((err, registry) => {
+      const primaryCollection = that.content.schema.getConfigItem('primaryCollection');
+      that.content.buildFullRegistry((err) => {
         Async.each(docs, (doc, done) => {
-            const identifierField = content.getIdentifierField(primaryCollection);
-            if (!(identifierField) in doc) {
-              throw new Error("Doc missing identifier field " + doc);
-            }
-            that.content.refCollections(doc, (err, fields) => {
-              Async.eachOf(fields, (collection, value, fin) => {
-                // Need to save the collection--->
-                // Need to return the reference id?
-            //    const field = that.content(primaryCollection, refField);
-
-
+          that.Hook.Store(doc, 'Test', (err, doc) => {
+          const identifierField = that.content.getIdentifierField(primaryCollection);
+          if (!(identifierField) in doc) {
+            throw new Error("Doc missing identifier field " + doc);
+          }
+          that.content.refCollections(doc, primaryCollection, (err, fields) => {
+            Async.eachOf(fields, (values, field, fin) => {
+              if (!values) {
+                fin();
+              }
+              else {
+                const collection = references[primaryCollection][field];
+                const identifier = content.getIdentifierField(collection);
+                const type = harvest._toType(values);
+                const title = content.getMapFieldByValue(collection, 'title');
+                const ids = content.registry[collection].reduce((acc, cur, i) => {
+                  acc.push(Object.values(cur)[0]);
+                  return acc;
+                }, []);
+                if (type === 'array') {
+                  doc[field] = [];
+                  Async.eachSeries(values, (value, valdone) => {
+                    if (!(identifier) in value) {
+                      throw new Error("Ref missing identifier field " + value);
+                      valdone();
+                    }
+                    if (value[identifier] in content.registry[collection]) {
+                      content.UpdateOne(content.registry[collection][value[identifier]], collection, value, (err, res) => {
+                        doc[field].push({'interra-reference': interraId});
+                        valdone();
+                      });
+                    }
+                    else {
+                      const idString = content.buildInterraId(value.title);
+                      const interraId = content.buildInterraIdSafe(idString, ids);
+                      value.interra = { "id": interraId};
+                      content.insertOne(interraId, collection, value, (err, res) => {
+                        doc[field].push({'interra-reference': interraId});
+                        content.addToRegistry({[interraId]: value[identifier]}, collection);
+                        valdone();
+                      });
+                    }
+                  }, function(err) {
+                    fin();
+                  });
+                }
+                else if (type === 'object') {
+                  doc[field] = {};
+                  if (false) {
+                    values.interra = { "id": interraId};
+                    content.UpdateOne(content.registry[collection][values[identifier]], collection, values, (err, res) => {
+                      doc[field]['interra-reference'] = content.registry[collection][values[identifier]];
+                      fin();
+                    });
+                  }
+                  else {
+                    const interraId = content.buildInterraIdSafe(content.buildInterraId(values[title]), ids);
+                    content.insertOne(interraId, collection, values, (err, res) => {
+                      doc[field]['interra-reference'] = interraId;
+                      content.addToRegistry({[interraId]: values[identifier]}, collection);
+                      fin();
+                    });
+                  }
+                }
+                else {
+                  fin();
+                }
+              }
+            }, function(err) {
+              const ids = that.content.registry[primaryCollection].reduce((acc, cur, i) => {
+                acc.push(Object.values(cur)[0]);
+                return acc;
+              }, []);
+              if (doc[identifierField] in that.content.registry[primaryCollection]) {
+                that.content.UpdateOne(doc[identifierField], primaryCollection, value, (err, res) => {
+                  done();
+                });
+              }
+              else {
+                const title = that.content.getMapFieldByValue(primaryCollection, 'title');
+                const interraId = that.content.buildInterraIdSafe(that.content.buildInterraId(doc.title), ids);
+                doc.interra = { "id": interraId};
+                that.content.insertOne(interraId, primaryCollection, doc, (err, res) => {
+                that.content.addToRegistry({[interraId]: doc[identifierField]}, primaryCollection);
+                  done();
+                });
+              }
               });
             });
-
-          // refCollections
-          //    - figure out if they already exist, use title?
-          //      - if identifier use that - otherwise slug title
-          // Ref
-          //
-            if (doc[identifierField] in registry) {
-              that.content.updateOne(registry[doc[identifierField]], primaryCollection, doc, (err, result) => {
-                done(err, result);
-              });
-            }
-            else {
-              const interraId = that.content.buildInterraId(doc[identifierField], (err, result) => {
-                that.content.buildInterraIdSafe(interraId, Object.values(registry), (err, id) => {
-                  that.content.insertOne(id, primaryCollection, doc, (err, result => ) {
-
-                  });
-                });
-              });
-            }
           });
-        };
-      })
+        }, function(err) {
+          callback(err, !err);
+        });
+      });
     });
-
-// 1. Get current registry.
-// 2. buildInterraId
-// 3. NEED TO REF Docs!
-
-
   }
+
+  /**
+   * Run the entire harvest.
    */
-
-  run() {
-    // do all
+  run(callback) {
+    const that = this;
+    Async.waterfall([
+      function(done) {
+        that.cache((err, result) => {
+          done(err);
+        })
+      },
+      function(done) {
+        that.load((err, result) => {
+          done(err, result);
+        })
+      },
+      function(docsGroup, done) {
+        that.prepare(docsGroup, (err, result) => {
+          done(null, result);
+        });
+      },
+      function(docsGroup, done) {
+        that.store(docsGroup, (err, result) => {
+          done(null, result);
+        });
+      }
+    ], function (err, result) {
+      callback(err, !err);
+    });
   }
-
-}
 
 module.exports = {
   Harvest
