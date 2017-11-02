@@ -175,17 +175,18 @@ class FileStorage extends Storage {
    * @param {object} refs Object with key as collection and value as ref ids.
    * @return {object} Doc with 'interra-reference' internal references.
    */
-  Ref(doc, refs, callback) {
-    let that = this;
+  Ref(doc, callback) {
+    const that = this;
     if (!this.references) {
       return callback(null, doc);
     }
+    let ref = {};
     that.Hook.preReference(doc,(err, pre) => {
       let refNum = 0;
       Async.eachSeries(this.references, function(collections, done) {
         Async.eachOfSeries(collections, function(collection, field, fin) {
           let refCollection = Object.keys(that.references)[refNum];
-          const ref = collection in ref ? ref[collection] : {};
+          ref = collection in ref ? ref[collection] : {};
           if (field in pre) {
             if (!(refCollection in that.loadedSchema)) {
               that.schema.load(refCollection, function(err, schema) {
@@ -236,6 +237,37 @@ class FileStorage extends Storage {
     });
   }
 
+  /**
+   * Applies map to doc.
+   * @param {object} doc Doc to apply map to.
+   * @param {string} collection Collection of doc.
+   * @return {object} Mapped doc.
+   */
+  Map(doc, collection, callback) {
+    if (collection in this.map) {
+      Async.each(this.map, (mapcoll, done) => {
+        Async.eachOfSeries(mapcoll, (mapField, currentField, fin) => {
+          if (currentField in doc) {
+            doc[mapField] = doc[currentField];
+            delete doc[currentField];
+          }
+          fin();
+        });
+        done();
+      }, function(err) {
+        if (err) {
+          return callback(err, null);
+        }
+        else {
+          return callback(null, doc);
+        }
+      });
+    }
+    else {
+      return callback(null, doc);
+    }
+  }
+
   getRefField(collection, field) {
     if (collection in this.references) {
       if (field in this.references[field]) {
@@ -266,37 +298,6 @@ class FileStorage extends Storage {
     }, function(err, result) {
       callback(err, result);
     });
-  }
-
-  /**
-   * Applies map to doc.
-   * @param {object} doc Doc to apply map to.
-   * @param {string} collection Collection of doc.
-   * @return {object} Mapped doc.
-   */
-  Map(doc, collection, callback) {
-    if (collection in this.map) {
-      Async.each(this.map, (mapcoll, done) => {
-        Async.eachOfSeries(mapcoll, (mapField, currentField, fin) => {
-          if (currentField in doc) {
-            doc[mapField] = doc[currentField];
-            delete doc[currentField];
-          }
-          fin();
-        });
-        done();
-      }, function(err) {
-        if (err) {
-          return callback(err, null);
-        }
-        else {
-          return callback(null, doc);
-        }
-      });
-    }
-    else {
-      return callback(null, doc);
-    }
   }
 
   /**
@@ -388,7 +389,7 @@ class FileStorage extends Storage {
    */
   validateUnique(identifier, collection, callback) {
     const that = this;
-    this.buildRegistry(collection, (err, result) => {
+    this.buildRegistry((err, result) => {
       if (identifier in that.registry[collection]) {
         return callback(null, that.registry[collection][identifier]);
       }
@@ -529,7 +530,7 @@ class FileStorage extends Storage {
    * Builds fulll registry.
    * @return {object} Keyed by collections with {identifier: interraId} objects.
    */
-  buildFullRegistry(callback) {
+  buildRegistry(callback) {
     const collections = this.collections.reduce((acc, cur, i) => {
       acc = Object.assign(acc, {[cur]: []});
       return acc;
@@ -550,25 +551,12 @@ class FileStorage extends Storage {
     });
   }
 
-  getRegistryCollection(registry, collection, callback) {
-    Async.reduce(registry, {},(memo, item, done) => {
-      if (collection in item) {
-        done(null, item[collection]);
-      }
-      else {
-        done(null, memo);
-      }
-    }, function(err, results) {
-      callback(null, results);
-    });
-  }
-
   /**
    * Builds registry for a collection with a "identifier" : "interraId" object.
    * @param {string} collection - A {@link collection}.
    * @return {object} A built registry.
    */
-  buildRegistry(collection, callback) {
+  buildRegistryCollection(collection, callback) {
     const that = this;
     const identifier = this.getIdentifierField(collection);
     this.findByCollection(collection, false, (err, result) => {
@@ -608,8 +596,14 @@ class FileStorage extends Storage {
    * @return {object} An updated registry for that collection.
    */
   removeFromRegistry(identifier, collection) {
-    delete this.registry[collection][identifier];
-    return this.registry[collection];
+    this.registry[collection] = this.registry[collection].filter((obj) => {
+      if (identifier in obj) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    });
   }
 
   /**
