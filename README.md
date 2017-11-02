@@ -29,3 +29,7 @@ The default search uses [ElasticLunr](http://elasticlunr.com/). We require the l
 ```bash
 rm -r node_modules/elasticlunr; cd node_modules; git clone git@github.com:weixsong/elasticlunr.js.git elasticlunr;
 ```
+
+## Requirements
+
+Requires node v6+.
