@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/interra/data-generate.svg?branch=master)](https://travis-ci.org/interra/data-generate)
 
-# Interra Data Generate
+# Interra Catalog Generate
 
 A static site generated Open Data catalog using React.
 
