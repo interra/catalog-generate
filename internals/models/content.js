@@ -526,6 +526,32 @@ class FileStorage extends Storage {
     return 'identifier';
   }
 
+  getRegistryIdentifier(collection, interraId) {
+    if (collection in this.registry) {
+      const ids = Object.values(this.registry[collection]);
+      if (ids.indexOf(interraId) !== -1) {
+        return ids[interraId];
+      }
+      else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  getRegistryInterraId(collection, identifier) {
+    if (collection in this.registry) {
+      const ids = Object.keys(this.registry[collection]);
+      if (ids.indexOf(identifier) !== -1) {
+        return ids[identifier];
+      }
+      else {
+        return null;
+      }
+    }
+    return null;
+  }
+
   /**
    * Builds fulll registry.
    * @return {object} Keyed by collections with {identifier: interraId} objects.

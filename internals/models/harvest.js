@@ -347,7 +347,7 @@ class Harvest {
         }
       }
       else {
-        console.log("-------------------------------------------------------------------->", item);
+        return null;
       }
     }
     else {
@@ -363,6 +363,23 @@ class Harvest {
     }, function (err, result) {
       call(null, result);
     });
+  }
+
+  // TODO: generate this from the schema by getting the required fields.
+  _createDefaultFromString(id, string) {
+
+    const now = new Date().toISOString();
+
+    const doc = {
+      "created": now,
+      "title": string,
+      "modified": now,
+      "identifier": id,
+      "interra": {
+        "id": id
+      }
+    }
+    return doc;
   }
 
   /**
@@ -404,12 +421,28 @@ class Harvest {
                     doc[field] = [];
                     Async.eachSeries(values, (value, valdone) => {
                       if (that._toType(value) === 'string') {
-                      //  console.log('skipping', value);
-                        valdone();
+                        const stringId = that.content.buildInterraId(value);
+                        // If string exists don't save there is nothing to update with.
+                        if (that.content.getRegistryIdentifier(collection, stringId)) {
+                          doc[field].push({'interra-reference': stringId});
+                          valdone();
+                        }
+                        else {
+                          const newDocFromString =  that._createDefaultFromString(stringId, value);
+                          that.content.insertOne(stringId, collection, newDocFromString, (err, res) => {
+                            if (err) {
+                              console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                            }
+                            doc[field].push({'interra-reference': stringId});
+                            that.content.addToRegistry({[stringId]: newDocFromString[identifier]}, collection);
+                            valdone();
+                          });
+                        }
                       }
                       else {
-                        if (value[identifier] in that.content.registry[collection]) {
-                          that.content.UpdateOne(that.content.registry[collection][value[identifier]], collection, value, (err, res) => {
+                        const existingInterraId = that.content.getRegistryInterraId(value[identifier]);
+                        if (existingInterraId) {
+                          that.content.UpdateOne(existingInterraId, collection, value, (err, res) => {
                             if (err) {
                               console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
                             }
@@ -438,9 +471,10 @@ class Harvest {
                   }
                   else if (type === 'object') {
                     doc[field] = {};
-                    if (values[identifier] in that.content.registry) {
+                    const existingInterraId = that.content.getRegistryInterraId(values[identifier]);
+                    if (existingInterraId ) {
                       values.interra = { "id": interraId};
-                      that.content.UpdateOne(that.content.registry[collection][values[identifier]], collection, values, (err, res) => {
+                      that.content.UpdateOne(existingInterraId, collection, values, (err, res) => {
                         if (err) {
                           console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
                         }
@@ -467,6 +501,7 @@ class Harvest {
                   }
                 }
               }, function(err) {
+                // Now we are saving the primary collection.
                 let ids = [];
                 if (that.content.registry[primaryCollection].length > 0) {
                   ids = that.content.registry[primaryCollection].reduce((acc, cur, i) => {
@@ -474,8 +509,9 @@ class Harvest {
                     return acc;
                   }, []);
                 }
-                if (doc[identifierField] in that.content.registry[primaryCollection]) {
-                  that.content.UpdateOne(doc[identifierField], primaryCollection, value, (err, res) => {
+                const existingInterraId = that.content.getRegistryInterraId(doc[identifierField]);
+                if (existingInterraId) {
+                  that.content.updateOne(doc[identifierField], primaryCollection, doc, (err, res) => {
                     if (err) {
                       console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
                     }
