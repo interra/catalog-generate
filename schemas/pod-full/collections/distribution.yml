@@ -29,15 +29,28 @@ properties:
     title: Format
     description: A human-readable description of the file format of a distribution
     type: string
-    enum:
-      - csv
-      - xls
-      - xlsx
-      - pdf
-      - zip
-      - gif
-      - jpeg
-      - bmp
+#    enum:
+#      - csv
+#      - xls
+#      - xlsx
+#      - pdf
+#      - zip
+#      - gif
+#      - jpeg
+#      - bmp
+#      - ascii
+#      - shp
+#      - html
+#      - txt
+#      - KML
+#      - OGC WFS
+#      - Shapefile
+#      - OGC WMS
+#      - rff
+#      - RFF
+#      - GeoJSON
+#      - Esri REST
+#      - API
   mediaType:
     title: Media Type
     description: The machine-readable file format (IANA Media Type or MIME Type) of the distribution’s downloadURL

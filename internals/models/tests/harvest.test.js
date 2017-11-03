@@ -211,16 +211,10 @@ test("Tests _overrides", done => {
   });
 });
 
-//console.log(harvest);
-
-/**
-//jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
-test("Create cache", done => {
-
-  harvest.createCache((err,result) => {
+test("Harvest run", done => {
+  harvest.run((err, result) => {
+    // TODO: Read file system to verify output.
     expect(1).toBe(1);
     done();
-
   });
 });
-*/

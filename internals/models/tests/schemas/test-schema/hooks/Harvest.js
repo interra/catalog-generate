@@ -14,18 +14,19 @@ module.exports = {
   Store: function(doc, type, callback) {
 
     if (type === 'DataJSON') {
-      const converted = {};
-      converted.title = doc.title;
-      converted.id = doc.identifier;
+      const converted = {
+        title: doc.title,
+        id: doc.identifier,
       // TODO: cycle through and convert object properties.
-      converted.org = doc.organization;
+        org: doc.organization,
       // TODO: cycle through and convert object properties.
-      converted.tags = doc.tags;
-      converted.created = doc.created;
-      converted.modified = doc.modified;
+        tags: doc.tags,
+        created: doc.created,
+        modified: doc.modified,
       // TODO: cycle through and convert object properties.
-      converted.resource = doc.distribution;
-      return callback(null, converted);
+        resource: doc.distribution
+      };
+      return callback(null, Object.assign(converted, doc));
     }
     else if (type === 'Test') {
       const created = formatDate(doc.created);

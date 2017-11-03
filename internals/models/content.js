@@ -438,7 +438,7 @@ class FileStorage extends Storage {
       return this.Hook.buildInterraId(idString);
     }
     else {
-      return slug(idString).substring(0,10);
+      return slug(idString).substring(0,25).toLowerCase();
     }
   }
 
@@ -691,28 +691,46 @@ class FileStorage extends Storage {
    * @param {string} route The filename to save as without .yml
    * @param {string} collection The folder to save in.
    * @param {object} doc The doc.
-   * @return {boolean} True if file saves correctly.
+   * @return {boolean} True if file saves correctly. The return error is keyed
+   * with the type of error, "schema" or "file":
+   * err = {
+   * "schema|file": {
+   *   "collection": ,
+   *   "interraId": ,
+   *   "error": ,
+   *   }
+   * }
+   *
    */
   insertOne(interraId, collection, doc, callback) {
-    // Validate required.
-    this.validateRequired(doc, collection, (err, result) => {
-      if (err) return callback(err);
-    });
-    // Validate schema.
-    this.validateDocToStore(doc, collection, (err, result) => {
-      if (err) return callback(err);
-    });
     this.Hook.preSave(interraId, collection, doc, (err, interraId, collection, doc) => {
-      const file = this.directory + '/' + collection + '/' + interraId + '.yml';
-      const yml = YAML.stringify(doc, 20, 2);
-      fs.outputFile(file, yml, err => {
-        if (err) return callback(err);
-        this.Hook.postSave(doc, (err, doc) => {
-          if (err) return callback(err);
-          return callback(null, doc);
+      // Validate required.
+      this.validateRequired(doc, collection, (validerr, validresult) => {
+        if (validerr) {
+          return callback(validerr);
+        }
+        // Validate schema.
+        this.validateDocToStore(doc, collection, (schemaErr, result) => {
+          const file = this.directory + '/' + collection + '/' + interraId + '.yml';
+          const yml = YAML.stringify(doc, 20, 2);
+          fs.outputFile(file, yml, err => {
+            if (err) return callback(err);
+            this.Hook.postSave(doc, (err, doc) => {
+              if (schemaErr) {
+                return callback({"type": "schema", "collection": collection, "interraId": interraId, "error": schemaErr}, doc);
+              }
+              else if (err) {
+                return callback({"type": "file", "collection": collection, "interraId": interraId, "error": err}, doc);
+              }
+              else {
+                return callback(schemaErr, doc);
+              }
+            });
+          });
         });
       });
     });
+
   }
 
   /**
@@ -787,14 +805,11 @@ class FileStorage extends Storage {
   load(file, callback) {
     const that = this;
     const dir = this.directory + '/' + file;
-    that.Hook.preLoad(dir,(err, ymlFile) => {
-      if (err) return callback(err);
-      const data = fs.readFileSync(ymlFile, 'utf8');
-      const doc = YAML.parse(data);
-      that.Hook.postLoad(doc, (err, output) => {
-        return callback(err, output);
-      });
-    })
+    const data = fs.readFileSync(dir, 'utf8');
+    const doc = YAML.parse(data);
+    that.Hook.postLoad(doc, (err, output) => {
+      return callback(err, output);
+    });
   }
 
   /**

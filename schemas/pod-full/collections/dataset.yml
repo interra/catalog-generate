@@ -46,7 +46,8 @@ properties:
     title: Frequency
     description: "Frequency with which dataset is published."
     type: string
-    pattern: "^R\\/P(?:\\d+(?:\\.\\d+)?Y)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?W)?(?:\\d+(?:\\.\\d+)?D)?(?:T(?:\\d+(?:\\.\\d+)?H)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+# Can fit this pattern "R\*" OR be irregular. Need to update regex to accomidate.
+#    pattern: "^R\\/P(?:\\d+(?:\\.\\d+)?Y)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?W)?(?:\\d+(?:\\.\\d+)?D)?(?:T(?:\\d+(?:\\.\\d+)?H)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
   bureauCode:
     title: "Bureau Code"
     description: "Federal agencies, combined agency and bureau code from <a href=\"http://www.whitehouse.gov/sites/default/files/omb/assets/a11_current_year/app_c.pdf\">OMB Circular A-11, Appendix C</a> in the format of <code>015:010</code>."
@@ -74,7 +75,7 @@ properties:
   dataQuality:
     title: "Data Quality"
     description: "Whether the dataset meets the agency’s Information Quality Guidelines (true/false)."
-    type: string
+    type: boolean
   contactPoint:
     title: "Contact"
     description: "Contact person for dataset."
@@ -154,7 +155,9 @@ properties:
     minItems: 1
     uniqueItems: true
   publisher:
-    $ref: organization.yml
+    type: object
+    properties:
+      $ref: organization.yml
   references:
     title: "Related Documents"
     description: "Related documents such as technical information about a dataset, developer documentation, etc."
