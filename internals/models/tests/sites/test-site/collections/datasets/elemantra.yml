@@ -1,0 +1,21 @@
+resources:
+  -
+    type: pdf
+    title: mollit
+  -
+    type: xls
+    title: voluptate
+modified: '1994-12-15'
+created: '2013-03-15'
+tags:
+  -
+    interra-reference: education-0
+org:
+  interra-reference: amet
+id: 93048df1-3cfb-4336-aec8-4cf6db9165b4
+description: 'Velit ullamco est nostrud commodo excepteur ad ut fugiat magna enim. Anim sunt nostrud est do fugiat culpa ea pariatur excepteur. Minim eiusmod consectetur ullamco labore aute proident mollit amet proident sunt ex laboris ipsum. Ipsum pariatur nisi adipisicing laborum excepteur qui et Lorem ut do. Deserunt cillum culpa laboris occaecat et amet laborum anim occaecat commodo tempor veniam commodo.'
+title: Elemantra
+org.name:
+  - 'City of Mos Eiesely'
+interra:
+  id: elemantra
