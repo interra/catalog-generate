@@ -8,7 +8,7 @@ module.exports = {
       schema.properties.created = {
         "type": "string",
         "title": "Created",
-        "format": "date-time"
+        "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2}"
       }
       schema.required.push("created");
     }

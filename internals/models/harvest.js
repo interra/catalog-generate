@@ -147,31 +147,35 @@ class Harvest {
   }
 
   _exclude(sources, docsGroup, callback) {
-    const excludedDocs = docsGroup;
+    const excludedDocs = {};
     const that = this;
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
-      Async.eachOfSeries(docs, (doc, i, docCallback) => {
-        let docPass = false;
-        if ('excludes' in sources[id]) {
-          Async.eachOf(sources[id].excludes, (criteria, field, done) => {
+      excludedDocs[id] = docs;
+      if ('excludes' in sources[id]) {
+        Async.eachOf(sources[id].excludes, (criteria, field, done) => {
+          Async.filter(excludedDocs[id], (doc, filterCallback) => {
             that._searchObj(doc, field, criteria, (err, result) => {
               if (result) {
-                excludedDocs[id].pop();
+                filterCallback(null, false);
               }
-              done(err, !err);
+              else {
+                filterCallback(null, true);
+              }
             });
-          }, function(err) {
-              docCallback(err, !err);
+          }, function(err, result) {
+            excludedDocs[id] = result;
+            done(err, !err);
           });
-        }
-        else {
-          docCallback(null, true);
-        }
-      }, function(err) {
-        docsCallback(err, !err);
-      });
+        }, function(err) {
+          docsCallback(err, !err);
+        });
+      }
+      else {
+        excludedDocs[id] = docs;
+        docsCallback(null, true);
+      }
     }, function(err) {
-      callback(err, docsGroup);
+      callback(err, excludedDocs);
     });
   }
 
@@ -181,23 +185,23 @@ class Harvest {
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
       filteredDocs[id] = [];
       if ('filters' in sources[id]) {
-        Async.filter(docs, (doc, filterCallback) => {
-          Async.eachOf(sources[id].filters, (criteria, field, done) => {
+        Async.eachOf(sources[id].filters, (criteria, field, done) => {
+          Async.filter(docs, (doc, filterCallback) => {
             that._searchObj(doc, field, criteria, (err, result) => {
               if (result) {
                 filterCallback(null, true);
-                done();
               }
               else {
                 filterCallback(null, false);
-                done();
               }
             });
+          }, function(err, result) {
+            filteredDocs[id] = result;
+            done(err, !err);
           });
-        }, function(err, result) {
-          filteredDocs[id] = result;
+        }, function(err) {
           docsCallback(err, !err);
-        });
+        })
       }
       else {
         filteredDocs[id] = docs;
@@ -217,7 +221,6 @@ class Harvest {
    */
   _getObjValue(doc, field, callback) {
     const length = field.length;
-//    const inception = Object.assign({}, doc);
     const that = this;
     Async.reduce(field, doc, (memo, item, done) => {
       const docType = that._toType(memo);
