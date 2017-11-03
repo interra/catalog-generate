@@ -13,6 +13,7 @@ class HarvestSource {
     this.source = source;
   }
   cache(callback) {
+    const that = this;
     const dir = this.content.directory.substring(0, this.content.directory.length - 12) + '/harvest/' + slug(this.source.id);
     fs.ensureDirSync(dir);
     console.log("Downloading data from " + this.source.source);
@@ -22,10 +23,10 @@ class HarvestSource {
       return callback(null);
     }
     else {
-      axios.get(this.source.remote)
+      axios.get(this.source.source)
         .then(function (response) {
           if (response.status === 200) {
-            fs.writeJsonSync(dir + '/' + this.source.type + '.json', response.data);
+            fs.writeJsonSync(dir + '/' + that.source.type + '.json', response.data);
           }
           return callback(null);
         })
@@ -33,44 +34,37 @@ class HarvestSource {
           console.log(error);
           return callback(error);
         });
-      }
-  }
-  load(callback) {
-    const dir = this.content.directory.substring(0, this.content.directory.length - 12) + '/harvest/' + slug(this.source.id);
-    const result = fs.readJsonSync(dir + '/' + this.source.type + '.json');
-    callback(null, result);
+    }
   }
 
-  store() {}
+  load(callback) {
+    const dir = this.content.directory.substring(0, this.content.directory.length - 12) + '/harvest/' + slug(this.source.id);
+    fs.readJson(dir + '/' + this.source.type + '.json', (err, result) => {
+      callback(null, result);
+    });
+  }
+
 }
 
 class DataJSON extends HarvestSource {
   constructor(content, source) {
     super(content, source);
   }
-//  prepare() {}
-  store() {}
+  load(callback) {
+    const dir = this.content.directory.substring(0, this.content.directory.length - 12) + '/harvest/' + slug(this.source.id);
+    fs.readJson(dir + '/' + this.source.type + '.json', (err, result) => {
+      callback(null, result.dataset);
+    });
+  }
 }
 
 class CKAN extends HarvestSource {
   constructor(content, source) {
     super(content, source);
   }
-  cache () {
-      // /api/3/action/package_list
-      // /api/3/action/package_show?id=
-  }
-  load() {
-    // get package_list / get files
-  }
-  prepare() {
-    //  super()
-    //    this.Hook.convertToSchema()
-    // filter()
-  }
 }
 
-class Test extends DataJSON {}
+class Test extends HarvestSource {}
 
 /**
 1. Consume config file [x]

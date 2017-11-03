@@ -158,7 +158,8 @@ test("Tests harvest prepare", done => {
         if (id === 'hothplanet') {
           expect(result[0].title).toBe('Quadeebo');
           expect(result[1].title).toBe('Cormoran');
-          expect(result[2].title).toBe('Intrawear');
+          // In our source the doc "Quilk" and "Intrawear" are excluded.
+          expect(result.length).toBe(2);
         }
         else if (id === 'cityofmoseisleygov') {
           expect(result[0].title).toBe('Elemantra');
@@ -166,9 +167,7 @@ test("Tests harvest prepare", done => {
         else if (id === 'moonendor') {
           expect(result[0].title).toBe('Quadeebo');
           expect(result[1].title).toBe('Infotrips');
-          expect(result[2].title).toBe('Minetica');
-          // In our source the doc "Quilk" is excluded which is the 4th doc.
-          expect(result.length).toBe(3);
+          expect(result.length).toBe(2);
         }
         fin();
 
@@ -211,16 +210,10 @@ test("Tests _overrides", done => {
   });
 });
 
-//console.log(harvest);
-
-/**
-//jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
-test("Create cache", done => {
-
-  harvest.createCache((err,result) => {
+test("Harvest run", done => {
+  harvest.run((err, result) => {
+    // TODO: Read file system to verify output.
     expect(1).toBe(1);
     done();
-
   });
 });
-*/

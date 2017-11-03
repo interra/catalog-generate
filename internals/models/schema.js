@@ -97,7 +97,7 @@ class Schema {
    * @return {object} The loaded schema.
    */
   load(collection, callback) {
-    let that = this;
+    const that = this;
     const file = that.dir + '/collections/' + collection + ".yml";
     const interraSchemaFile = __dirname + '/../../schemas/interra.yml';
     that.Hook.preLoad(file,(err, file) => {
@@ -161,7 +161,9 @@ class Schema {
           that.refSchemas[collection] = schema;
           callback(err, schema);
         });
-
+      }
+      else {
+        callback(null, schema);
       }
     });
   }

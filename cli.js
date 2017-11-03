@@ -7,6 +7,7 @@ const BuildSchema = require('./internals/scripts/build-schema');
 const BuildConfig = require('./internals/scripts/build-config');
 const BuildSwagger = require('./internals/scripts/build-swagger');
 const BuildSearch = require('./internals/scripts/build-search');
+const Harvest = require('./internals/scripts/harvest');
 const Schema = require('./internals/models/schema');
 const Site = require('./internals/models/site');
 
@@ -57,15 +58,17 @@ prog
     .action((args, options) => {
        BuildSwagger.get(args.site);
     })
-    .command('import-datajson')
+    .command('harvest-cache')
     .argument('site', 'The site to import into')
-    .argument('url', 'The url to import from')
-    .help('imports a new site from a data.json file')
+    .help('Caches harvest sources.')
     .action((args, options) => {
-        var site = new Site();
-        var schema = new Schema(site.getConfigItem(args.site, 'schema'));
-        var config = schema.getConfig();
-        dataJsonImport(args.url, config.collections, args.site);
+        Harvest.cache(args.site);
+    })
+    .command('harvest-run')
+    .argument('site', 'The site to import into')
+    .help('Runs a harvest with cached sources.')
+    .action((args, options) => {
+        Harvest.run(args.site);
     });
 
 prog.parse(process.argv);

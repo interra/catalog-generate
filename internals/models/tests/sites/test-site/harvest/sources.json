@@ -34,7 +34,8 @@
 			"tags.title": ["snow", "cold", "space", "health"]
 		},
 		"excludes": {
-			"id": "516f7ea3-f6c4-4df8-bc03-14fc28df21e2"
+			"id": "516f7ea3-f6c4-4df8-bc03-14fc28df21e2",
+      "title": "Intrawear"
 		},
 		"defaults": {
 			"org": {

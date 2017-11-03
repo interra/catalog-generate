@@ -1,5 +1,6 @@
 name: Project Open Data Full Specification
 api: 1
+primaryCollection: dataset
 collections:
   - dataset
   - organization

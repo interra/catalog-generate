@@ -1,9 +1,9 @@
 module.exports = {
     // Load.
     preLoad: function(file, callback) {
-        return callback(null, file);
+      return callback(null, file);
     },
-    postLoad: function(data, callback) {
+    postLoad: function(collection, data, callback) {
         return callback(null, data);
     },
     // Dereference.

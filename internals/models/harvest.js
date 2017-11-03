@@ -7,6 +7,7 @@ const Ajv = require('ajv');
 const HarvestSource = require('./harvestsource');
 const isEqual = require('lodash.isequal');
 const defaults = require('lodash.defaults');
+const uuid = require('uuidv4');
 
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
@@ -16,10 +17,10 @@ const sourceSchema = {
 	"title": "Schema for the source",
 	"type": "object",
 	"patternProperties": {
-      	"^[a-zA-Z0-9]*$": {
-			"title": "id",
-			"description": "Unique identifier for source",
-			"type": "object",
+    "^[a-zA-Z0-9]*$": {
+      "title": "id",
+      "description": "Unique identifier for source",
+      "type": "object",
 			"required": ["id", "source", "type"],
 			"properties": {
 				"id": {
@@ -85,7 +86,7 @@ class Harvest {
 
   load(callback) {
     let json = {};
-    Async.eachOf(this.sources, (source, id, done) => {
+    Async.eachOfSeries(this.sources, (source, id, done) => {
       let harvestSource = new HarvestSource[source.type](this.content, source);
       harvestSource.load((err, result) => {
         json[source.id] = result;
@@ -146,29 +147,33 @@ class Harvest {
   }
 
   _exclude(sources, docsGroup, callback) {
-    const excludedDocs = docsGroup;
+    const excludedDocs = {};
     const that = this;
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
-      Async.eachOfSeries(docs, (doc, i, docCallback) => {
-        let docPass = false;
-        if ('excludes' in sources[id]) {
-          Async.eachOf(sources[id].excludes, (criteria, field, done) => {
+      excludedDocs[id] = docs;
+      if ('excludes' in sources[id]) {
+        Async.eachOf(sources[id].excludes, (criteria, field, done) => {
+          Async.filter(excludedDocs[id], (doc, filterCallback) => {
             that._searchObj(doc, field, criteria, (err, result) => {
               if (result) {
-                excludedDocs[id].pop();
+                filterCallback(null, false);
               }
-              done(err, !err);
+              else {
+                filterCallback(null, true);
+              }
             });
-          }, function(err) {
-              docCallback(err, !err);
+          }, function(err, result) {
+            excludedDocs[id] = result;
+            done(err, !err);
           });
-        }
-        else {
-          docCallback(null, true);
-        }
-      }, function(err) {
-        docsCallback(err, !err);
-      });
+        }, function(err) {
+          docsCallback(err, !err);
+        });
+      }
+      else {
+        excludedDocs[id] = docs;
+        docsCallback(null, true);
+      }
     }, function(err) {
       callback(err, excludedDocs);
     });
@@ -179,28 +184,29 @@ class Harvest {
     const that = this;
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
       filteredDocs[id] = [];
-      Async.eachSeries(docs, (doc, docCallback) => {
-        let docPass = false;
-        if ('filters' in sources[id]) {
-          Async.eachOf(sources[id].filters, (criteria, field, done) => {
+      if ('filters' in sources[id]) {
+        Async.eachOf(sources[id].filters, (criteria, field, done) => {
+          Async.filter(docs, (doc, filterCallback) => {
             that._searchObj(doc, field, criteria, (err, result) => {
               if (result) {
-                filteredDocs[id].push(doc);
+                filterCallback(null, true);
               }
-              done(err, !err);
+              else {
+                filterCallback(null, false);
+              }
             });
-          }, function(err) {
-              docCallback(err, !err);
-
+          }, function(err, result) {
+            filteredDocs[id] = result;
+            done(err, !err);
           });
-        }
-        else {
-          filteredDocs[id] = unfiltered;
-          docCallback(null, true);
-        }
-      }, function(err) {
-        docsCallback(err, !err);
-      });
+        }, function(err) {
+          docsCallback(err, !err);
+        })
+      }
+      else {
+        filteredDocs[id] = docs;
+        docsCallback(null, true);
+      }
     }, function(err) {
       callback(err, filteredDocs);
     });
@@ -215,9 +221,8 @@ class Harvest {
    */
   _getObjValue(doc, field, callback) {
     const length = field.length;
-    const inception = Object.assign({}, doc);
     const that = this;
-    Async.reduce(field, inception, (memo, item, done) => {
+    Async.reduce(field, doc, (memo, item, done) => {
       const docType = that._toType(memo);
       if (docType === 'array') {
         Async.reduce(memo, [], (col, val, valdone) => {
@@ -270,12 +275,11 @@ class Harvest {
     const that = this;
     const criteriaType = this._toType(criteria);
     that._getObjValue(doc, field.split('.'), (err, result) => {
-
       const resultType = that._toType(result);
       // If criteria is an object we can only compare with an object.
       if (criteriaType === 'object') {
         if (resultType === 'object') {
-          if (isEqual(result, critera)) {
+          if (isEqual(result, criteria)) {
             docPass = true;
           }
         }
@@ -327,7 +331,28 @@ class Harvest {
    * @return {string} Enum 'string', 'array', 'object'.
    */
   _toType(item) {
-    return ({}).toString.call(item).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+    if (item) {
+      if (typeof item === 'string') {
+        return 'string';
+      }
+      else if (typeof item === 'array') {
+        return 'array';
+      }
+      else if (typeof item === 'object') {
+        if (item instanceof Array) {
+          return 'array';
+        }
+        else {
+          return 'object';
+        }
+      }
+      else {
+        console.log("-------------------------------------------------------------------->", item);
+      }
+    }
+    else {
+      return null;
+    }
   }
 
   _flattenResults(docsGroup, call) {
@@ -346,106 +371,139 @@ class Harvest {
    * @return boolean True if succesful.
    */
   store(docsGroup, callback) {
-    const references = this.content.references.slice();
+    // TODO: Move all content function calls to content model. Ref should return
+    // the doc + the fields that need to be saved. That would eliminated need
+    // for most of this.
+    const references = Object.assign({}, this.content.references);
     const that = this;
-    this._flattenResults(docsGroup, (err, docs) => {
+    Async.eachOf(docsGroup, (docs, sourceId, finished) => {
       const primaryCollection = that.content.schema.getConfigItem('primaryCollection');
-      that.content.buildFullRegistry((err) => {
+      that.content.buildRegistry((err) => {
         Async.each(docs, (doc, done) => {
-          that.Hook.Store(doc, 'Test', (err, doc) => {
-          const identifierField = that.content.getIdentifierField(primaryCollection);
-          if (!(identifierField) in doc) {
-            throw new Error("Doc missing identifier field " + doc);
-          }
-          that.content.refCollections(doc, primaryCollection, (err, fields) => {
-            Async.eachOf(fields, (values, field, fin) => {
-              if (!values) {
-                fin();
-              }
-              else {
-                const collection = references[primaryCollection][field];
-                const identifier = content.getIdentifierField(collection);
-                const type = harvest._toType(values);
-                const title = content.getMapFieldByValue(collection, 'title');
-                const ids = content.registry[collection].reduce((acc, cur, i) => {
-                  acc.push(Object.values(cur)[0]);
-                  return acc;
-                }, []);
-                if (type === 'array') {
-                  doc[field] = [];
-                  Async.eachSeries(values, (value, valdone) => {
-                    if (!(identifier) in value) {
-                      throw new Error("Ref missing identifier field " + value);
-                      valdone();
-                    }
-                    if (value[identifier] in content.registry[collection]) {
-                      content.UpdateOne(content.registry[collection][value[identifier]], collection, value, (err, res) => {
-                        doc[field].push({'interra-reference': interraId});
+          // TODO: get source type.
+          that.Hook.Store(doc, that.sources[sourceId].type, (err, doc) => {
+            const identifierField = that.content.getIdentifierField(primaryCollection);
+            if (!(identifierField) in doc) {
+              throw new Error("Doc missing identifier field " + doc);
+            }
+            that.content.refCollections(doc, primaryCollection, (err, fields) => {
+              Async.eachOf(fields, (values, field, fin) => {
+                if (!values) {
+                  fin();
+                }
+                else {
+                  const collection = references[primaryCollection][field];
+                  const identifier = that.content.getIdentifierField(collection);
+                  const type = that._toType(values);
+                  const title = that.content.getMapFieldByValue(collection, 'title');
+                  const ids = that.content.registry[collection].reduce((acc, cur, i) => {
+                    acc.push(Object.values(cur)[0]);
+                    return acc;
+                  }, []);
+                  if (type === 'array') {
+                    doc[field] = [];
+                    Async.eachSeries(values, (value, valdone) => {
+                      if (that._toType(value) === 'string') {
+                      //  console.log('skipping', value);
                         valdone();
+                      }
+                      else {
+                        if (value[identifier] in that.content.registry[collection]) {
+                          that.content.UpdateOne(that.content.registry[collection][value[identifier]], collection, value, (err, res) => {
+                            if (err) {
+                              console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                            }
+                            doc[field].push({'interra-reference': interraId});
+                            valdone();
+                          });
+                        }
+                        else {
+                          value[title] = value[title] ? value[title] :  uuid();
+                          const idString = that.content.buildInterraId(value[title]);
+                          const interraId = that.content.buildInterraIdSafe(idString, ids);
+                          value.interra = { "id": interraId};
+                          that.content.insertOne(interraId, collection, value, (err, res) => {
+                            if (err) {
+                              console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                            }
+                            doc[field].push({'interra-reference': interraId});
+                            that.content.addToRegistry({[interraId]: value[identifier]}, collection);
+                            valdone();
+                          });
+                        }
+                      }
+                    }, function(err) {
+                      fin();
+                    });
+                  }
+                  else if (type === 'object') {
+                    doc[field] = {};
+                    if (values[identifier] in that.content.registry) {
+                      values.interra = { "id": interraId};
+                      that.content.UpdateOne(that.content.registry[collection][values[identifier]], collection, values, (err, res) => {
+                        if (err) {
+                          console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                        }
+                        doc[field]['interra-reference'] = that.content.registry[collection][values[identifier]];
+                        fin();
                       });
                     }
                     else {
-                      const idString = content.buildInterraId(value.title);
-                      const interraId = content.buildInterraIdSafe(idString, ids);
-                      value.interra = { "id": interraId};
-                      content.insertOne(interraId, collection, value, (err, res) => {
-                        doc[field].push({'interra-reference': interraId});
-                        content.addToRegistry({[interraId]: value[identifier]}, collection);
-                        valdone();
+                      const tempId = that.content.buildInterraId(values[title]);
+                      const interraId = that.content.buildInterraIdSafe(tempId, ids);
+                      values.interra = { "id": interraId};
+                      that.content.insertOne(interraId, collection, values, (err, res) => {
+                        if (err) {
+                          console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                        }
+                        doc[field]['interra-reference'] = interraId;
+                        that.content.addToRegistry({[interraId]: values[identifier]}, collection);
+                        fin();
                       });
                     }
-                  }, function(err) {
-                    fin();
-                  });
-                }
-                else if (type === 'object') {
-                  doc[field] = {};
-                  if (false) {
-                    values.interra = { "id": interraId};
-                    content.UpdateOne(content.registry[collection][values[identifier]], collection, values, (err, res) => {
-                      doc[field]['interra-reference'] = content.registry[collection][values[identifier]];
-                      fin();
-                    });
                   }
                   else {
-                    const interraId = content.buildInterraIdSafe(content.buildInterraId(values[title]), ids);
-                    content.insertOne(interraId, collection, values, (err, res) => {
-                      doc[field]['interra-reference'] = interraId;
-                      content.addToRegistry({[interraId]: values[identifier]}, collection);
-                      fin();
-                    });
+                    fin();
                   }
                 }
-                else {
-                  fin();
+              }, function(err) {
+                let ids = [];
+                if (that.content.registry[primaryCollection].length > 0) {
+                  ids = that.content.registry[primaryCollection].reduce((acc, cur, i) => {
+                    acc.push(Object.values(cur)[0]);
+                    return acc;
+                  }, []);
                 }
-              }
-            }, function(err) {
-              const ids = that.content.registry[primaryCollection].reduce((acc, cur, i) => {
-                acc.push(Object.values(cur)[0]);
-                return acc;
-              }, []);
-              if (doc[identifierField] in that.content.registry[primaryCollection]) {
-                that.content.UpdateOne(doc[identifierField], primaryCollection, value, (err, res) => {
-                  done();
-                });
-              }
-              else {
-                const title = that.content.getMapFieldByValue(primaryCollection, 'title');
-                const interraId = that.content.buildInterraIdSafe(that.content.buildInterraId(doc.title), ids);
-                doc.interra = { "id": interraId};
-                that.content.insertOne(interraId, primaryCollection, doc, (err, res) => {
-                that.content.addToRegistry({[interraId]: doc[identifierField]}, primaryCollection);
-                  done();
-                });
-              }
+                if (doc[identifierField] in that.content.registry[primaryCollection]) {
+                  that.content.UpdateOne(doc[identifierField], primaryCollection, value, (err, res) => {
+                    if (err) {
+                      console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                    }
+                    done();
+                  });
+                }
+                else {
+                  const title = that.content.getMapFieldByValue(primaryCollection, 'title');
+                  const tempId = that.content.buildInterraId(doc[title]);
+                  const interraId = that.content.buildInterraIdSafe(tempId, ids);
+                  doc.interra = { "id": interraId};
+                  that.content.insertOne(interraId, primaryCollection, doc, (err, res) => {
+                    if (err) {
+                      console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                    }
+                    that.content.addToRegistry({[interraId]: doc[identifierField]}, primaryCollection);
+                    done();
+                  });
+                }
               });
             });
           });
         }, function(err) {
-          callback(err, !err);
+          finished(err, !err);
         });
       });
+    }, function(err) {
+      callback(err, !err);
     });
   }
 
