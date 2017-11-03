@@ -126,26 +126,26 @@ test("Tests harvest load", done => {
   });
 });
 
-test("_getObjValue returns array of objs val", done => {
-  harvest._getObjValue(testDoc, ["tags", "title"], (err, result) => {
+test("getObjValue returns array of objs val", done => {
+  harvest.getObjValue(testDoc, ["tags", "title"], (err, result) => {
     expect(result).toEqual(expect.arrayContaining(["health", "ut", "fugiat"]));
     done();
   });
 });
-test("_getObjValue returns objs val", done => {
-  harvest._getObjValue(testDoc, ["org", "name"], (err, result) => {
+test("getObjValue returns objs val", done => {
+  harvest.getObjValue(testDoc, ["org", "name"], (err, result) => {
     expect(result).toBe("fugiat");
     done();
   });
 });
-test("_getObjValue returns string val", done => {
-  harvest._getObjValue(testDoc, ["id"], (err, result) => {
+test("getObjValue returns string val", done => {
+  harvest.getObjValue(testDoc, ["id"], (err, result) => {
     expect(result).toBe("516f7ea3-f6c4-4df8-bc03-14fc28df21e2");
     done();
   });
 });
-test("_getObjValue returns null for missing val", done => {
-  harvest._getObjValue(testDoc, ["ids"], (err, result) => {
+test("getObjValue returns null for missing val", done => {
+  harvest.getObjValue(testDoc, ["ids"], (err, result) => {
     expect(result).toBe(null);
     done();
   });
@@ -180,22 +180,22 @@ test("Tests harvest prepare", done => {
 });
 
 
-test("Tests _filter", done => {
-  harvest._filter(testSources, {"hothplanet": [testDoc]}, (err, result) => {
+test("Tests applyFilters", done => {
+  harvest.applyFilters(testSources, {"hothplanet": [testDoc]}, (err, result) => {
     expect(result.hothplanet[0].title).toBe("Quilk");
     done();
   })
 });
 
-test("Tests _exclude", done => {
-  harvest._exclude(testSources, {"hothplanet": [testDoc]}, (err, result) => {
+test("Tests applyExcludes", done => {
+  harvest.applyExcludes(testSources, {"hothplanet": [testDoc]}, (err, result) => {
     expect(result.hothplanet.length).toBe(0);
     done();
   });
 });
 
-test("Tests _defaults", done => {
-  harvest._defaults(testSources, {"hothplanet": [testDocNoOrg]}, (err, result) => {
+test("Tests applyDefaults", done => {
+  harvest.applyDefaults(testSources, {"hothplanet": [testDocNoOrg]}, (err, result) => {
     expect(result.hothplanet[0].org.name).toBe("Planet of Hoth Federation");
     // Should not change the description since one exists.
     expect(result.hothplanet[0].description).toBe("Sit irure culpa pariatur ad laboris ut.");
@@ -203,8 +203,8 @@ test("Tests _defaults", done => {
   });
 });
 
-test("Tests _overrides", done => {
-  harvest._overrides(testSources, {"hothplanet": [testDoc]}, (err, result) => {
+test("Tests applyOverrides", done => {
+  harvest.applyOverrides(testSources, {"hothplanet": [testDoc]}, (err, result) => {
     expect(result.hothplanet[0].title).toBe("A different title");
     done();
   });

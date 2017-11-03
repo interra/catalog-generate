@@ -427,7 +427,7 @@ class Harvest {
                           value.interra = { id: interraId }; // eslint-disable-line no-param-reassign
                           that.content.insertOne(interraId, collection, value, (errIns) => {
                             if (errIns) {
-                              that.log(err.type + ' validatinon error for ' + err.interraId + ' in ' + err.collection + ' : ' + JSON.stringify(err.error)); // eslint-disable-line prefer-template
+                              that.log(errIns.type + ' validatinon error for ' + errIns.interraId + ' in ' + errIns.collection + ' : ' + JSON.stringify(errIns.error)); // eslint-disable-line prefer-template
                             }
                             doc[field].push({ 'interra-reference': interraId }); // eslint-disable-line no-param-reassign
                             that.content.addToRegistry({ [interraId]: value[identifier] }, collection);
@@ -491,7 +491,7 @@ class Harvest {
                   doc.interra = { id: interraId }; // eslint-disable-line no-param-reassign
                   that.content.insertOne(interraId, primaryCollection, doc, (errins) => {
                     if (errins) {
-                      that.log(err.type + ' validatinon error for ' + errins.interraId + ' in ' + errins.collection + ' : ' + JSON.stringify(errins.error)); // eslint-disable-line prefer-template
+                      that.log(errins.type + ' validatinon error for ' + errins.interraId + ' in ' + errins.collection + ' : ' + JSON.stringify(errins.error)); // eslint-disable-line prefer-template
                     }
                     that.content.addToRegistry({ [interraId]: doc[identifierField] }, primaryCollection);
                     done();
