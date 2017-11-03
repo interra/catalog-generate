@@ -1,8 +1,4 @@
-const fs = require('fs-extra');
-const YAML = require('yamljs');
 const Async = require('async');
-const slug = require('slug');
-const axios = require('axios');
 const Ajv = require('ajv');
 const HarvestSource = require('./harvestsource');
 const isEqual = require('lodash.isequal');
@@ -12,51 +8,50 @@ const uuid = require('uuidv4');
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 const sourceSchema = {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "#",
-	"title": "Schema for the source",
-	"type": "object",
-	"patternProperties": {
-    "^[a-zA-Z0-9]*$": {
-      "title": "id",
-      "description": "Unique identifier for source",
-      "type": "object",
-			"required": ["id", "source", "type"],
-			"properties": {
-				"id": {
-					"type": "string",
-					"title": "ID",
-					"description": "Unique id for the source",
-          "pattern": "^[a-zA-Z0-9]*$"
-				},
-				"source": {
-					"type": "string",
-					"title": "Remote source",
-					"pattern": "^http://|^https://|^file://"
-				},
-				"type": {
-					"type": "string",
-					"title": "Type of source",
-					"enum": ["DataJSON", "Test", "CKAN"]
-				},
-				"excludes": {
-					"type": "object",
-					"title": "Exclude"
-				},
-				"defaults": {
-					"type": "object",
-					"title": "Defaults"
-				},
-				"overrides": {
-					"type": "object",
-					"title": "Overrides"
-				}
-			}
-
-		}
-	},
-	"additionalProperties":false
-}
+  $schema: 'http://json-schema.org/draft-04/schema#',
+  id: '#',
+  title: 'Schema for the source',
+  type: 'object',
+  patternProperties: {
+    '^[a-zA-Z0-9]*$': {
+      title: 'id',
+      description: 'Unique identifier for source',
+      type: 'object',
+      required: ['id', 'source', 'type'],
+      properties: {
+        id: {
+          type: 'string',
+          title: 'ID',
+          description: 'Unique id for the source',
+          pattern: '^[a-zA-Z0-9]*$',
+        },
+        source: {
+          type: 'string',
+          title: 'Remote source',
+          pattern: '^http://|^https://|^file://',
+        },
+        type: {
+          type: 'string',
+          title: 'Type of source',
+          enum: ['DataJSON', 'Test', 'CKAN'],
+        },
+        excludes: {
+          type: 'object',
+          title: 'Exclude',
+        },
+        defaults: {
+          type: 'object',
+          title: 'Defaults',
+        },
+        overrides: {
+          type: 'object',
+          title: 'Overrides',
+        },
+      },
+    },
+  },
+  additionalProperties: false,
+};
 
 class Harvest {
   constructor(content, sources) {
@@ -65,9 +60,14 @@ class Harvest {
     const validator = ajv.compile(sourceSchema);
     const valid = validator(sources);
     if (!valid) {
-      throw new Error("Sources file is not valid: " + JSON.stringify(validator.errors));
+      throw new Error('Sources file is not valid: ' + JSON.stringify(validator.errors)); // eslint-disable-line prefer-template
     }
-    this.Hook = require(this.content.schemaDir + '/hooks/Harvest.js');
+    this.Hook = require(this.content.schemaDir + '/hooks/Harvest.js'); // eslint-disable-line
+  }
+
+  // TODO: Add real logger.
+  log(string) {
+    console.log(string); // eslint-disable-line no-console
   }
 
   /**
@@ -75,25 +75,25 @@ class Harvest {
    */
   cache(callback) {
     Async.each(this.sources, (source, done) => {
-      let harvestSource = new HarvestSource[source.type](this.content, source);
+      const harvestSource = new HarvestSource[source.type](this.content, source);
       harvestSource.cache((err, result) => {
         done(err, result);
       });
-    }, function(err) {
-      return callback(err, !err);
+    }, (err) => {
+      callback(err, !err);
     });
   }
 
   load(callback) {
-    let json = {};
+    const json = {};
     Async.eachOfSeries(this.sources, (source, id, done) => {
-      let harvestSource = new HarvestSource[source.type](this.content, source);
+      const harvestSource = new HarvestSource[source.type](this.content, source);
       harvestSource.load((err, result) => {
         json[source.id] = result;
         done(err);
       });
-    }, function(err) {
-      return callback(err, json);
+    }, (err) => {
+      callback(err, json);
     });
   }
 
@@ -105,10 +105,10 @@ class Harvest {
   prepare(docsGroup, callback) {
     const that = this;
     // I ♥ callbacks. I promise to fix this.
-    that._filter(this.sources, docsGroup, (err, filtered) => {
-      that._exclude(this.sources, filtered, (err, excluded) => {
-        that._defaults(this.sources, excluded, (err, defaulted) => {
-          that._overrides(this.sources, defaulted, (err, over) => {
+    that.applyFilters(this.sources, docsGroup, (err, filtered) => {
+      that.applyExcludes(this.sources, filtered, (exerr, excluded) => {
+        that.applyDefaults(this.sources, excluded, (deferr, defaulted) => {
+          that.applyOverrides(this.sources, defaulted, (overr, over) => {
             callback(err, over);
           });
         });
@@ -116,37 +116,35 @@ class Harvest {
     });
   }
 
-  _overrides(sources, docsGroup, callback) {
-    const that = this;
+  applyOverrides(sources, docsGroup, callback) {
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
       Async.eachOfSeries(docs, (doc, i, docCallback) => {
         if ('overrides' in sources[id]) {
-          docsGroup[id][i] = Object.assign(docsGroup[id][i], sources[id].overrides);
+          docsGroup[id][i] = Object.assign(docsGroup[id][i], sources[id].overrides); // eslint-disable-line no-param-reassign
         }
         docCallback();
       });
       docsCallback();
-    }, function(err) {
+    }, (err) => {
       callback(err, docsGroup);
     });
   }
 
-  _defaults(sources, docsGroup, callback) {
-    const that = this;
+  applyDefaults(sources, docsGroup, callback) {
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
       Async.eachOfSeries(docs, (doc, i, docCallback) => {
         if ('defaults' in sources[id]) {
-          docsGroup[id][i] = defaults(docsGroup[id][i], sources[id].defaults);
+          docsGroup[id][i] = defaults(docsGroup[id][i], sources[id].defaults); // eslint-disable-line no-param-reassign
         }
         docCallback();
       });
       docsCallback();
-    }, function(err) {
+    }, (err) => {
       callback(err, docsGroup);
     });
   }
 
-  _exclude(sources, docsGroup, callback) {
+  applyExcludes(sources, docsGroup, callback) {
     const excludedDocs = {};
     const that = this;
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
@@ -154,32 +152,30 @@ class Harvest {
       if ('excludes' in sources[id]) {
         Async.eachOf(sources[id].excludes, (criteria, field, done) => {
           Async.filter(excludedDocs[id], (doc, filterCallback) => {
-            that._searchObj(doc, field, criteria, (err, result) => {
+            that.searchObj(doc, field, criteria, (err, result) => {
               if (result) {
                 filterCallback(null, false);
-              }
-              else {
+              } else {
                 filterCallback(null, true);
               }
             });
-          }, function(err, result) {
+          }, (err, result) => {
             excludedDocs[id] = result;
             done(err, !err);
           });
-        }, function(err) {
+        }, (err) => {
           docsCallback(err, !err);
         });
-      }
-      else {
+      } else {
         excludedDocs[id] = docs;
         docsCallback(null, true);
       }
-    }, function(err) {
+    }, (err) => {
       callback(err, excludedDocs);
     });
   }
 
-  _filter(sources, docsGroup, callback) {
+  applyFilters(sources, docsGroup, callback) {
     const filteredDocs = {};
     const that = this;
     Async.eachOfSeries(docsGroup, (docs, id, docsCallback) => {
@@ -187,27 +183,25 @@ class Harvest {
       if ('filters' in sources[id]) {
         Async.eachOf(sources[id].filters, (criteria, field, done) => {
           Async.filter(docs, (doc, filterCallback) => {
-            that._searchObj(doc, field, criteria, (err, result) => {
+            that.searchObj(doc, field, criteria, (err, result) => {
               if (result) {
                 filterCallback(null, true);
-              }
-              else {
+              } else {
                 filterCallback(null, false);
               }
             });
-          }, function(err, result) {
+          }, (err, result) => {
             filteredDocs[id] = result;
             done(err, !err);
           });
-        }, function(err) {
+        }, (err) => {
           docsCallback(err, !err);
-        })
-      }
-      else {
+        });
+      } else {
         filteredDocs[id] = docs;
         docsCallback(null, true);
       }
-    }, function(err) {
+    }, (err) => {
       callback(err, filteredDocs);
     });
   }
@@ -219,46 +213,40 @@ class Harvest {
    * @return {mixed} Null if doc does not contain the value. String if string value
    * and array if the field parent is an array.
    */
-  _getObjValue(doc, field, callback) {
-    const length = field.length;
+  getObjValue(doc, field, callback) {
     const that = this;
     Async.reduce(field, doc, (memo, item, done) => {
-      const docType = that._toType(memo);
+      const docType = that.toType(memo);
       if (docType === 'array') {
         Async.reduce(memo, [], (col, val, valdone) => {
-          const valType = that._toType(val);
+          const valType = that.toType(val);
           if (valType === 'array') {
             if (val.indexOf(item) !== -1) {
               col.push(val[item]);
               valdone(null, col);
             }
-          }
-          else if (valType === 'object') {
+          } else if (valType === 'object') {
             if (item in val) {
               col.push(val[item]);
-              valdone(null, col)
+              valdone(null, col);
             }
+          } else {
+            valdone(null, null);
           }
-          else {
-            valdone(null, null)
-          }
-        }, function(err, res) {
+        }, (err, res) => {
           done(null, res);
-        })
-      }
-      else if (docType === 'object') {
+        });
+      } else if (docType === 'object') {
         if (item in memo) {
           done(null, memo[item]);
-        }
-        else {
+        } else {
           done(null, null);
         }
-      }
-      else {
+      } else {
         done(null, memo);
         // Do nothing, a string is a thing too.
       }
-    }, function(err, result) {
+    }, (err, result) => {
       callback(null, result);
     });
   }
@@ -270,12 +258,12 @@ class Harvest {
    * @param {mixed} criteria String, array or object to match with the field.
    * @return {boolean} True if the doc contains the field and the value of the criteria.
    */
-  _searchObj(doc, field, criteria, callback) {
+  searchObj(doc, field, criteria, callback) {
     let docPass = false;
     const that = this;
-    const criteriaType = this._toType(criteria);
-    that._getObjValue(doc, field.split('.'), (err, result) => {
-      const resultType = that._toType(result);
+    const criteriaType = this.toType(criteria);
+    that.getObjValue(doc, field.split('.'), (err, result) => {
+      const resultType = that.toType(result);
       // If criteria is an object we can only compare with an object.
       if (criteriaType === 'object') {
         if (resultType === 'object') {
@@ -290,33 +278,28 @@ class Harvest {
             if (crit in result) {
               docPass = true;
             }
-          }
-          else if (resultType === 'array') {
+          } else if (resultType === 'array') {
             if (result.indexOf(crit) !== -1) {
               docPass = true;
             }
-          }
-          else {
-            if (result === crit) {
+          } else {
+            if (result === crit) { // eslint-disable-line no-lonely-if
               docPass = true;
             }
           }
           done();
         });
-      }
-      else {
-        if (resultType === 'array') {
+      } else {
+        if (resultType === 'array') { // eslint-disable-line no-lonely-if
           if (result.indexOf(criteria)) {
             docPass = true;
           }
-        }
-        else if (resultType === 'object') {
+        } else if (resultType === 'object') {
           if (criteria in result) {
             docPass = true;
           }
-        }
-        else {
-          if (criteria === result) {
+        } else {
+          if (criteria === result) { // eslint-disable-line no-lonely-if
             docPass = true;
           }
         }
@@ -326,59 +309,48 @@ class Harvest {
   }
 
   /**
-   * Gets type. Yeah JS. From https://stackoverflow.com/questions/7390426/better-way-to-get-type-of-a-javascript-variable .
+   * Gets type. Yeah JS
    * @param {lol} item Item to get the type of.
    * @return {string} Enum 'string', 'array', 'object'.
    */
-  _toType(item) {
+  toType(item) {
     if (item) {
       if (typeof item === 'string') {
         return 'string';
-      }
-      else if (typeof item === 'array') {
+      } else if (typeof item === 'array') { // eslint-disable-line valid-typeof
         return 'array';
-      }
-      else if (typeof item === 'object') {
+      } else if (typeof item === 'object') { // eslint-disable-line valid-typeof
         if (item instanceof Array) {
           return 'array';
         }
-        else {
-          return 'object';
-        }
+        return 'object';
       }
-      else {
-        return null;
-      }
-    }
-    else {
       return null;
     }
+    return null;
   }
 
   _flattenResults(docsGroup, call) {
-    const that = this;
     Async.reduce(docsGroup, [], (memo, item, done) => {
-      memo = memo.concat(item)
+      memo = memo.concat(item); // eslint-disable-line no-param-reassign
       done(null, memo);
-    }, function (err, result) {
+    }, (err, result) => {
       call(null, result);
     });
   }
 
   // TODO: generate this from the schema by getting the required fields.
-  _createDefaultFromString(id, string) {
-
+  createDefaultFromString(id, string) {
     const now = new Date().toISOString();
-
     const doc = {
-      "created": now,
-      "title": string,
-      "modified": now,
-      "identifier": id,
-      "interra": {
-        "id": id
-      }
-    }
+      created: now,
+      title: string,
+      modified: now,
+      identifier: id,
+      interra: {
+        'id': id, // eslint-disable-line quote-props
+      },
+    };
     return doc;
   }
 
@@ -396,150 +368,144 @@ class Harvest {
     Async.eachOf(docsGroup, (docs, sourceId, finished) => {
       const primaryCollection = that.content.schema.getConfigItem('primaryCollection');
       that.content.buildRegistry((err) => {
-        Async.each(docs, (doc, done) => {
+        Async.each(docs, (doci, done) => {
           // TODO: get source type.
-          that.Hook.Store(doc, that.sources[sourceId].type, (err, doc) => {
+          that.Hook.Store(doci, that.sources[sourceId].type, (errSt, doc) => {
             const identifierField = that.content.getIdentifierField(primaryCollection);
-            if (!(identifierField) in doc) {
-              throw new Error("Doc missing identifier field " + doc);
+            if (!(identifierField in doc)) {
+              throw new Error('Doc missing identifier field ' + doc); // eslint-disable-line prefer-template
             }
-            that.content.refCollections(doc, primaryCollection, (err, fields) => {
+            that.content.refCollections(doc, primaryCollection, (errRef, fields) => {
               Async.eachOf(fields, (values, field, fin) => {
                 if (!values) {
                   fin();
-                }
-                else {
+                } else {
                   const collection = references[primaryCollection][field];
                   const identifier = that.content.getIdentifierField(collection);
-                  const type = that._toType(values);
+                  const type = that.toType(values);
                   const title = that.content.getMapFieldByValue(collection, 'title');
-                  const ids = that.content.registry[collection].reduce((acc, cur, i) => {
+                  const ids = that.content.registry[collection].reduce((acc, cur) => {
                     acc.push(Object.values(cur)[0]);
                     return acc;
                   }, []);
                   if (type === 'array') {
-                    doc[field] = [];
+                    doc[field] = []; // eslint-disable-line no-param-reassign
+
                     Async.eachSeries(values, (value, valdone) => {
-                      if (that._toType(value) === 'string') {
+                      if (that.toType(value) === 'string') {
                         const stringId = that.content.buildInterraId(value);
                         // If string exists don't save there is nothing to update with.
                         if (that.content.getRegistryIdentifier(collection, stringId)) {
-                          doc[field].push({'interra-reference': stringId});
+                          doc[field].push({ 'interra-reference': stringId });
                           valdone();
-                        }
-                        else {
-                          const newDocFromString =  that._createDefaultFromString(stringId, value);
-                          that.content.insertOne(stringId, collection, newDocFromString, (err, res) => {
-                            if (err) {
-                              console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                        } else {
+                          const newDocFromString = that.createDefaultFromString(stringId, value);
+                          that.content.insertOne(stringId, collection, newDocFromString, (errInsert) => {
+                            if (errInsert) {
+                              that.log(errInsert.type + ' validatinon error for ' + errInsert.interraId + ' in ' + errInsert.collection + ' : ' + JSON.stringify(errInsert.error)); // eslint-disable-line prefer-template
                             }
-                            doc[field].push({'interra-reference': stringId});
-                            that.content.addToRegistry({[stringId]: newDocFromString[identifier]}, collection);
+                            doc[field].push({ 'interra-reference': stringId }); // eslint-disable-line no-param-reassign
+                            that.content.addToRegistry({ [stringId]: newDocFromString[identifier] }, collection);
                             valdone();
                           });
                         }
-                      }
-                      else {
+                      } else {
                         const existingInterraId = that.content.getRegistryInterraId(value[identifier]);
                         if (existingInterraId) {
-                          that.content.UpdateOne(existingInterraId, collection, value, (err, res) => {
+                          that.content.UpdateOne(existingInterraId, collection, value, (errUp) => {
                             if (err) {
-                              console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                              that.log(errUp.type + ' validatinon error for ' + errUp.interraId + ' in ' + errUp.collection + ' : ' + JSON.stringify(errUp.error)); // eslint-disable-line prefer-template
                             }
-                            doc[field].push({'interra-reference': interraId});
+                            doc[field].push({ 'interra-reference': existingInterraId }); // eslint-disable-line no-param-reassign
                             valdone();
                           });
-                        }
-                        else {
-                          value[title] = value[title] ? value[title] :  uuid();
+                        } else {
+                          value[title] = value[title] ? value[title] : uuid(); // eslint-disable-line no-param-reassign
+
                           const idString = that.content.buildInterraId(value[title]);
                           const interraId = that.content.buildInterraIdSafe(idString, ids);
-                          value.interra = { "id": interraId};
-                          that.content.insertOne(interraId, collection, value, (err, res) => {
-                            if (err) {
-                              console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                          value.interra = { id: interraId }; // eslint-disable-line no-param-reassign
+                          that.content.insertOne(interraId, collection, value, (errIns) => {
+                            if (errIns) {
+                              that.log(errIns.type + ' validatinon error for ' + errIns.interraId + ' in ' + errIns.collection + ' : ' + JSON.stringify(errIns.error)); // eslint-disable-line prefer-template
                             }
-                            doc[field].push({'interra-reference': interraId});
-                            that.content.addToRegistry({[interraId]: value[identifier]}, collection);
+                            doc[field].push({ 'interra-reference': interraId }); // eslint-disable-line no-param-reassign
+                            that.content.addToRegistry({ [interraId]: value[identifier] }, collection);
                             valdone();
                           });
                         }
                       }
-                    }, function(err) {
-                      fin();
+                    }, (e) => {
+                      fin(e, !e);
                     });
-                  }
-                  else if (type === 'object') {
-                    doc[field] = {};
+                  } else if (type === 'object') {
+                    doc[field] = {}; // eslint-disable-line no-param-reassign
                     const existingInterraId = that.content.getRegistryInterraId(values[identifier]);
-                    if (existingInterraId ) {
-                      values.interra = { "id": interraId};
-                      that.content.UpdateOne(existingInterraId, collection, values, (err, res) => {
-                        if (err) {
-                          console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                    if (existingInterraId) {
+                      values.interra = { id: existingInterraId }; // eslint-disable-line no-param-reassign
+                      that.content.UpdateOne(existingInterraId, collection, values, (errUp) => {
+                        if (errUp) {
+                          that.log(err.type + ' validatinon error for ' + err.interraId + ' in ' + err.collection + ' : ' + JSON.stringify(err.error)); // eslint-disable-line prefer-template
                         }
-                        doc[field]['interra-reference'] = that.content.registry[collection][values[identifier]];
+                        doc[field]['interra-reference'] = that.content.registry[collection][values[identifier]]; // eslint-disable-line no-param-reassign
                         fin();
                       });
-                    }
-                    else {
+                    } else {
                       const tempId = that.content.buildInterraId(values[title]);
                       const interraId = that.content.buildInterraIdSafe(tempId, ids);
-                      values.interra = { "id": interraId};
-                      that.content.insertOne(interraId, collection, values, (err, res) => {
-                        if (err) {
-                          console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                      values.interra = { id: interraId }; // eslint-disable-line no-param-reassign
+                      that.content.insertOne(interraId, collection, values, (errIns) => {
+                        if (errIns) {
+                          that.log(errIns.type + ' validatinon error for ' + errIns.interraId + ' in ' + errIns.collection + ' : ' + JSON.stringify(errIns.error)); // eslint-disable-line prefer-template
                         }
-                        doc[field]['interra-reference'] = interraId;
-                        that.content.addToRegistry({[interraId]: values[identifier]}, collection);
+                        doc[field]['interra-reference'] = interraId; // eslint-disable-line no-param-reassign
+                        that.content.addToRegistry({ [interraId]: values[identifier] }, collection);
                         fin();
                       });
                     }
-                  }
-                  else {
+                  } else {
                     fin();
                   }
                 }
-              }, function(err) {
+              }, () => {
                 // Now we are saving the primary collection.
                 let ids = [];
                 if (that.content.registry[primaryCollection].length > 0) {
-                  ids = that.content.registry[primaryCollection].reduce((acc, cur, i) => {
+                  ids = that.content.registry[primaryCollection].reduce((acc, cur) => {
                     acc.push(Object.values(cur)[0]);
                     return acc;
                   }, []);
                 }
                 const existingInterraId = that.content.getRegistryInterraId(doc[identifierField]);
                 if (existingInterraId) {
-                  that.content.updateOne(doc[identifierField], primaryCollection, doc, (err, res) => {
-                    if (err) {
-                      console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                  that.content.updateOne(doc[identifierField], primaryCollection, doc, (errUp) => {
+                    if (errUp) {
+                      that.log(errUp.type + ' validatinon error for ' + errUp.interraId + ' in ' + errUp.collection + ' : ' + JSON.stringify(errUp.error)); // eslint-disable-line prefer-template
                     }
                     done();
                   });
-                }
-                else {
+                } else {
                   const title = that.content.getMapFieldByValue(primaryCollection, 'title');
                   const tempId = that.content.buildInterraId(doc[title]);
                   const interraId = that.content.buildInterraIdSafe(tempId, ids);
-                  doc.interra = { "id": interraId};
-                  that.content.insertOne(interraId, primaryCollection, doc, (err, res) => {
-                    if (err) {
-                      console.log(err.type + " validatinon error for " + err.interraId + " in " + err.collection + " : " + JSON.stringify(err.error));
+                  doc.interra = { id: interraId }; // eslint-disable-line no-param-reassign
+                  that.content.insertOne(interraId, primaryCollection, doc, (errins) => {
+                    if (errins) {
+                      that.log(errins.type + ' validatinon error for ' + errins.interraId + ' in ' + errins.collection + ' : ' + JSON.stringify(errins.error)); // eslint-disable-line prefer-template
                     }
-                    that.content.addToRegistry({[interraId]: doc[identifierField]}, primaryCollection);
+                    that.content.addToRegistry({ [interraId]: doc[identifierField] }, primaryCollection);
                     done();
                   });
                 }
               });
             });
           });
-        }, function(err) {
-          finished(err, !err);
+        }, (errc) => {
+          finished(errc, !errc);
         });
       });
-    }, function(err) {
-      callback(err, !err);
+    }, (errf) => {
+      callback(errf, !errf);
     });
   }
 
@@ -549,32 +515,32 @@ class Harvest {
   run(callback) {
     const that = this;
     Async.waterfall([
-      function(done) {
-        that.cache((err, result) => {
+      (done) => {
+        that.cache((err) => {
           done(err);
-        })
+        });
       },
-      function(done) {
+      (done) => {
         that.load((err, result) => {
           done(err, result);
-        })
+        });
       },
-      function(docsGroup, done) {
+      (docsGroup, done) => {
         that.prepare(docsGroup, (err, result) => {
           done(null, result);
         });
       },
-      function(docsGroup, done) {
+      (docsGroup, done) => {
         that.store(docsGroup, (err, result) => {
           done(null, result);
         });
-      }
-    ], function (err, result) {
+      },
+    ], (err) => {
       callback(err, !err);
     });
   }
 
 }
 module.exports = {
-  Harvest
+  Harvest,
 };
