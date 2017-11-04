@@ -45,28 +45,28 @@ function run(siteName) {
   const harvest = prepare(siteName);
 
   Async.waterfall([
-    function(done) {
+    (done) => {
       console.log("Loading files...");
       harvest.load((err, result) => {
         console.log("Files loaded...");
         done(err, result);
       })
     },
-    function(docsGroup, done) {
+    (docsGroup, done) => {
       console.log("Preparing files...");
       harvest.prepare(docsGroup, (err, result) => {
         console.log("Files prepared...");
         done(null, result);
       });
     },
-    function(docsGroup, done) {
+    (docsGroup, done) => {
       console.log("Storing files...");
       harvest.store(docsGroup, (err, result) => {
         console.log("Files stored...");
         done(null, result);
       });
     }
-  ], function (err, result) {
+  ], (err) => {
     console.log(err, !err);
   });
 }
