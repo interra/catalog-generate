@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const prog = require('caporal');
 const dataJsonImport = require('./internals/scripts/datajson2yml');
-const Validate = require('./internals/scripts/validateSchema');
+const Validate = require('./internals/scripts/validate');
 const Build = require('./internals/scripts/build-collection-data');
 const BuildSchema = require('./internals/scripts/build-schema');
 const BuildConfig = require('./internals/scripts/build-config');
@@ -12,20 +12,26 @@ const Schema = require('./internals/models/schema');
 const Site = require('./internals/models/site');
 
 prog
-    .version('0.0.1')
-    .command('validate-schema')
-    .help('validates a site based off of a schema')
-    .argument('site', 'The site to validate')
-    .action((args, options) => {
-        Validate.all(args.site);
-    })
-    .command('build-collection-data')
-    .help('builds collection data for a site exporting it to the build dir')
-    .argument('site', 'The site to build')
-    .action(function(args, options) {
-        console.log("Exporting data for " + args.site);
-        Build.all(args.site);
-    })
+  .version('0.0.1')
+  .command('validate-site-contents')
+  .help('validates a site contents based off of a schema')
+  .argument('site', 'The site to validate')
+  .action((args, options) => {
+    Validate.content(args.site);
+  })
+  .command('validate-site')
+  .help('validates a site')
+  .argument('site', 'The site to validate')
+  .action((args, options) => {
+    Validate.site(args.site);
+  })
+  .command('build-collection-data')
+  .help('builds collection data for a site exporting it to the build dir')
+  .argument('site', 'The site to build')
+  .action(function(args, options) {
+    console.log("Exporting data for " + args.site);
+    Build.all(args.site);
+  })
     .command('build-collection-data-item')
     .help('builds collection data for a collection item')
     .argument('site', 'The site to build from')
