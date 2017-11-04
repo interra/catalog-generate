@@ -1,8 +1,6 @@
 'use strict';
 const Async = require('async');
 const fs = require('fs-extra');
-const YAML = require('yamljs');
-const refParser = require('json-schema-ref-parser');
 const chalk = require('chalk');
 const elasticlunr = require('elasticlunr');
 
@@ -40,30 +38,30 @@ class dataJsonSearch extends Search {
 
 class elasticLunr extends Search {
 
-    constructor(siteId) {
-        super(siteId);
-    }
+  constructor(siteId) {
+    super(siteId);
+  }
 
-    init() {
-        this.idx = elasticlunr(function(){});
-        this.idx.setRef('identifier');
-    }
+  init() {
+    this.idx = elasticlunr(function(){});
+    this.idx.setRef('identifier');
+  }
 
-    insertOne(item, callback) {
-        this.idx.addDoc(item)
-        return callback(null);
-    }
+  insertOne(item, callback) {
+    this.idx.addDoc(item)
+    return callback(null);
+  }
 
-    push() {
-        const config = new Config();
-        const buildDir = config.get('buildDir');
-        const file = __dirname.replace("internals/models","") + buildDir + '/' + this.siteId + "/api/v1/search-index.json";
-        fs.outputFile(file, JSON.stringify(this.idx), err => {
-            if (err) {
-                console.log(err);
-            }
-        });
-    }
+  push() {
+    const config = new Config();
+    const buildDir = config.get('buildDir');
+    const file = __dirname.replace("internals/models","") + buildDir + '/' + this.siteId + "/api/v1/search-index.json";
+    fs.outputFile(file, JSON.stringify(this.idx), err => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
 }
 
 function type(obj) {

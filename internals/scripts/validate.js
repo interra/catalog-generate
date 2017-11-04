@@ -19,13 +19,13 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
  * Validates all docs in site collections.
  * TODO: Use methods from content class.
  */
-function contents(site) {
+function contents(siteName) {
   const siteInfo = new Site();
-  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schemaName = siteInfo.getConfigItem(siteName, 'schema');
   const schema = new Schema(schemaName);
   const collections = schema.getConfigItem('collections');
   _.each(collections, (collection) => {
-    const content = new Content[storage](site);
+    const content = new Content[storage](siteName);
     schema.dereference(collection, (err, collectionSchema) => {
       if (err) {
         console.log(chalk.red('Error for ' + collection), err); // eslint-disable-line
@@ -51,8 +51,8 @@ function contents(site) {
   });
 }
 
-function site(site) {
-  console.log(chalk.blue('Site validateion coming soon')); // eslint-disable-line
+function site(site) { // eslint-disable-line
+  console.log(chalk.blue('Site validation coming soon')); // eslint-disable-line
 }
 
 module.exports = {

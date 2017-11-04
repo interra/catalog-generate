@@ -17,54 +17,52 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 function get(site) {
   console.log(chalk.blue("Building schema"));
-    var siteInfo = new Site();
-    var schemaName = siteInfo.getConfigItem(site, 'schema');
-    var schema = new Schema(schemaName);
-    var collections = schema.getConfigItem('collections');
-    var facets = schema.getConfigItem('facets');
-    var buildDir = config.get('buildDir');
-    var siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/api/v1';
-     schemas = {
-      collections: collections,
-      schema: {},
-      facets: facets,
+  const siteInfo = new Site();
+  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schema = new Schema(schemaName);
+  const collections = schema.getConfigItem('collections');
+  const facets = schema.getConfigItem('facets');
+  const buildDir = config.get('buildDir');
+  const siteDir = __dirname.replace("internals/scripts", "") + buildDir + '/' + site + '/api/v1';
+  let schemas = {
+    collections: collections,
+    schema: {},
+    facets: facets,
+  }
+  Async.each(collections, function(collection, callback) {
+    const content = new Content[storage](site);
+    if (collection == 'dataset') {
+      schema.dereference(collection, (err, collectionSchema) => {
+        if (err) {
+          console.log(chalk.red("Error for " + collection), err);
+          process.exit(1);
+        }
+        schemas.schema[collection] = collectionSchema;
+        callback();
+      });
+    } else {
+      schema.load(collection, (err, collectionSchema) => {
+        if (err) {
+          console.log(chalk.red("Error for " + collection), err);
+          process.exit(1);
+        }
+        schemas.schema[collection] = collectionSchema;
+        callback();
+      });
     }
-    Async.each(collections, function(collection, callback) {
-        const content = new Content[storage](site);
-        if (collection == 'dataset') {
-            schema.dereference(collection, (err, collectionSchema) => {
-                if (err) {
-                    console.log(chalk.red("Error for " + collection), err);
-                    process.exit(1);
-                }
-                schemas.schema[collection] = collectionSchema;
-                callback();
-            });
-        }
-        else {
-            schema.load(collection, (err, collectionSchema) => {
-                if (err) {
-                    console.log(chalk.red("Error for " + collection), err);
-                    process.exit(1);
-                }
-                schemas.schema[collection] = collectionSchema;
-                callback();
-            });
-        }
-
-    }, function (err) {
-        schema.map((err, result) => {
-          schemas.map = result;
-          schema.uiSchema((err, ui) => {
-            schemas.uiSchema = ui;
-            fs.outputJson(siteDir + '/schema.json', schemas, err => {
-                if (err) {
-                    console.log(err);
-                }
-            });
-            });
+  }, function (err) {
+    schema.map((err, result) => {
+      schemas.map = result;
+      schema.uiSchema((err, ui) => {
+        schemas.uiSchema = ui;
+        fs.outputJson(siteDir + '/schema.json', schemas, err => {
+          if (err) {
+            console.log(err);
+          }
         });
+      });
     });
+  });
 
 }
 
