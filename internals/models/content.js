@@ -399,12 +399,17 @@ class FileStorage extends Storage {
   validateUnique(identifier, collection, callback) {
     const that = this;
     this.buildRegistry((err, result) => {
-      if (identifier in that.registry[collection]) {
-        return callback(null, that.registry[collection][identifier]);
-      }
-      else {
-        return callback(null, null);
-      }
+      Async.detect(that.registry[collection], (id, done) => {
+        if (identifier === Object.values(id)[0]) {
+          done(null, true);
+        }
+        else {
+          done(null);
+        }
+      }, (err, res) => {
+        const result = res === undefined ? null : Object.keys(res)[0];
+        callback(err, result);
+      });
     });
   }
 
