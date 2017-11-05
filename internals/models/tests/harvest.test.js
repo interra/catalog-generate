@@ -3,7 +3,7 @@ const Harvest = require('../harvest').Harvest;
 const fs = require('fs-extra');
 const path = require('path');
 const schemaDir = path.join(__dirname, 'schemas/test-schema');
-const config = new Config(path.join(__dirname, 'config.yml');
+const config = new Config(path.join(__dirname, 'config.yml'));
 const content = new Content['FileStorage'](config);
 const Async = require('async');
 
