@@ -26,7 +26,7 @@ To get started install node modules:
 npm install
 ```
 
-The default search uses [ElasticLunr](http://elasticlunr.com/). We require the latest ``0.9.6`` version however the current version on npm is ``0.9.5``. To get the latest version:
+The default search uses [ElasticLunr](http://elasticlunr.com/). We require the latest ``0.9.6`` version however the current version on npm is [``0.9.5``](https://github.com/weixsong/elasticlunr.js/issues/60). To get the latest version:
 
 ```bash
 rm -r node_modules/elasticlunr; cd node_modules; git clone git@github.com:weixsong/elasticlunr.js.git elasticlunr;

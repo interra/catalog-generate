@@ -10,6 +10,7 @@ class Config {
  constructor(configDir) {
    this.configDir = configDir;
    this.configFile = path.join(configDir, 'config.yml');
+   this.data = {};
    if (!(fs.pathExistsSync(this.configFile))) {
      throw new Error('Config class could not be instantiated. config.yml file not found at :' + this.configFile);
    }
@@ -25,9 +26,14 @@ class Config {
  }
 
   load() {
-    const data = fs.readFileSync(this.configFile, 'utf8');
-    console.log(data);
-    return YAML.parse(data);
+    if (Object.keys(this.data).length > 1) {
+      return this.data;
+    }
+    else {
+      const data = fs.readFileSync(this.configFile, 'utf8');
+      this.data = YAML.parse(data);
+      return this.data;
+    }
   }
 }
 

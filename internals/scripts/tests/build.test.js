@@ -7,20 +7,58 @@ const Build = require('../build');
 const config = new Config(path.join(__dirname, '../../models/tests'));
 const content = new Content['FileStorage']('test-site', config);
 const buildDir = config.get('buildDir');
-
 const Async = require('async');
+const site = 'test-site';
+
+const schemaMock = require('./mockschema.json');
+const routesMock = require('./mockroutes.json');
+const datasetMock = require('./mockdatasetone.json');
+const tagMock = require('./mocktagtransportation.json');
+const indexMock = require('./mocksearchindex.json');
 
 // Let's start from scratch.
 fs.emptyDirSync(buildDir);
 
 test('Build schema', (done) => {
- 
-  //Build.schemaExport('test-site', config, (err) => {
-    //console.log(err);
+  Build.schemaExport(site, config, (err) => {
+    const result = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/schema.json'));
+    expect(schemaMock).toMatchObject(JSON.parse(result));
+    done();
+  });
+});
+
+test('Build routes', (done) => {
+  Build.routesExport(site, config, (err) => {
+    const result = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/routes.json'));
+    expect(routesMock).toMatchObject(JSON.parse(result));
+    done();
+  });
+});
+
+test('Build docs', (done) => {
+  Build.docsExport(site, config, (err) => {
+    const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
+    const tag = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/tags/transportation.json'));
+    expect(datasetMock).toMatchObject(JSON.parse(dataset));
+    expect(tagMock).toMatchObject(JSON.parse(tag));
+    done();
+  });
+});
+
+test('Build doc', (done) => {
+  fs.emptyDirSync(buildDir);
+  Build.docExport(site, config, 'datasets', 'dataset-one', (err) => {
+    const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
+    expect(datasetMock).toMatchObject(JSON.parse(dataset));
+    done();
+  });
+});
+
+test('Build search', (done) => {
+  Build.searchExport(site, config, (err) => {
+    const index = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/search-index.json'));
+    expect(indexMock).toMatchObject(JSON.parse(index));
     expect(1).toBe(1);
     done();
-  
-  //});
-
-
+  });
 });
