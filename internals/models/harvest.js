@@ -4,6 +4,7 @@ const HarvestSource = require('./harvestsource');
 const isEqual = require('lodash.isequal');
 const defaults = require('lodash.defaults');
 const uuid = require('uuidv4');
+const path = require('path');
 
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
@@ -62,7 +63,7 @@ class Harvest {
     if (!valid) {
       throw new Error('Sources file is not valid: ' + JSON.stringify(validator.errors)); // eslint-disable-line prefer-template
     }
-    this.Hook = require(this.content.schemaDir + '/hooks/Harvest.js'); // eslint-disable-line
+    this.Hook = require(path.join(this.content.schemasDir, this.content.schemaName, 'hooks/Harvest.js')); // eslint-disable-line
   }
 
   // TODO: Add real logger.

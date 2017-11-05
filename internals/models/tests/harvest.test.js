@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const config = new Config(path.join(__dirname));
 const storage = 'FileStorage';
-const content = new Content[storage](config);
+const content = new Content[storage]('test-site', config);
 const Async = require('async');
 
 const sources = fs.readJsonSync(path.join(__dirname, 'sites/test-site/harvest/sources.json'));
