@@ -48,7 +48,7 @@ test("Load specific file", done => {
 });
 
 test("Retrieve all files of a group of collection", done => {
-  content.findAll(['organization', 'tags'], false, (err, result) => {
+  content.findAll(false, (err, result) => {
     expect(result.organization[1].identifier).toBe("good-org");
     done();
   });
@@ -235,7 +235,7 @@ test("Find doc by field value", done => {
 });
 
 test("Find all with multiple collections", done => {
-  content.findAll(["datasets", "tags"], false, (err, result) => {
+  content.findAll(false, (err, result) => {
     expect(result.datasets.length).toBe(2);
     expect(result.tags.length).toBe(6);
     expect(result.datasets[1].title).toBe("Dataset Two");
