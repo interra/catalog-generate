@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Build functions for exporting site content and config.
+ * TODO: Maybe make this a class like the others so we can properly pass config.
+ */
 const Content = require('../models/content');
 const Config = require('../models/config');
 const Site = require('../models/site');
@@ -8,13 +13,10 @@ const fs = require('fs-extra');
 const Async = require('async');
 const path = require('path');
 
-const config = new Config();
 const siteInfo = new Site();
-const storage = config.get('storage');
-const buildDir = config.get('buildDir');
 
-function prepare(site) {
-  const content = new Content[storage](site);
+function prepare(site, config) {
+  const content = new Content[storage](site, config);
   const apiDir = path.join(__dirname.replace('internals/scripts', ''), buildDir, site, 'api/v1');
   fs.ensureDirSync(apiDir);
   return content;
@@ -23,8 +25,8 @@ function prepare(site) {
 /**
  * Exports routes.
  */
-function routes(site) {
-  const content = prepare(site);
+function routesExport(site, config) {
+  const content = prepare(site, config);
   const routeCollections = schema.getConfigItem('routeCollections');
   const file = path.join(__dirname.replace('internals/scripts',''), buildDir, site, 'api/v1/routes.json');
 
@@ -46,8 +48,8 @@ function routes(site) {
 /**
  * Exports json files for each doc in each collection.
  */
-function collectionData(site) {
-  const content = prepare(site);
+function docsExport(site, config) {
+  const content = prepare(site, config);
   content.findAll(true, (err, results) => {
     Async.eachOf(results, (docs, collection, done) => {
       content.exportMany(docs, collection, apiDir, (err, result) => {
@@ -62,8 +64,8 @@ function collectionData(site) {
 /**
  * Exports json file for single doc.
  */
-function collectionData(site, collection, interraId) {
-  const content = prepare(site);
+function docExport(site, config, collection, interraId) {
+  const content = prepare(site, config);
   content.findByInterraId(interraId, collection, (err, doc) => {
     content.Deref(doc, (derefErr, dereffed) => {
       content.exportOne(interraId, collection, dereffed, apiDir, (exportErr) =>  {
@@ -76,20 +78,25 @@ function collectionData(site, collection, interraId) {
 /**
  * Exports the schema for the site.
  */
-function schemaData(site, callback) {
+function schemaExport(site, config, callback) {
   console.log(chalk.blue("Building schema"));
-  const content = prepare(site);
+  const content = prepare(site, config);
+  return callback(null, null);
   const schemaName = siteInfo.getConfigItem(site, 'schema');
+  console.log(schemaName);
   const schema = new Schema(schemaName);
   const collections = schema.getConfigItem('collections');
   const facets = schema.getConfigItem('facets');
+  const primaryCollection = schema.getConfigItem('primaryCollection');
+  const apiDir = path.join(__dirname.replace('internals/scripts', ''), buildDir, site, 'api/v1');
+
   let schemas = {
     collections: collections,
     schema: {},
     facets: facets,
   }
   Async.each(collections, function(collection, callback) {
-    if (collection == 'dataset') {
+    if (collection == primaryCollection) {
       schema.dereference(collection, (err, collectionSchema) => {
         if (err) {
           console.log(chalk.red("Error for " + collection), err);
@@ -127,7 +134,7 @@ function schemaData(site, callback) {
 /**
  * Exports configuration.
  */
-function configuration(site) {
+function configExport(site, config) {
   const siteConfig = siteInfo.getConfig(site);
   fs.outputJson(apiDir + '/config.json', siteConfig, err => {
     if (err) {
@@ -140,13 +147,15 @@ function configuration(site) {
 /**
  * Exports search file for site.
  */
-function search(site) {
+function searchExport(site) {
   console.log(chalk.blue("Building search"));
   const schemaName = siteInfo.getConfigItem(site, 'schema');
+  console.log(schemaName);
   const schema = new Schema(schemaName);
   const search = new Search[searchEngine](site);
   const content = prepare(site);
   const primaryCollection = schema.getConfigItem('primaryCollection');
+  const apiDir = path.join(__dirname.replace('internals/scripts', ''), buildDir, site, 'api/v1');
 
   search.init();
 
@@ -176,9 +185,10 @@ function search(site) {
 }
 
 module.exports = {
-  routes,
-  collectionData,
-  configuration,
-  schema,
-  search,
+  routesExport,
+  docsExport,
+  docExport,
+  configExport,
+  schemaExport,
+  searchExport,
 }

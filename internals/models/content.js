@@ -14,9 +14,25 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 class Storage {
 
-  constructor(siteDir, schemaDir) {
-      this.siteDir = siteDir;
-      this.schemaDir = schemaDir;
+  /**
+   * @param {object} config Loaded Config object.
+   */
+  constructor(site, config) {
+    console.log(config);
+    this.siteDir = config.get('sitesDir');
+    this.schemaDir = config.get('sitesDir');
+    this.schema = new Schema(this.schemaDir);
+    this.directory = siteDir + '/collections';
+    this.loadedSchema = [];
+    this.registry = {};
+    this.schemaMap = this.schema.mapSettings();
+    this.references = this.schema.getConfigItem('references');
+    this.collections = this.schema.getConfigItem('collections');
+    this.map = this.schema.mapSettings();
+
+    // TODO: Export to function where we can see if file exists. Make hooks
+    // opt-in instead of mandatory.
+    this.Hook = require(schemaDir + '/hooks/Content.js');
   }
 
   requiredFields () {
@@ -44,20 +60,8 @@ class Storage {
 
 class FileStorage extends Storage {
 
-  constructor(siteDir, schemaDir) {
-    super(siteDir, schemaDir);
-    this.schema = new Schema(schemaDir);
-    this.directory = siteDir + '/collections';
-    this.loadedSchema = [];
-    this.registry = {};
-    this.schemaMap = this.schema.mapSettings();
-    this.references = this.schema.getConfigItem('references');
-    this.collections = this.schema.getConfigItem('collections');
-    this.map = this.schema.mapSettings();
-
-    // TODO: Export to function where we can see if file exists. Make hooks
-    // opt-in instead of mandatory.
-    this.Hook = require(schemaDir + '/hooks/Content.js');
+  constructor(site, config) {
+    super(site, config);
   }
 
   // Ref, Deref, and Map are the functions that transform docs

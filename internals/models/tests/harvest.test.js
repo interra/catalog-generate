@@ -3,9 +3,8 @@ const Harvest = require('../harvest').Harvest;
 const fs = require('fs-extra');
 const path = require('path');
 const schemaDir = path.join(__dirname, 'schemas/test-schema');
-const siteDir = path.join(__dirname, 'sites/test-site');
-const storage = 'FileStorage';
-const content = new Content[storage](siteDir, schemaDir);
+const config = new Config(path.join(__dirname, 'config.yml');
+const content = new Content['FileStorage'](config);
 const Async = require('async');
 
 const sources = fs.readJsonSync(path.join(__dirname, 'sites/test-site/harvest/sources.json'));

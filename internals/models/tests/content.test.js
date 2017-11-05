@@ -1,11 +1,9 @@
-//
+const Config = require('../config');
 const Content = require('../content');
-const Schema = require('../schema');
 const fs = require('fs-extra');
-const schemaDir = __dirname + '/schemas/test-schema';
-const siteDir = __dirname + '/sites/test-site';
-const content = new Content['FileStorage'](siteDir, schemaDir);
-const YAML = require('yamljs');
+const path = require('path');
+const config = new Config(__dirname);
+const content = new Content['FileStorage']('test-site', config);
 
 test("Get list of docs from tags collection", done => {
   content.list('tags', (err, result) => {
