@@ -4,15 +4,37 @@ const path = require('path');
 
 class Config {
 
-   get(key) {
-       var data = this.load();
-       return data[key];
+ /**
+  * @param {string} confiDir Full path to the dir that contains config.yml file.
+  */
+ constructor(configDir) {
+   this.configDir = configDir;
+   this.configFile = path.join(configDir, 'config.yml');
+   this.data = {};
+   if (!(fs.pathExistsSync(this.configFile))) {
+     throw new Error('Config class could not be instantiated. config.yml file not found at :' + this.configFile);
    }
+ }
 
-    load() {
-        var data = fs.readFileSync(__dirname + '/../../config.yml', 'utf8');
-        return YAML.parse(data);
+ get(key) {
+   const data = this.load();
+   if (key === 'sitesDir' || key === 'schemasDir' || key === 'buildDir') {
+     return path.join(this.configDir, data[key]);
+   } else {
+     return data[key];
+   }
+ }
+
+  load() {
+    if (Object.keys(this.data).length > 1) {
+      return this.data;
     }
+    else {
+      const data = fs.readFileSync(this.configFile, 'utf8');
+      this.data = YAML.parse(data);
+      return this.data;
+    }
+  }
 }
 
 module.exports = Config;

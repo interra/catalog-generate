@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Provides interface for running and caching harvests.
+ */
+
 const Content = require('../models/content');
 const Schema = require('../models/schema');
 const Site = require('../models/site');
@@ -7,6 +12,9 @@ const Async = require('async');
 const Config = require('../models/config');
 const config = new Config();
 
+/**
+ * Prepares harvest.
+ */
 function prepare(siteName) {
   const siteDir = __dirname + '/../../' + config.get('sitesDir') + '/' + (siteName);
   const site = new Site(config.get('sitesDir'));
@@ -18,6 +26,10 @@ function prepare(siteName) {
   return harvest;
 }
 
+/**
+ * Caches harvest sources. Downloading sources makes it easier to deal with
+ * timeouts, revisions, and other issues.
+ */
 function cache(siteName) {
   const harvest = prepare(siteName);
   harvest.cache((err, result) => {
@@ -26,32 +38,35 @@ function cache(siteName) {
 
 }
 
+/**
+ * Runs harvest. Use after files have been cached.
+ */
 function run(siteName) {
   const harvest = prepare(siteName);
 
   Async.waterfall([
-    function(done) {
+    (done) => {
       console.log("Loading files...");
       harvest.load((err, result) => {
         console.log("Files loaded...");
         done(err, result);
       })
     },
-    function(docsGroup, done) {
+    (docsGroup, done) => {
       console.log("Preparing files...");
       harvest.prepare(docsGroup, (err, result) => {
         console.log("Files prepared...");
         done(null, result);
       });
     },
-    function(docsGroup, done) {
+    (docsGroup, done) => {
       console.log("Storing files...");
       harvest.store(docsGroup, (err, result) => {
         console.log("Files stored...");
         done(null, result);
       });
     }
-  ], function (err, result) {
+  ], (err) => {
     console.log(err, !err);
   });
 }

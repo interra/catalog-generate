@@ -2,6 +2,7 @@
 const fs = require('fs-extra');
 const Config = require('./config');
 const Site = require('./site');
+const path = require('path');
 const Schema = require('./schema');
 const YAML = require('yamljs');
 const Async = require('async');
@@ -9,14 +10,34 @@ const slug = require('slug');
 const Ajv = require('ajv');
 const ajv = new Ajv();
 const merge = require('lodash.merge');
+const apiSubDir = 'api/v1';
 
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 class Storage {
 
-  constructor(siteDir, schemaDir) {
-      this.siteDir = siteDir;
-      this.schemaDir = schemaDir;
+  /**
+   * @param {object} config Loaded Config object.
+   */
+  constructor(site, config) {
+    this.sitesDir = config.get('sitesDir');
+    this.siteDir = path.join(this.sitesDir, site);
+    this.schemasDir = config.get('schemasDir');
+    this.siteInfo = new Site(this.sitesDir);
+    this.schemaName = this.siteInfo.getConfigItem(site,'schema'); 
+    this.schema = new Schema(path.join(this.schemasDir, this.schemaName));
+    this.directory = this.siteDir + '/collections';
+    this.apiDir = path.join(config.get('buildDir'), site, apiSubDir, 'collections');
+    this.loadedSchema = [];
+    this.registry = {};
+    this.schemaMap = this.schema.mapSettings();
+    this.references = this.schema.getConfigItem('references');
+    this.collections = this.schema.getConfigItem('collections');
+    this.map = this.schema.mapSettings();
+
+    // TODO: Export to function where we can see if file exists. Make hooks
+    // opt-in instead of mandatory.
+    this.Hook = require(path.join(this.schemasDir, this.schemaName, 'hooks/Content.js'));
   }
 
   requiredFields () {
@@ -44,20 +65,8 @@ class Storage {
 
 class FileStorage extends Storage {
 
-  constructor(siteDir, schemaDir) {
-    super(siteDir, schemaDir);
-    this.schema = new Schema(schemaDir);
-    this.directory = siteDir + '/collections';
-    this.loadedSchema = [];
-    this.registry = {};
-    this.schemaMap = this.schema.mapSettings();
-    this.references = this.schema.getConfigItem('references');
-    this.collections = this.schema.getConfigItem('collections');
-    this.map = this.schema.mapSettings();
-
-    // TODO: Export to function where we can see if file exists. Make hooks
-    // opt-in instead of mandatory.
-    this.Hook = require(schemaDir + '/hooks/Content.js');
+  constructor(site, config) {
+    super(site, config);
   }
 
   // Ref, Deref, and Map are the functions that transform docs
@@ -390,12 +399,17 @@ class FileStorage extends Storage {
   validateUnique(identifier, collection, callback) {
     const that = this;
     this.buildRegistry((err, result) => {
-      if (identifier in that.registry[collection]) {
-        return callback(null, that.registry[collection][identifier]);
-      }
-      else {
-        return callback(null, null);
-      }
+      Async.detect(that.registry[collection], (id, done) => {
+        if (identifier === Object.values(id)[0]) {
+          done(null, true);
+        }
+        else {
+          done(null);
+        }
+      }, (err, res) => {
+        const result = res === undefined ? null : Object.keys(res)[0];
+        callback(err, result);
+      });
     });
   }
 
@@ -403,10 +417,10 @@ class FileStorage extends Storage {
    * Like insertOne but outputs to json.
    * @param {string} identifier
    */
-  exportOne(identifier, collection, content, callback) {
-    this.Hook.preOutput(identifier, collection, content, (err, identifier, collection, content) => {
-      let dir = this.directory + "/collections/" + collection;
-      let file = dir + '/' + identifier + '.json';
+  exportOne(interraId, collection, doc, callback) {
+    this.Hook.preOutput(interraId, collection, doc, (err, identifier, collection, content) => {
+      fs.ensureDirSync(path.join(this.apiDir, collection));
+      const file = path.join(this.apiDir, collection, interraId + '.json');
       fs.writeJson(file, content, err => {
         if (err) return callback(err);
         this.Hook.postOutput(content, (err, content) => {
@@ -417,9 +431,15 @@ class FileStorage extends Storage {
     });
   }
 
-  exportMany(contents, callback) {
-    Async.eachSeries(contents, function(content, done) {
-      exportOne(content.identifier, content.collection, content, (err, item) => {
+  /**
+   * Writes many docs to the filesystem from a single collection.
+   * @param {array} docs Array of docs.
+   * @param {string} collection Collection to export.
+   */
+  exportMany(docs, collection, callback) {
+    const that = this;
+    Async.eachSeries(docs, function(doc, done) {
+      that.exportOne(doc.interra.id, collection, doc, (err, item) => {
         if (err) return done(err);
         done(null);
       })
@@ -844,10 +864,10 @@ class FileStorage extends Storage {
    * @param {boolean} deref Whether or not to dereference the docs.
    * @param {function} callback Callback with err, result params.
    */
-  findAll(collections, deref, callback) {
+  findAll(deref, callback) {
     let collectionData = [];
     const that = this;
-    Async.each(collections, function(collection, done) {
+    Async.each(this.collections, function(collection, done) {
       collectionData[collection] = [];
       that.findByCollection(collection, deref, (err, results) => {
         collectionData[collection] = results;

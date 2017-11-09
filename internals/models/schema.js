@@ -4,6 +4,7 @@ const YAML = require('yamljs');
 const refParser = require('json-schema-ref-parser');
 const chalk = require('chalk');
 const Async = require('async');
+const path = require('path');
 const Ajv = require('ajv');
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
@@ -64,13 +65,13 @@ class Schema {
 
   // Retrieves uiSchema.
   uiSchema() {
-    const data = fs.readFileSync(this.dir + "/UISchema.yml", 'utf8');
+    const data = fs.readFileSync(path.join(this.dir,'UISchema.yml'), 'utf8');
     return YAML.parse(data);
   }
 
   // Retrieves map settings.
   mapSettings() {
-    var data = fs.readFileSync(this.dir + "/map.yml", 'utf8');
+    const data = fs.readFileSync(path.join(this.dir, 'map.yml'), 'utf8');
     return YAML.parse(data);
   }
 
@@ -78,7 +79,7 @@ class Schema {
   collectionAndSchema(collection, callback) {
     this.collection(collection, (err, list) => {
       if (err) {
-        return callback("Collection not found.");
+        return callback('Collection not found.');
       }
       const uiSchema = this.uiSchema();
       const map = this.mapSettings();
@@ -98,12 +99,12 @@ class Schema {
    */
   load(collection, callback) {
     const that = this;
-    const file = that.dir + '/collections/' + collection + ".yml";
-    const interraSchemaFile = __dirname + '/../../schemas/interra.yml';
+    const file = path.join(that.dir, 'collections', collection + '.yml');
+    const interraSchemaFile = path.join(__dirname, '../../schemas/interra.yml');
     that.Hook.preLoad(file,(err, file) => {
       const collectionFile = fs.readFileSync(file, 'utf8');
       const interraSchema = fs.readFileSync(interraSchemaFile, 'utf8');
-//      const data = Object.assign(YAML.parse(collectionFile), {interra: YAML.parse(interraSchema)});
+      // const data = Object.assign(YAML.parse(collectionFile), {interra: YAML.parse(interraSchema)});
       const data = YAML.parse(collectionFile);
       that.Hook.postLoad(collection, data, (err, output) => {
         if (data) {

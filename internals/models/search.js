@@ -1,22 +1,25 @@
 'use strict';
 const Async = require('async');
 const fs = require('fs-extra');
-const YAML = require('yamljs');
-const refParser = require('json-schema-ref-parser');
 const chalk = require('chalk');
 const elasticlunr = require('elasticlunr');
 
 const Config = require('./config');
 const Schema = require('./schema');
 const Site = require('./site');
+const path = require('path');
+const apiSubDir = 'api/v1';
 
 class Search {
 
-  constructor(siteId) {
-      this.siteId = siteId;
-      const site = new Site();
-      this.schemaType = site.getConfigItem(siteId, 'schema');
-      this.schema = new Schema(this.schemaType).getConfig();
+  constructor(site, config) {
+    this.sitesDir = config.get('sitesDir');
+    this.siteDir = path.join(this.sitesDir, site);
+    this.schemasDir = config.get('schemasDir');
+    this.siteInfo = new Site(this.sitesDir);
+    this.schemaName = this.siteInfo.getConfigItem(site,'schema'); 
+    this.schema = new Schema(path.join(this.schemasDir, this.schemaName));
+    this.apiDir = path.join(config.get('buildDir'), site, apiSubDir);
   }
 
   init() {}
@@ -40,30 +43,27 @@ class dataJsonSearch extends Search {
 
 class elasticLunr extends Search {
 
-    constructor(siteId) {
-        super(siteId);
-    }
+  constructor(site, config) {
+    super(site, config);
+  }
 
-    init() {
-        this.idx = elasticlunr(function(){});
-        this.idx.setRef('identifier');
-    }
+  init() {
+    this.idx = elasticlunr(function(){});
+    // TODO: get the map for this.
+    this.idx.setRef('identifier');
+  }
 
-    insertOne(item, callback) {
-        this.idx.addDoc(item)
-        return callback(null);
-    }
+  insertOne(item, callback) {
+    this.idx.addDoc(item)
+    return callback(null);
+  }
 
-    push() {
-        const config = new Config();
-        const buildDir = config.get('buildDir');
-        const file = __dirname.replace("internals/models","") + buildDir + '/' + this.siteId + "/api/v1/search-index.json";
-        fs.outputFile(file, JSON.stringify(this.idx), err => {
-            if (err) {
-                console.log(err);
-            }
-        });
-    }
+  push(callback) {
+    const file = path.join(this.apiDir, 'search-index.json');
+    fs.outputFile(file, JSON.stringify(this.idx), err => {
+      callback(err, !err);
+    });
+  }
 }
 
 function type(obj) {

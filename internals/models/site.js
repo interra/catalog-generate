@@ -4,11 +4,11 @@ const path = require('path');
 const Schema = require('./schema');
 const Async = require('async');
 
-  /** Required fields for site settings. */
-  const required = [ "name", "description", "identifier", "schema"];
+/** Required fields for site settings. */
+const required = [ "name", "description", "identifier", "schema"];
 
-  /** Optional fields for site settings. */
-  const optional = [ "front-page-icons", "front-page-icon-collection", "fontConfig"];
+/** Optional fields for site settings. */
+const optional = [ "front-page-icons", "front-page-icon-collection", "fontConfig"];
 
 
 
@@ -90,7 +90,7 @@ class Site {
    * @param {function} callback callback function (err, result);
    */
   create(settings, callback) {
-    var that = this;
+    const that = this;
     fs.stat(__dirname + '/' + that.siteDir + '/' + settings.identifier, function(err, stat) {
       if(err == null) {
         callback('Site already exists', null);
@@ -118,25 +118,25 @@ class Site {
     });
   }
 
-    createDirs(dir, collections) {
-        var that = this;
-        _.each(collections, function(collection) {
-            fs.ensureDir(dir +  '/collections/' + collection)
-                .catch(err => {
-                    console.log(err)
-                });
+  createDirs(dir, collections) {
+    const that = this;
+    _.each(collections, function(collection) {
+      fs.ensureDir(dir +  '/collections/' + collection)
+        .catch(err => {
+          console.log(err)
         });
-    }
+    });
+  }
 
-    getConfig(site) {
-        var data = fs.readFileSync(__dirname + '/../../' + this.sitesDir + '/' + site + '/config.yml', 'utf8');
-        return YAML.parse(data);
-    }
+  getConfig(site) {
+    const data = fs.readFileSync(path.join(this.sitesDir, site, 'config.yml'), 'utf8');
+    return YAML.parse(data);
+  }
 
-    getConfigItem(site, item) {
-        var items = this.getConfig(site);
-        return items[item];
-    }
+  getConfigItem(site, item) {
+    const items = this.getConfig(site);
+    return items[item];
+  }
 
 }
 
