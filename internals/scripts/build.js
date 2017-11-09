@@ -189,6 +189,309 @@ function searchExport(site, config, callback) {
   });
 }
 
+function setCollectionPathDocDef(collection, collectionPathDef) {
+  let documentPathDef = JSON.parse(JSON.stringify(collectionPathDef));
+  documentPathDef.get['description'] = 'An individual document in the ' + collection;
+  documentPathDef.get['operationId'] = collection + 'CollectionDoc';
+  documentPathDef.get.parameters = [
+    {
+      in: 'path',
+      name: 'document',
+      type: 'string',
+      required: true,
+      description: 'The identifier for the document.'
+    }
+  ];
+  return documentPathDef;
+}
+
+function setCollectionPathDef(collection) {
+  let conf = {
+    get: {
+      summary: 'All results for ' + collection + ' collection',
+      operationId: collection + 'Collection',
+      produces: ['application/json'],
+      responses: {
+        200: {
+          description: 'This is a file so will either be 200 or 404',
+          schema: {
+            type: 'array',
+            items: {
+              '$ref':'#/definitions/' + collection
+            },
+          },
+        },
+      },
+    },
+  };
+  return conf;
+}
+
+function swaggerExport(site, config, callback) {
+  const siteInfo = new Site(config.get('sitesDir'));
+  const siteConfig = siteInfo.getConfig(site);
+  const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
+  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schema = new Schema(path.join(config.get('schemasDir'), schemaName));
+  const primaryCollection = schema.getConfigItem('primaryCollection');
+  const collections = schema.getConfigItem('collections');
+
+  const swagger = {
+    swagger:'2.0',
+    info: {
+      description:'Interra Open Data Catalog APIs. These are all read endpoints since Interra Generate runs without a server. Full CRUD APIs are available with Interra Admin.',
+      version:'0.0.1',
+      title: siteInfo.getConfigItem(site, 'name') + ' Data Catalog API'
+    },
+    paths: {
+      '/data.json':{
+        get:{
+          summary:'Project Open Data inspired endpoint',
+          operationId: 'dataJson',
+          description: 'A list of all of the datasets as fully rendered documents. If using the pod-full schema this will be Project Open Data compliant.',
+          produces: ['application/json'],
+          responses: {
+            200:{
+              description: 'This is a file so will either be 200 or 404',
+              schema:{
+                type: 'array',
+                items:{
+                  '$ref':'#/definitions/dataset'
+                },
+              },
+            },
+          },
+        },
+      },
+      '/schema.json': {
+        get:{
+          summary:'Schema for the catalog',
+          operationId: 'schema',
+          description: 'A list of all of the schemas for the catalog.',
+          produces: ['application/json'],
+          responses: {
+            200: {
+              description: 'This is a file so will either be 200 or 404',
+              schema: {
+                type: 'object',
+                properties: {
+                  collections: {
+                    type: 'array',
+                    items: {
+                      type: 'string',
+                      title: 'Collections',
+                      description: 'A list of strings of the collections in the catalog.'
+                    }
+                  },
+                  schema: {
+                    type: 'object',
+                    title: 'Schema',
+                    description: 'Schemas for all of the catalog collections'
+                  },
+                  map: {
+                    type: 'object',
+                    description: 'A mapping of expected keys for collections and the actual value. For example every collection should have an identifier. Map allows implementing a different key for identifier or other required keys.',
+                    title: 'Map'
+                  },
+                  uiSchema: {
+                    type: 'object',
+                    title: 'UISchema',
+                    description: 'A UISchema for the forms for each collection. See Mozilla\'s react-json-schema-form for details.'
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      '/routes.json': {
+        get: {
+          summary: 'A list of routes for the catalog.',
+          description: 'This list is used by the front end to determine what routes are rendered as well as the build process for rendering each HTML page.',
+          operationId: 'routes',
+          produces: ['application/json'],
+          responses: {
+            200: {
+              description: 'This is a file so will either be 200 or 404',
+              schema:{
+                type: 'array',
+                items: {
+                  type: 'string'
+                },
+              },
+            },
+          },
+        },
+      },
+      '/latest.json': {
+        get: {
+          summary: 'A list of datasets in descending date order.',
+          description: 'This list is used by the front end to determine what routes are rendered as well as the build process for rendering each HTML page.',
+          operationId: 'latest',
+          produces: ['application/json'],
+          responses: {
+            200: {
+              description: 'This is a file so will either be 200 or 404',
+              schema:{
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    identifier: {
+                      type: 'string'
+                    },
+                    modified: {
+                      type: 'string'
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    definitions: {
+    },
+    host: '',
+    basePath:'/api/v1/',
+    schemes:['https','http']
+  }
+
+  Async.each(collections, function(collection, done) {
+    if (collection === primaryCollection) {
+      schema.dereference(collection, (err, collectionSchema) => {
+        if (err) {
+          console.log(chalk.red('Error for ' + collection), err);
+          process.exit(1);
+        }
+        // Swagger doesn't like these.
+        delete collectionSchema['$schema'];
+        delete collectionSchema['id'];
+        swagger.definitions[collection] = collectionSchema;
+        const collectionPathDef = setCollectionPathDef(collection);
+        swagger.paths['/collections/' + collection + '.json'] = collectionPathDef;
+        swagger.paths['/collections/' + collection + '/{document}.json'] = setCollectionPathDocDef(collection, collectionPathDef)
+        done();
+      });
+    } else {
+      schema.load(collection, (err, collectionSchema) => {
+        if (err) {
+          console.log(chalk.red('Error for ' + collection), err);
+          process.exit(1);
+        }
+        // Swagger doesn't like these.
+        delete collectionSchema['$schema'];
+        delete collectionSchema['id'];
+        swagger.definitions[collection] = collectionSchema;
+        const collectionPathDef = setCollectionPathDef(collection);
+        swagger.paths['/collections/' + collection + '.json'] = collectionPathDef;
+        swagger.paths['/collections/' + collection + '/{document}.json'] = setCollectionPathDocDef(collection, collectionPathDef)
+        done();
+      });
+    }
+  }, function (err) {
+    fs.outputJson(path.join(apiDir, 'swagger.json'), swagger, err => {
+      callback(err, swagger);
+    });
+  });
+}
+
+function datajsonExport(site, config, callback) {
+  const siteInfo = new Site(config.get('sitesDir'));
+  const siteConfig = siteInfo.getConfig(site);
+  const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
+  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schema = new Schema(path.join(config.get('schemasDir'), schemaName));
+  const primaryCollection = schema.getConfigItem('primaryCollection');
+  const collections = schema.getConfigItem('collections');
+  const content = prepare(site, config);
+
+  let datajson = {
+    '@context': "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+    '@id': "http://demo.getdkan.com/data.json",
+    '@type': "dcat:Catalog",
+    conformsTo: "https://project-open-data.cio.gov/v1.1/schema",
+    describedBy: "https://project-open-data.cio.gov/v1.1/schema/catalog.json",
+    dataset : []
+  };
+
+  Async.auto({
+    load: function(done) {
+      // TODO: figure out why I am derefencing the schema.
+      schema.dereference(primaryCollection, (err, collectionSchema) => {
+        content.findByCollection(primaryCollection, true, (err, results) => {
+          done(err, results);
+        });
+      });
+    },
+    index: ['load', function (results, done) {
+      Async.each(results.load, function(item, callback) {
+        datajson.dataset.push(item);
+        callback(null);
+      }, function(err) {
+        if (err) {
+          console.log(chalk.red("Error indexing"));
+          done(err);
+        }
+        else {
+          done(null)
+        }
+      });
+    }],
+  }, (err) => {
+    if (err) {
+      callback(err, !err);
+    }
+    const file = path.join(apiDir, 'data.json');
+    fs.outputFile(file, JSON.stringify(datajson), (fileErr) => {
+      callback(fileErr, !fileErr);
+    });
+  });
+}
+
+function all(site, config, callback) {
+  Async.waterfall([
+    (done) => {
+      routesExport(site, config, (err) => {
+        done(err);
+      });
+    },
+    (done) => {
+      docsExport(site, config, (err) => {
+        done(err);
+      });
+    },
+    (done) => {
+      routesExport(site, config, (err) => {
+        done(err);
+      });
+    },
+    (done) => {
+      schemaExport(site, config, (err) => {
+        done(err);
+      });
+    },
+    (done) => {
+      searchExport(site, config, (err) => {
+        done(err);
+      });
+    },
+    (done) => {
+      swaggerExport(site, config, (err) => {
+        done(err);
+      });
+    },
+    (done) => {
+      datajsonExport(site, config, (err) => {
+        done(err);
+      });
+    },
+  ], (err) => {
+    callback(err, !err);
+  });
+}
+
 module.exports = {
   routesExport,
   docsExport,
@@ -196,4 +499,7 @@ module.exports = {
   configExport,
   schemaExport,
   searchExport,
+  swaggerExport,
+  datajsonExport,
+  all,
 }

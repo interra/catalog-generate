@@ -2,11 +2,9 @@
 const prog = require('caporal');
 const Validate = require('./internals/scripts/validate');
 const Build = require('./internals/scripts/build');
-const BuildSchema = require('./internals/scripts/build-schema');
-const BuildConfig = require('./internals/scripts/build-config');
-const BuildSwagger = require('./internals/scripts/build-swagger');
-const BuildSearch = require('./internals/scripts/build-search');
 const Harvest = require('./internals/scripts/harvest');
+const Config = require('./internals/scripts/config');
+const config = new Config(__dirname);
 
 prog
   .version('0.0.1')
@@ -26,14 +24,14 @@ prog
   .help('builds collection data for a site exporting it to the build dir')
   .argument('site', 'The site to build')
   .action((args) => {
-    Build.routes(args.site);
+    Build.routesExport(args.site, config);
   })
   .command('build-collection-data')
   .help('builds collection data for a site exporting it to the build dir')
   .argument('site', 'The site to build')
   .action((args) => {
     console.log("Exporting data for " + args.site); // eslint-disable-line
-    Build.collectionData(args.site);
+    Build.docsExport(args.site, config);
   })
   .command('build-collection-data-item')
   .help('builds collection data for a collection item')
@@ -41,32 +39,43 @@ prog
   .argument('collection', 'The colleciton to build from')
   .argument('interraId', 'The internal id of the item')
   .action((args) => {
-    console.log("Exporting data for " + args.site + ' ' + args.collection); // eslint-disable-line
-    Build.collectionDataItem(args.site, args.interraId, args.collection);
+    Build.docExport(args.site, args.interraId, args.collection, config);
   })
   .command('build-schema')
   .help('builds schema file for a site')
   .argument('site', 'The site to build from')
   .action((args) => {
-    BuildSchema.get(args.site);
+    Build.schemaExport(args.site, config);
   })
   .command('build-config')
   .help('builds config file for a site')
   .argument('site', 'The site to build from')
   .action((args) => {
-    BuildConfig.get(args.site);
+    Build.configExport(args.site, config);
   })
   .command('build-search')
   .help('builds search index for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    BuildSearch.all(args.site);
+    build.searchExport(args.site, config);
   })
   .command('build-swagger')
   .help('builds swagger json file for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    BuildSwagger.get(args.site);
+    build.swaggerExport(args.site, config);
+  })
+  .command('build-datajson')
+  .help('builds data.json file for a site')
+  .argument('site', 'The site to index from')
+  .action((args) => {
+    build.datajsonxport(args.site, config);
+  })
+  .command('build')
+  .help('builds api files for a site')
+  .argument('site', 'The site to index from')
+  .action((args) => {
+    build.all(args.site, config);
   })
   .command('harvest-cache')
   .argument('site', 'The site to import into')
