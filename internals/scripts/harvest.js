@@ -10,18 +10,18 @@ const Harvest = require('../models/harvest').Harvest;
 const fs = require('fs-extra');
 const Async = require('async');
 const Config = require('../models/config');
-const config = new Config();
 
 /**
  * Prepares harvest.
  */
-function prepare(siteName) {
-  const siteDir = __dirname + '/../../' + config.get('sitesDir') + '/' + (siteName);
+function prepare(siteName, config) {
   const site = new Site(config.get('sitesDir'));
+  const sitesDir = config.get('sitesDir');
+  const siteDir = `${sitesDir}/${siteName}`;
   const schemaName = site.getConfigItem(siteName, 'schema');
-  const schemaDir = __dirname + '/../../' +  config.get('schemasDir') + '/' + schemaName;
-  const content = new Content[config.get('storage')](siteDir, schemaDir);
-  const sources = fs.readJsonSync( siteDir + '/harvest/sources.json');
+  const schemaDir = `${config.get('schemasDir')}/${schemaName}`;
+  const content = new Content[config.get('storage')](siteName, config);
+  const sources = fs.readJsonSync(`${siteDir}/harvest/sources.json`);
   const harvest = new Harvest(content, sources);
   return harvest;
 }
@@ -30,8 +30,8 @@ function prepare(siteName) {
  * Caches harvest sources. Downloading sources makes it easier to deal with
  * timeouts, revisions, and other issues.
  */
-function cache(siteName) {
-  const harvest = prepare(siteName);
+function cache(siteName, config) {
+  const harvest = prepare(siteName, config);
   harvest.cache((err, result) => {
     if (!err) console.log("Harvest cached.");
   });
@@ -41,7 +41,7 @@ function cache(siteName) {
 /**
  * Runs harvest. Use after files have been cached.
  */
-function run(siteName) {
+function run(siteName, config) {
   const harvest = prepare(siteName);
 
   Async.waterfall([

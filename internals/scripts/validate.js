@@ -10,8 +10,6 @@ const Schema = require('../models/schema');
 const _ = require('lodash');
 const chalk = require('chalk');
 
-const config = new Config();
-const storage = config.get('storage');
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
@@ -19,8 +17,9 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
  * Validates all docs in site collections.
  * TODO: Use methods from content class.
  */
-function contents(siteName) {
+function contents(siteName, config) {
   const siteInfo = new Site();
+  const storage = config.get('storage');
   const schemaName = siteInfo.getConfigItem(siteName, 'schema');
   const schema = new Schema(schemaName);
   const collections = schema.getConfigItem('collections');
@@ -51,7 +50,7 @@ function contents(siteName) {
   });
 }
 
-function site(site) { // eslint-disable-line
+function site(site, config) { // eslint-disable-line
   console.log(chalk.blue('Site validation coming soon')); // eslint-disable-line
 }
 
