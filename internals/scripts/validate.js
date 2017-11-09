@@ -4,7 +4,6 @@
  */
 const Ajv = require('ajv');
 const Content = require('../models/content');
-const Config = require('../models/config');
 const Site = require('../models/site');
 const Schema = require('../models/schema');
 const _ = require('lodash');
