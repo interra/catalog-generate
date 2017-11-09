@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 const prog = require('caporal');
+const Config = require('./internals/models/config');
 const Validate = require('./internals/scripts/validate');
 const Build = require('./internals/scripts/build');
 const Harvest = require('./internals/scripts/harvest');
-const Config = require('./internals/scripts/config');
 const config = new Config(__dirname);
 
 prog
@@ -57,25 +57,25 @@ prog
   .help('builds search index for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    build.searchExport(args.site, config);
+    Build.searchExport(args.site, config);
   })
   .command('build-swagger')
   .help('builds swagger json file for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    build.swaggerExport(args.site, config);
+    Build.swaggerExport(args.site, config);
   })
   .command('build-datajson')
   .help('builds data.json file for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    build.datajsonxport(args.site, config);
+    Build.datajsonxport(args.site, config);
   })
   .command('build')
   .help('builds api files for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    build.all(args.site, config);
+    Build.all(args.site, config);
   })
   .command('harvest-cache')
   .argument('site', 'The site to import into')
