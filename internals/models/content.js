@@ -661,7 +661,7 @@ class FileStorage extends Storage {
       revisions = fs.readJsonSync(file);
     }
     revisions.push(doc);
-    fs.writeJsonSync(file, revisions, {spaces: 2});
+    fs.writeJsonSync(file, revisions, { spaces: 2 });
     return revisions;
   }
 
@@ -705,7 +705,7 @@ class FileStorage extends Storage {
           const file = `${this.directory}/${collection}/${interraId}.json`;
           console.log(file);
           console.log(predoc);
-          fs.writeJson(file, predoc, {spaces: 2}, (fserr) => {
+          fs.writeJson(file, predoc, { spaces: 2 }, (fserr) => {
             console.log(fserr);
             if (fserr) callback(fserr);
             this.Hook.postSave(doc, (posterr, postdoc) => {

@@ -304,9 +304,7 @@ test('Save a doc', (done) => {
 
 test('Delete a doc', (done) => {
   content.deleteOne('test-dataset', 'datasets', (err, result) => {
-    console.log(err);
-    //expect(result).toBe(true);
-    expect(1).toBe(1);
+    expect(result).toBe(true);
     done();
   });
 });
