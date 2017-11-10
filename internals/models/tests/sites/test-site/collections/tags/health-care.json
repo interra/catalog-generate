@@ -1,5 +1,8 @@
-title: Health Care
-identifier: health-care
-icon: healthcare
-interra:
-  id: hc
+{
+  "title": "Health Care",
+  "identifier": "health-care",
+  "icon": "healthcare",
+  "interra": {
+    "id": "hc"
+  }
+}

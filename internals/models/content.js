@@ -661,7 +661,7 @@ class FileStorage extends Storage {
       revisions = fs.readJsonSync(file);
     }
     revisions.push(doc);
-    fs.writeJsonSync(file, revisions);
+    fs.writeJsonSync(file, revisions, {spaces: 2});
     return revisions;
   }
 
@@ -674,8 +674,7 @@ class FileStorage extends Storage {
   deleteOne(interraId, collection, callback) {
     const file = `${this.directory}/${collection}/${interraId}.json`;
     fs.unlink(file, (err) => {
-      if (err) return callback(err);
-      return callback(false, true);
+      callback(err, !err);
     });
   }
 
@@ -699,12 +698,15 @@ class FileStorage extends Storage {
   insertOne(interraId, collection, doc, callback) {
     this.Hook.preSave(interraId, collection, doc, (err, preinterraId, precollection, predoc) => {
       // Validate required.
-      this.validateRequired(doc, precollection, (validerr) => {
+      this.validateRequired(predoc, precollection, (validerr) => {
         if (validerr) callback(validerr);
         // Validate schema.
         this.validateDocToStore(predoc, precollection, (schemaErr) => {
           const file = `${this.directory}/${collection}/${interraId}.json`;
-          fs.writeJson(file, doc, '  ', (fserr) => {
+          console.log(file);
+          console.log(predoc);
+          fs.writeJson(file, predoc, {spaces: 2}, (fserr) => {
+            console.log(fserr);
             if (fserr) callback(fserr);
             this.Hook.postSave(doc, (posterr, postdoc) => {
               if (schemaErr) {
