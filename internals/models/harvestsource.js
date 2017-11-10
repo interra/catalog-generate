@@ -14,22 +14,22 @@ class HarvestSource {
   }
   cache(callback) {
     const that = this;
-    const dir = this.content.directory.substring(0, this.content.directory.length - 12) + '/harvest/' + slug(this.source.id);
+    const dir = `${this.content.directory.substring(0, this.content.directory.length - 12)}/harvest/${slug(this.source.id)}`;
     fs.ensureDirSync(dir);
-    console.log("Downloading data from " + this.source.source);
+    console.log('Downloading data from ' + this.source.source); // eslint-disable-line
     if (this.source.source.substring(0,7) === 'file://') {
       const sourceFile = this.content.directory.substring(0, this.content.directory.length - 12) + this.source.source.substring(6, this.source.source.length);
-      fs.copySync(sourceFile, dir + '/' + this.source.type + '.json');
+      fs.copySync(sourceFile, `${dir/${this.source.type}.json`);
       return callback(null);
     }
     else {
       axios.get(this.source.source)
         .then(function (response) {
           if (response.status === 200) {
-            fs.writeJsonSync(dir + '/' + that.source.type + '.json', response.data);
+            fs.writeJsonSync(`${dir/${this.source.type}.json`, response.data);
           }
           return callback(null);
-        })
+        });
         .catch(function (error) {
           console.log(error);
           return callback(error);
@@ -38,8 +38,8 @@ class HarvestSource {
   }
 
   load(callback) {
-    const dir = this.content.directory.substring(0, this.content.directory.length - 12) + '/harvest/' + slug(this.source.id);
-    fs.readJson(dir + '/' + this.source.type + '.json', (err, result) => {
+    const dir = `${this.content.directory.substring(0, this.content.directory.length - 12)/harvest/${slug(this.source.id)}`;
+    fs.readJson(`${dir}/${this.source.type}.json`, (err, result) => {
       callback(null, result);
     });
   }
@@ -47,12 +47,9 @@ class HarvestSource {
 }
 
 class DataJSON extends HarvestSource {
-  constructor(content, source) {
-    super(content, source);
-  }
   load(callback) {
-    const dir = this.content.directory.substring(0, this.content.directory.length - 12) + '/harvest/' + slug(this.source.id);
-    fs.readJson(dir + '/' + this.source.type + '.json', (err, result) => {
+    const dir = `${this.content.directory.substring(0, this.content.directory.length - 12)/harvest/${slug(this.source.id)}`;
+    fs.readJson(`${dir}/${this.source.type}.json`, (err, result) => {
       callback(null, result.dataset);
     });
   }
@@ -66,20 +63,8 @@ class CKAN extends HarvestSource {
 
 class Test extends HarvestSource {}
 
-/**
-1. Consume config file [x]
-1. Save JSON URL to file. [x]
-2. Version if new  [-]
-3. Load source from file load()
-4. Parse individual docs prepare()
-5. Reference docs ref()
-6. Save docs
-7. Create log?
-*/
-
-
 module.exports = {
   DataJSON,
   Test,
-  CKAN
+  CKAN,
 };
