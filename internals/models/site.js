@@ -5,12 +5,10 @@ const Schema = require('./schema');
 const Async = require('async');
 
 /** Required fields for site settings. */
-const required = [ "name", "description", "identifier", "schema"];
+const required = [ 'name', 'description', 'identifier', 'schema'];
 
 /** Optional fields for site settings. */
-const optional = [ "front-page-icons", "front-page-icon-collection", "fontConfig"];
-
-
+const optional = [ 'front-page-icons', 'front-page-icon-collection', 'fontConfig'];
 
 /**
  * Class for managing sites.
@@ -32,9 +30,9 @@ class Site {
    * @return {boolean} True if needle in haystack.
    */
   inArray(needle, haystack) {
-    var length = haystack.length;
-    for(var i = 0; i < length; i++) {
-      if(haystack[i] == needle) return true;
+    const length = haystack.length;
+    for (let i = 0; i < length; i++) { // eslint-disable-line
+      if (haystack[i] == needle) return true;
     }
     return false;
   }
@@ -50,9 +48,8 @@ class Site {
     Async.each(Object.keys(settings), function(item, callback) {
       if (inArray(item, optional)) {
         callback();
-      }
-      else {
-        callback(item + " is not allowed.");
+      } else {
+        callback(`${item} is not allowed.`);
       }
     }, function(err) {
       if (err) {
@@ -71,9 +68,8 @@ class Site {
     Async.each(required, function(item, callback) {
       if (inArray(item, Object.keys(settings))) {
         callback();
-      }
-      else {
-        callback(item + " not found in settings.");
+      } else {
+        callback(`${item} not found in settings.`);
       }
     }, function(err) {
       if (err) {
@@ -91,7 +87,7 @@ class Site {
    */
   create(settings, callback) {
     const that = this;
-    fs.stat(__dirname + '/' + that.siteDir + '/' + settings.identifier, function(err, stat) {
+    fs.stat(path.join(that.siteDir, settings.identifier), function(err, stat) {
       if(err == null) {
         callback('Site already exists', null);
         process.exit(1);
@@ -99,17 +95,14 @@ class Site {
       const schema = new Schema(settings.schema);
       const schemaConfig = schema.getConfig();
 
-      that.sitedir = __dirname.replace("internals/models","") + that.sitesDir + '/' + settings.identifier;
+      that.sitedir = path.join(that.sitesDir, settings.identifier);
 
       that.createDirs(that.sitedir, schemaConfig.collections);
 
       fs.ensureDir(that.sitedir)
         .then(() => {
-          fs.writeFile(that.sitedir + '/config.yml', YAML.stringify(settings), function(err) {
-            if (err) {
-              callback('Error creating config file', null);
-            }
-            callback(null, true);
+          fs.writeFile(`${that.sitedir}/config.yml`, YAML.stringify(settings), function(err) {
+            callback(err, true);
           });
         })
         .catch(err => {
@@ -121,9 +114,9 @@ class Site {
   createDirs(dir, collections) {
     const that = this;
     _.each(collections, function(collection) {
-      fs.ensureDir(dir +  '/collections/' + collection)
+      fs.ensureDir(path.join(dir, 'collections', collection))
         .catch(err => {
-          console.log(err)
+          console.log(err);
         });
     });
   }
