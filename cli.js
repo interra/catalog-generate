@@ -12,13 +12,13 @@ prog
   .help('validates a site contents based off of a schema')
   .argument('site', 'The site to validate')
   .action((args) => {
-    Validate.content(args.site);
+    Validate.content(args.site, config);
   })
   .command('validate-site')
   .help('validates a site')
   .argument('site', 'The site to validate')
   .action((args) => {
-    Validate.site(args.site);
+    Validate.site(args.site, config);
   })
   .command('build-routes')
   .help('builds collection data for a site exporting it to the build dir')
@@ -81,13 +81,13 @@ prog
   .argument('site', 'The site to import into')
   .help('Caches harvest sources.')
   .action((args) => {
-    Harvest.cache(args.site);
+    Harvest.cache(args.site, config);
   })
   .command('harvest-run')
   .argument('site', 'The site to import into')
   .help('Runs a harvest with cached sources.')
   .action((args) => {
-    Harvest.run(args.site);
+    Harvest.run(args.site, config);
   });
 
 prog.parse(process.argv);

@@ -1,6 +1,4 @@
-'use strict';
 const fs = require('fs-extra');
-const Config = require('./config');
 const Site = require('./site');
 const path = require('path');
 const Schema = require('./schema');
@@ -24,9 +22,9 @@ class Storage {
     this.siteDir = path.join(this.sitesDir, site);
     this.schemasDir = config.get('schemasDir');
     this.siteInfo = new Site(this.sitesDir);
-    this.schemaName = this.siteInfo.getConfigItem(site,'schema'); 
+    this.schemaName = this.siteInfo.getConfigItem(site, 'schema');
     this.schema = new Schema(path.join(this.schemasDir, this.schemaName));
-    this.directory = this.siteDir + '/collections';
+    this.directory = `${this.siteDir}/collections`;
     this.apiDir = path.join(config.get('buildDir'), site, apiSubDir, 'collections');
     this.loadedSchema = [];
     this.registry = {};
@@ -37,10 +35,10 @@ class Storage {
 
     // TODO: Export to function where we can see if file exists. Make hooks
     // opt-in instead of mandatory.
-    this.Hook = require(path.join(this.schemasDir, this.schemaName, 'hooks/Content.js'));
+    this.Hook = require(path.join(this.schemasDir, this.schemaName, 'hooks/Content.js')); // eslint-disable-line global-require
   }
 
-  requiredFields () {
+  requiredFields() {
     return ['identifier', 'title', 'created', 'modified'];
   }
 
@@ -52,7 +50,7 @@ class Storage {
 
   count() {}
 
-  findByIdentifier(){}
+  findByIdentifier() {}
 
   insertOne() {}
 
@@ -64,10 +62,6 @@ class Storage {
 }
 
 class FileStorage extends Storage {
-
-  constructor(site, config) {
-    super(site, config);
-  }
 
   // Ref, Deref, and Map are the functions that transform docs
   // between states.
@@ -82,100 +76,95 @@ class FileStorage extends Storage {
    * @return {object} dereferenced doc.
    */
   Deref(doc, callback) {
-    let that = this;
-    let referencedCollections = [];
+    const that = this;
+    const referencedCollections = [];
     if (!this.references) {
-      return callback(null, doc);
-    }
-    that.Hook.preDereference(doc,(err, pre) => {
-      let refNum = 0;
-      Async.eachSeries(this.references, function(collections, done) {
-        Async.eachOfSeries(collections, function(collection, field, fin) {
-          let refCollection = Object.keys(that.references)[refNum];
-          if (field in pre) {
-            // 'interra-reference' can be applied to a string or
-            // array. Convert to array if string.
-            if (pre[field].length == undefined) {
-              pre[field] = [pre[field]];
+      callback(null, doc);
+    } else {
+      that.Hook.preDereference(doc, (err, pre) => {
+        let refNum = 0;
+        Async.eachSeries(this.references, (collections, done) => {
+          Async.eachOfSeries(collections, (collection, field, fin) => {
+            const refCollection = Object.keys(that.references)[refNum];
+            if (field in pre) {
+              // 'interra-reference' can be applied to a string or
+              // array. Convert to array if string.
+              if (pre[field].length === undefined) {
+                pre[field] = [pre[field]]; // eslint-disable-line no-param-reassign
+              }
+              Async.eachOfSeries(pre[field], (item, val, over) => {
+                const reference = {};
+                if ('interra-reference' in item) {
+                  const file = `${collection}/${item['interra-reference']}.yml`;
+                  if (!fs.existsSync(`${that.directory}/${file}`)) {
+                    // TODO: Throw a bigger error. 'interra-reference' stays in doc.
+                    over(`Doc contains reference file ${file} from ${field} field that does not exist.`, null);
+                  } else {
+                    reference[field] = file;
+                    referencedCollections.push(reference);
+                    over();
+                  }
+                }
+              }, (eoerr) => {
+                if (eoerr) {
+                  fin(eoerr);
+                } else {
+                  if (!(refCollection in that.loadedSchema)) {
+                    that.schema.load(refCollection, (loaderr, schema) => {
+                      that.loadedSchema[refCollection] = schema;
+                    });
+                  }
+                  // Reset field so we can put dereferenced values in.
+                  const type = that.loadedSchema[refCollection].properties[field].type;
+                  if (type === 'array') {
+                    pre[field] = []; // eslint-disable-line no-param-reassign
+                  } else if (type === 'object') {
+                    pre[field] = {}; // eslint-disable-line no-param-reassign
+                  } else {
+                    pre[field] = ''; // eslint-disable-line no-param-reassign
+                  }
+                  fin();
+                }
+              });
             }
-            Async.eachOfSeries(pre[field], function(item, val, over) {
-              let reference = {};
-              if ('interra-reference' in item) {
-                let file = collection + '/' + item['interra-reference'] + '.yml';
-                if (!fs.existsSync(that.directory + '/' + file)) {
-                  // TODO: Throw a bigger error. 'interra-reference' stays in doc.
-                  return over("Doc contains reference file " + file + " from " + field + " field that does not exist.", null);
-                }
-                else {
-                  reference[field] = file;
-                  referencedCollections.push(reference);
-                  return over();
-                }
-              }
-            }, function(err) {
-              if (err) {
-                fin(err);
-              }
-              else {
-                if (!(refCollection in that.loadedSchema)) {
-                  that.schema.load(refCollection, function(err, schema) {
-                    that.loadedSchema[refCollection] = schema;
-                  });
-                }
-                // Reset field so we can put dereferenced values in.
-                let type = that.loadedSchema[refCollection].properties[field].type;
-                if (type === 'array') {
-                  pre[field] = [];
-                }
-                else if (type === 'object') {
-                  pre[field] = {};
-                }
-                else {
-                  pre[field] = '';
-                }
-                fin();
-              }
-            });
-          }
-        }, function(err) {
-          if (err) {
-            return done(err);
-          }
-          else {
-            refNum++;
-            done();
-          }
-        });
-      }, function(err) {
-        if (err) return callback(err, null);
-      });
-      Async.mapValuesSeries(referencedCollections, that.loadWithField.bind(that), function(err, results)  {
-        Async.eachSeries(results, function(result, over) {
-          let refNum = 0;
-          let field = Object.keys(result)[0];
-          let value = Object.values(result)[0];
-          Async.eachSeries(that.references, function(collections, done) {
-            let refCollection = Object.keys(that.references)[refNum];
-            if (field in that.loadedSchema[refCollection].properties) {
-              let type = that.loadedSchema[refCollection].properties[field].type;
-              if (type === 'array') {
-                pre[field].push(value);
-              }
-              else {
-                pre[field] = value;
-              }
-              refNum++;
+          }, (eacherr) => {
+            if (eacherr) {
+              done(eacherr);
+            } else {
+              refNum++; // eslint-disable-line
               done();
             }
-          }, function (err) {
-          over();
+          });
+        }, (oferr) => {
+          if (oferr) callback(oferr, !oferr);
+        });
+        Async.mapValuesSeries(referencedCollections, that.loadWithField.bind(that), (maperr, results) => {
+          Async.eachSeries(results, (result, over) => {
+            let reNum = 0;
+            const field = Object.keys(result)[0];
+            const value = Object.values(result)[0];
+            Async.eachSeries(that.references, (collections, done) => {
+              const refCollection = Object.keys(that.references)[reNum];
+              if (field in that.loadedSchema[refCollection].properties) {
+                const type = that.loadedSchema[refCollection].properties[field].type;
+                if (type === 'array') {
+                  pre[field].push(value); // eslint-disable-line no-param-reassign
+                } else {
+                  pre[field] = value; // eslint-disable-line no-param-reassign
+                }
+                reNum++; // eslint-disable-line
+                done();
+              }
+            }, () => {
+              over();
+            });
+          });
+          that.Hook.postDereference(pre, (posterr, post) => {
+            callback(posterr, post);
           });
         });
-        that.Hook.postDereference(pre,(err, post) => {
-          return callback(null, post);
-        });
       });
-    });
+    }
   }
 
   /**
@@ -187,63 +176,55 @@ class FileStorage extends Storage {
   Ref(doc, callback) {
     const that = this;
     if (!this.references) {
-      return callback(null, doc);
-    }
-    let ref = {};
-    that.Hook.preReference(doc,(err, pre) => {
-      let refNum = 0;
-      Async.eachSeries(this.references, function(collections, done) {
-        Async.eachOfSeries(collections, function(collection, field, fin) {
-          let refCollection = Object.keys(that.references)[refNum];
-          ref = collection in ref ? ref[collection] : {};
-          if (field in pre) {
-            if (!(refCollection in that.loadedSchema)) {
-              that.schema.load(refCollection, function(err, schema) {
-                that.loadedSchema[refCollection] = schema;
-              });
-            }
-            // Reset field so we can put dereferenced values in.
-            let type = that.loadedSchema[refCollection].properties[field].type;
-            if (type === 'array') {
-              let items = pre[field];
-              pre[field] = [];
-              Async.eachOfSeries(items, function(item, val, over) {
-                if (field in ref && refField.indexOf(val) !== -1) {
-                  pre[field] = {'interra-reference': ref[field][val]};
-                }
-                else {
-                  pre[field].push({'interra-reference' : that.createCollectionFileName(item.identifier)});
-                }
-                over();
-              });
-            }
-            else if (type === 'object') {
-              if (field in ref) {
-                pre[field] = {'interra-reference': ref[field]}
+      callback(null, doc);
+    } else {
+      let ref = {};
+      that.Hook.preReference(doc, (err, pre) => {
+        const refNum = 0;
+        Async.eachSeries(this.references, (collections, done) => {
+          Async.eachOfSeries(collections, (collection, field, fin) => {
+            const refCollection = Object.keys(that.references)[refNum];
+            ref = collection in ref ? ref[collection] : {};
+            if (field in pre) {
+              if (!(refCollection in that.loadedSchema)) {
+                that.schema.load(refCollection, (loaderr, schema) => {
+                  that.loadedSchema[refCollection] = schema;
+                });
               }
-              else {
-                pre[field] = {'interra-reference' : that.createCollectionFileName(pre[field].identifier)};
+              // Reset field so we can put dereferenced values in.
+              const type = that.loadedSchema[refCollection].properties[field].type;
+              if (type === 'array') {
+                const items = pre[field];
+                pre[field] = []; // eslint-disable-line no-param-reassign
+                Async.eachOfSeries(items, (item, val, over) => {
+                  if (field in ref && ref[field].indexOf(val) !== -1) {
+                    pre[field] = { 'interra-reference': ref[field][val] }; // eslint-disable-line no-param-reassign
+                  } else {
+                    pre[field].push({ 'interra-reference': that.createCollectionFileName(item.identifier) }); // eslint-disable-line no-param-reassign
+                  }
+                  over();
+                });
+              } else if (type === 'object') {
+                if (field in ref) {
+                  pre[field] = { 'interra-reference': ref[field] }; // eslint-disable-line no-param-reassign
+                } else {
+                  pre[field] = { 'interra-reference': that.createCollectionFileName(pre[field].identifier) }; // eslint-disable-line no-param-reassign
+                }
               }
             }
-          }
-          fin();
-        }, function(err) {
-          if (err) {
-            return callback(err, null);
-          }
-          else {
-            done();
-          }
+            fin();
+          }, (oferr) => {
+            if (oferr) {
+              callback(oferr, null);
+            } else {
+              done();
+            }
+          });
+        }, (eacherr) => {
+          callback(eacherr, pre);
         });
-      }, function(err) {
-        if (err) {
-          return callback(err, null);
-        }
-        else {
-          return callback(null, pre);
-        }
       });
-    });
+    }
   }
 
   /**
@@ -257,23 +238,21 @@ class FileStorage extends Storage {
       Async.each(this.map, (mapcoll, done) => {
         Async.eachOfSeries(mapcoll, (mapField, currentField, fin) => {
           if (currentField in doc) {
-            doc[mapField] = doc[currentField];
-            delete doc[currentField];
+            doc[mapField] = doc[currentField]; // eslint-disable-line
+            delete doc[currentField]; // eslint-disable-line
           }
           fin();
         });
         done();
-      }, function(err) {
+      }, (err) => {
         if (err) {
-          return callback(err, null);
-        }
-        else {
-          return callback(null, doc);
+          callback(err, null);
+        } else {
+          callback(null, doc);
         }
       });
-    }
-    else {
-      return callback(null, doc);
+    } else {
+      callback(null, doc);
     }
   }
 
@@ -292,21 +271,20 @@ class FileStorage extends Storage {
    * @return {object} Object with keys for collections and field value for refs.
    */
   refCollections(doc, collection, callback) {
-    let that = this;
     if (!this.references || !(collection in this.references)) {
-      return callback(null, {});
+      callback(null, {});
+    } else {
+      const references = this.references[collection];
+      Async.mapValues(references, (ref, key, done) => {
+        if (key in doc) {
+          done(null, doc[key]);
+        } else {
+          done();
+        }
+      }, (err, result) => {
+        callback(err, result);
+      });
     }
-    const references = this.references[collection];
-    Async.mapValues(references, (ref, key, done) => {
-      if (key in doc) {
-        done(null, doc[key]);
-      }
-      else {
-        done();
-      }
-    }, function(err, result) {
-      callback(err, result);
-    });
   }
 
   /**
@@ -328,27 +306,21 @@ class FileStorage extends Storage {
   validateRequired(doc, collection, callback) {
     const that = this;
     const fiveGoldenFields = this.requiredFields();
-    Async.each(fiveGoldenFields, function(field, done) {
+    Async.each(fiveGoldenFields, (field, done) => {
       if (collection in that.map) {
         if (Object.values(that.map[collection]).indexOf(field) !== -1) {
-          let values = Object.values(that.map[collection]);
-          let keys = Object.keys(that.map[collection]);
-          field = keys[values.indexOf(field)];
+          const values = Object.values(that.map[collection]);
+          const keys = Object.keys(that.map[collection]);
+          field = keys[values.indexOf(field)]; // eslint-disable-line
         }
       }
       if (!(field in doc)) {
-        return done(field + " field is required.");
+        done(`${field} field is required.`);
+      } else {
+        done();
       }
-      else {
-        return done();
-      }
-    }, function(err) {
-      if (err) {
-        return callback(err, false);
-      }
-      else {
-        return callback(null, true);
-      }
+    }, (err) => {
+      callback(err, !err);
     });
   }
 
@@ -360,32 +332,33 @@ class FileStorage extends Storage {
    */
   validateDoc(doc, collection, callback) {
     this.schema.dereference(collection, (err, schema) => {
-      if (err) return callback(err);
-      const valid = ajv.validate(schema, doc);
-      if (!valid) {
-         return callback(ajv.errors);
-      }
-      else {
-        return callback(false, true);
+      if (err) {
+        callback(err);
+      } else {
+        const valid = ajv.validate(schema, doc);
+        if (!valid) {
+          callback(ajv.errors);
+        } else {
+          callback(false, true);
+        }
       }
     });
   }
 
   /**
-   * Validates doc based on schema that includes "interra-reference"..
+   * Validates doc based on schema that includes 'interra-reference'..
    * @param {object} doc - The {@link doc}.
    * @param {string} collection - The {@link collection};
    * @return {boolean} True if the {@link doc} is valid.
    */
   validateDocToStore(doc, collection, callback) {
     this.schema.reference(collection, (err, schema) => {
-      if (err) return callback(err);
+      if (err) callback(err);
       const valid = ajv.validate(schema, doc);
       if (!valid) {
-         return callback(ajv.errors);
-      }
-      else {
-        return callback(false, true);
+        callback(ajv.errors);
+      } else {
+        callback(false, true);
       }
     });
   }
@@ -398,17 +371,16 @@ class FileStorage extends Storage {
    */
   validateUnique(identifier, collection, callback) {
     const that = this;
-    this.buildRegistry((err, result) => {
+    this.buildRegistry(() => {
       Async.detect(that.registry[collection], (id, done) => {
         if (identifier === Object.values(id)[0]) {
           done(null, true);
-        }
-        else {
+        } else {
           done(null);
         }
-      }, (err, res) => {
-        const result = res === undefined ? null : Object.keys(res)[0];
-        callback(err, result);
+      }, (deterr, res) => {
+        const out = res === undefined ? null : Object.keys(res)[0];
+        callback(deterr, out);
       });
     });
   }
@@ -418,14 +390,13 @@ class FileStorage extends Storage {
    * @param {string} identifier
    */
   exportOne(interraId, collection, doc, callback) {
-    this.Hook.preOutput(interraId, collection, doc, (err, identifier, collection, content) => {
+    this.Hook.preOutput(interraId, collection, doc, (err, identifier, precollection, content) => {
       fs.ensureDirSync(path.join(this.apiDir, collection));
-      const file = path.join(this.apiDir, collection, interraId + '.json');
-      fs.writeJson(file, content, err => {
-        if (err) return callback(err);
-        this.Hook.postOutput(content, (err, content) => {
-          if (err) return callback(err);
-          return callback(null, content);
+      const file = path.join(this.apiDir, precollection, `${interraId}.json`);
+      fs.writeJson(file, content, (writeerr) => {
+        if (writeerr) callback(writeerr);
+        this.Hook.postOutput(content, (posterr, postcontent) => {
+          callback(posterr, postcontent);
         });
       });
     });
@@ -438,13 +409,12 @@ class FileStorage extends Storage {
    */
   exportMany(docs, collection, callback) {
     const that = this;
-    Async.eachSeries(docs, function(doc, done) {
-      that.exportOne(doc.interra.id, collection, doc, (err, item) => {
-        if (err) return done(err);
-        done(null);
-      })
-    }, function(err) {
-      callback(err);
+    Async.eachSeries(docs, (doc, done) => {
+      that.exportOne(doc.interra.id, collection, doc, (err) => {
+        done(err, !err);
+      });
+    }, (eacherr) => {
+      callback(eacherr);
     });
   }
 
@@ -457,9 +427,7 @@ class FileStorage extends Storage {
     if ('buildInterraId' in this.Hook) {
       return this.Hook.buildInterraId(idString);
     }
-    else {
-      return slug(idString).substring(0,25).toLowerCase();
-    }
+    return slug(idString).substring(0, 25).toLowerCase();
   }
 
   /**
@@ -478,25 +446,22 @@ class FileStorage extends Storage {
       // safeId not in routes so current safeRoute is safe.
       if (ids.indexOf(safeId) === -1) {
         safe = true;
-      }
-      else {
-        if (safeId.lastIndexOf('-')) {
+      } else {
+        if (safeId.lastIndexOf('-')) { // eslint-disable-line
           last = safeId.substring(safeId.lastIndexOf('-') + 1, safeId.length);
           // Javascript's isNumeric().
           if (!isNaN(last)) {
             last = Number(last) + 1;
-            safeId = safeId.substring(0, safeId.lastIndexOf('-')) + '-' + last;
+            safeId = `${safeId.substring(0, safeId.lastIndexOf('-'))}-${last}`;
+          } else {
+            safeId = `${safeId}-0`;
           }
-          else {
-            safeId = safeId + '-' + 0;
-          }
-        }
-        else {
-          safeId = safeId + '-' + 0;
+        } else {
+          safeId = `${safeId}-0`;
         }
       }
       // To prevent a race condition.
-      counter++;
+      counter++; // eslint-disable-line
       if (counter > 10000) {
         safe = true;
       }
@@ -510,11 +475,11 @@ class FileStorage extends Storage {
    * @return {array} Array of routes.
    */
   getRoutes(collection, callback) {
-    fs.readdir(this.directory + '/' + collection, function(err, items) {
-      let routes = [];
-      for (let n in items) {
+    fs.readdir(`${this.directory}/${collection}`, (err, items) => {
+      const routes = [];
+      for (const n in items) { // eslint-disable-line
         // Remove .yml filename.
-        routes.push(items[n].substring(0, items[n].length - 4 ));
+        routes.push(items[n].substring(0, items[n].length - 4));
       }
       callback(null, routes);
     });
@@ -528,7 +493,7 @@ class FileStorage extends Storage {
    */
   getMapFieldByValue(collection, field) {
     if (collection in this.map) {
-      let fields = Object.values(this.map[collection]);
+      const fields = Object.values(this.map[collection]);
       if (fields.indexOf(field) !== -1) {
         return Object.keys(this.map[collection])[fields.indexOf(field)];
       }
@@ -539,8 +504,8 @@ class FileStorage extends Storage {
   getIdentifierField(collection) {
     if (collection in this.map) {
       const fields = Object.values(this.map[collection]);
-      if (fields.indexOf("identifier") !== -1) {
-        return Object.keys(this.map[collection])[fields.indexOf("identifier")];
+      if (fields.indexOf('identifier') !== -1) {
+        return Object.keys(this.map[collection])[fields.indexOf('identifier')];
       }
     }
     return 'identifier';
@@ -552,9 +517,7 @@ class FileStorage extends Storage {
       if (ids.indexOf(interraId) !== -1) {
         return ids[interraId];
       }
-      else {
-        return null;
-      }
+      return null;
     }
     return null;
   }
@@ -565,9 +528,7 @@ class FileStorage extends Storage {
       if (ids.indexOf(identifier) !== -1) {
         return ids[identifier];
       }
-      else {
-        return null;
-      }
+      return null;
     }
     return null;
   }
@@ -577,8 +538,8 @@ class FileStorage extends Storage {
    * @return {object} Keyed by collections with {identifier: interraId} objects.
    */
   buildRegistry(callback) {
-    const collections = this.collections.reduce((acc, cur, i) => {
-      acc = Object.assign(acc, {[cur]: []});
+    const collections = this.collections.reduce((acc, cur) => {
+      acc = Object.assign(acc, { [cur]: [] }); // eslint-disable-line
       return acc;
     }, {});
     const that = this;
@@ -587,18 +548,18 @@ class FileStorage extends Storage {
       this.findByCollection(collection, false, (err, docs) => {
         Async.map(docs, (doc, done) => {
           done(null, { [doc[identifier]]: doc.interra.id });
-        }, function(err, result) {
-          fin(null, result);
+        }, (maperr, result) => {
+          fin(maperr, result);
         });
       });
-    }, function(err, results) {
+    }, (err, results) => {
       that.registry = results;
       callback(err, results);
     });
   }
 
   /**
-   * Builds registry for a collection with a "identifier" : "interraId" object.
+   * Builds registry for a collection with a 'identifier' : 'interraId' object.
    * @param {string} collection - A {@link collection}.
    * @return {object} A built registry.
    */
@@ -610,20 +571,15 @@ class FileStorage extends Storage {
       Async.each(result, (doc, done) => {
         that.registry[collection][doc[identifier]] = doc.interra.id;
         done();
-      }, function(err) {
-        if (err) {
-          return callback(err);
-        }
-        else {
-          return callback(null, that.registry[collection]);
-        }
+      }, (eacherr) => {
+        callback(eacherr, that.registry[collection]);
       });
     });
   }
 
   /**
    * Adds item to the registry. Updates existing value if exists.
-   * @param {object} item - Object with "identifier" : "interraId" pair.
+   * @param {object} item - Object with 'identifier' : 'interraId' pair.
    * @param {string} collection - A {@link collection}.
    * @return {object} An updated registry for that collection.
    */
@@ -646,9 +602,7 @@ class FileStorage extends Storage {
       if (identifier in obj) {
         return false;
       }
-      else {
-        return true;
-      }
+      return true;
     });
   }
 
@@ -656,14 +610,12 @@ class FileStorage extends Storage {
    * Updates an existing document.
    */
   updateOne(interraId, collection, doc, callback) {
-    const that = this;
     this.findByInterraId(interraId, collection, (err, existingDoc) => {
       this.createRevision(collection, existingDoc);
-      if (err) return callback(err);
+      if (err) callback(err);
       const newDoc = merge(existingDoc, doc);
-      this.insertOne(interraId, collection, newDoc, (err, result) => {
-        if (err) return callback(err);
-        return callback(null, result);
+      this.insertOne(interraId, collection, newDoc, (inserr, result) => {
+        callback(inserr, result);
       });
     });
   }
@@ -674,10 +626,9 @@ class FileStorage extends Storage {
   replaceOne(interraId, collection, doc, callback) {
     this.findByInterraId(interraId, collection, (err, existingDoc) => {
       this.createRevision(collection, existingDoc);
-      if (err) return callback(err);
-      this.insertOne(interraId, collection, doc, (err, result) => {
-        if (err) return callback(err);
-        return callback(null, result);
+      if (err) callback(err);
+      this.insertOne(interraId, collection, doc, (inserr, result) => {
+        callback(inserr, result);
       });
     });
   }
@@ -686,14 +637,13 @@ class FileStorage extends Storage {
    * Reverts doc to revision.
    */
   revertOne(interraId, collection, revisionId, callback) {
-    const file = this.directory + '/' + collection + '/rev/' + interraId + '.json';
-    let revisions = fs.readJsonSync(file);
+    const file = `${this.directory}/${collection}/rev/${interraId}.json`;
+    const revisions = fs.readJsonSync(file);
     const revision = revisions[revisionId];
     delete revisions[revisionId];
     if (revision.length) {
-        fs.outputFileSync(file, revision);
-    }
-    else {
+      fs.outputFileSync(file, revision);
+    } else {
       fs.unlink(file);
     }
     this.insertOne(interraId, collection, revision, (err, doc) => {
@@ -707,7 +657,7 @@ class FileStorage extends Storage {
   createRevision(collection, doc) {
     const interraId = doc.interra.id;
     // Temp using json until this lands https://github.com/jeremyfa/yaml.js/pull/99
-    const file = this.directory + '/' + collection + '/rev/' + interraId + '.json';
+    const file = `${this.directory}/${collection}/rev/${interraId}.json`;
     let revisions = [];
     if (fs.existsSync(file)) {
       revisions = fs.readJsonSync(file);
@@ -724,11 +674,11 @@ class FileStorage extends Storage {
    * @return {boolean} True if the file is removed.
    */
   deleteOne(interraId, collection, callback) {
-    const file = this.directory + '/' + collection + '/' + interraId + '.yml';
+    const file = `${this.directory}/${collection}/${interraId}.yml`;
     fs.unlink(file, (err) => {
       if (err) return callback(err);
       return callback(false, true);
-    })
+    });
   }
 
   /**
@@ -738,45 +688,40 @@ class FileStorage extends Storage {
    * @param {string} collection The folder to save in.
    * @param {object} doc The doc.
    * @return {boolean} True if file saves correctly. The return error is keyed
-   * with the type of error, "schema" or "file":
+   * with the type of error, 'schema' or 'file':
    * err = {
-   * "schema|file": {
-   *   "collection": ,
-   *   "interraId": ,
-   *   "error": ,
+   * 'schema|file': {
+   *   'collection': ,
+   *   'interraId': ,
+   *   'error': ,
    *   }
    * }
    *
    */
   insertOne(interraId, collection, doc, callback) {
-    this.Hook.preSave(interraId, collection, doc, (err, interraId, collection, doc) => {
+    this.Hook.preSave(interraId, collection, doc, (err, preinterraId, precollection, predoc) => {
       // Validate required.
-      this.validateRequired(doc, collection, (validerr, validresult) => {
-        if (validerr) {
-          return callback(validerr);
-        }
+      this.validateRequired(doc, precollection, (validerr) => {
+        if (validerr) callback(validerr);
         // Validate schema.
-        this.validateDocToStore(doc, collection, (schemaErr, result) => {
-          const file = this.directory + '/' + collection + '/' + interraId + '.yml';
+        this.validateDocToStore(predoc, precollection, (schemaErr) => {
+          const file = `${this.directory}/${collection}/${interraId}.yml`;
           const yml = YAML.stringify(doc, 20, 2);
-          fs.outputFile(file, yml, err => {
-            if (err) return callback(err);
-            this.Hook.postSave(doc, (err, doc) => {
+          fs.outputFile(file, yml, (fserr) => {
+            if (fserr) callback(fserr);
+            this.Hook.postSave(doc, (posterr, postdoc) => {
               if (schemaErr) {
-                return callback({"type": "schema", "collection": collection, "interraId": interraId, "error": schemaErr}, doc);
-              }
-              else if (err) {
-                return callback({"type": "file", "collection": collection, "interraId": interraId, "error": err}, doc);
-              }
-              else {
-                return callback(schemaErr, doc);
+                callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
+              } else if (err) {
+                callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
+              } else {
+                callback(schemaErr, postdoc);
               }
             });
           });
         });
       });
     });
-
   }
 
   /**
@@ -785,14 +730,12 @@ class FileStorage extends Storage {
    * @return {boolean} True if succesful.
    */
   insertMany(docs, callback) {
-    Async.eachSeries(docs, function(content, done) {
-      insertOne(content.identifier, content.collection, content, (err, items) => {
-        if (err) return done(err);
-        done(null);
-      })
-    }, function(err) {
-      if (err) return callback(err);
-      return callback(null, true);
+    Async.eachSeries(docs, (content, done) => {
+      this.insertOne(content.identifier, content.collection, content, (err) => {
+        done(err, !err);
+      });
+    }, (err) => {
+      callback(err, !err);
     });
   }
 
@@ -801,7 +744,7 @@ class FileStorage extends Storage {
    * @param {string} collection The collection to query.
    */
   count(collection, callback) {
-    this.list(collection, function(err, list) {
+    this.list(collection, (err, list) => {
       const len = list ? list.length : 0;
       callback(err, len);
     });
@@ -813,14 +756,14 @@ class FileStorage extends Storage {
    * @return {array} list of documents.
    */
   list(collection, callback) {
-    var dir = this.directory + '/' + collection;
-    fs.readdir(dir, function(err, items) {
-      var t;
-      let output = [];
-      for (t in items) {
+    const dir = `${this.directory}/${collection}`;
+    fs.readdir(dir, (err, items) => {
+      let t;
+      const output = [];
+      for (t in items) { // eslint-disable-line
         // Folder may contain rev folder for revisions.
         if (items[t] !== 'rev') {
-          output.push(collection + '/' + items[t]);
+          output.push(`${collection}/${items[t]}`);
         }
       }
       return callback(null, output);
@@ -837,7 +780,7 @@ class FileStorage extends Storage {
   loadWithField(item, key, callback) {
     this.load(Object.values(item)[0], (err, result) => {
       if (err) return callback(err);
-      let output = [];
+      const output = [];
       output[Object.keys(item)[0]] = result;
       return callback(null, output);
     });
@@ -850,11 +793,11 @@ class FileStorage extends Storage {
    */
   load(file, callback) {
     const that = this;
-    const dir = this.directory + '/' + file;
+    const dir = `${this.directory}/${file}`;
     const data = fs.readFileSync(dir, 'utf8');
     const doc = YAML.parse(data);
     that.Hook.postLoad(doc, (err, output) => {
-      return callback(err, output);
+      callback(err, output);
     });
   }
 
@@ -862,18 +805,17 @@ class FileStorage extends Storage {
    * Wrapper for findByCollection allows passing multiple collections.
    * @param {array} collections An array of collections to retrieve.
    * @param {boolean} deref Whether or not to dereference the docs.
-   * @param {function} callback Callback with err, result params.
    */
   findAll(deref, callback) {
-    let collectionData = [];
+    const collectionData = [];
     const that = this;
-    Async.each(this.collections, function(collection, done) {
+    Async.each(this.collections, (collection, done) => {
       collectionData[collection] = [];
       that.findByCollection(collection, deref, (err, results) => {
         collectionData[collection] = results;
         done();
       });
-    }, function(err) {
+    }, (err) => {
       callback(err, collectionData);
     });
   }
@@ -885,40 +827,37 @@ class FileStorage extends Storage {
    * @return {array} An array of docs.
    */
   findByCollection(collection, deref, callback) {
-    let contents = [];
-    let that = this;
+    const that = this;
     Async.auto({
-      getCollections: function (done) {
+      getCollections: (done) => {
         if (collection) {
           done(null, [collection]);
-        }
-        else {
-          fs.readdir(that.directory, function(err, list) {
+        } else {
+          fs.readdir(that.directory, (err, list) => {
             done(null, list);
           });
         }
       },
-      getFiles: ['getCollections', function (list, done) {
-        Async.map(list.getCollections, that.list.bind(that), function(err, result) {
+      getFiles: ['getCollections', (list, done) => {
+        Async.map(list.getCollections, that.list.bind(that), (err, result) => {
           done(null, result);
-        })
+        });
       }],
-      readFiles: ['getFiles', function (results, done) {
+      readFiles: ['getFiles', (results, done) => {
         let files = [];
-        for(var i = 0; i < results.getFiles.length; i++) {
+        for(let i = 0; i < results.getFiles.length; i++) { // eslint-disable-line
           files = files.concat(results.getFiles[i]);
         }
-        Async.map(files, that.load.bind(that), function(err, result) {
+        Async.map(files, that.load.bind(that), (err, result) => {
           if (deref && collection in that.references) {
-            Async.map(result, that.Deref.bind(that), function (err, dereferenced) {
-              done(null, dereferenced);
+            Async.map(result, that.Deref.bind(that), (maperr, dereferenced) => {
+              done(maperr, dereferenced);
             });
-          }
-          else {
-            done(null, result);
+          } else {
+            done(err, result);
           }
         });
-      }]
+      }],
     }, (err, results) => {
       if (err) return callback(err);
       return callback(null, results.readFiles);
@@ -932,7 +871,7 @@ class FileStorage extends Storage {
    * @return {doc} Doc.
    */
   findByInterraId(interraId, collection, callback) {
-    const file = collection + '/' + interraId + '.yml'
+    const file = `${collection}/${interraId}.yml`;
     this.load(file, (err, result) => {
       if (err) return callback(err);
       return callback(null, result);
@@ -957,188 +896,190 @@ class FileStorage extends Storage {
           }
         }
         return done();
-      }, function(err) {
-        if (err) {
-          return callback(err);
-        }
-        else {
-          return callback(null, item);
-        }
+      }, (eacherr) => {
+        callback(eacherr, item);
       });
     });
   }
 
   findOneByIdentifierAndUpdate(identifier, collection, content, callback) {
-    this.insertOne(identifier, collection, content, function(err, result) {
-        callback(err,result);
+    this.insertOne(identifier, collection, content, (err, result) => {
+      callback(err, result);
     });
   }
 
-  pagedFind(query, fields, sort, limit, page, callback) {
-      var that = this;
-      Async.auto({
-            load: function(done) {
-                that.load(null, function(err, list) {
-                    if (err) done(err);
-                    done(null, list);
-                });
-            },
-            query: ['load', function (results, done) {
-                var keys = Object.keys(query);
-                if (keys.length) {
-                    Async.filter(results.load, function(item, callback) {
-                        var i;
-                        for (i in keys) {
-                            var key = keys[i];
-
-                            if (!(key in item)) {
-                                callback(key + " not found");
-                            }
-                            else if (item[key].search(query[key])>=0) {
-                                callback(null, item);
-                            }
-                            else {
-                                callback(null, null);
-                            }
-                        }
-                    },function(err, results) {
-                        if (results === undefined) {
-                            done(null, []);
-                        }
-                        else {
-                            done(null, results);
-                        }
-                    });
-                }
-                else {
-                    done(null, results.load);
-                }
-            }],
-            sort: ['query', function (results, done) {
-                if (sort) {
-                    // TODO: Sort by multiple.
-                    var sorts = MongoModels.sortAdapter(sort);
-                    var sortItem = Object.keys(sorts)[0];
-                    Async.sortBy(results.query, function(item, callback) {
-                        if (item[sortItem]) {
-                            callback(null, item[sortItem].toLowerCase())
-                        }
-                        else {
-                            callback(null,"");
-                        }
-                    }, function(err, items) {
-                        if (sorts[sortItem] < 1) {
-                            items.reverse();
-                        }
-                        done(err, items);
-                    });
-                }
-                else {
-                    done(null, results.query);
-                }
-            }],
-            limitPage: ['sort', function (results, done) {
-
-                // TODO: count total and hasPrev, hasNext
-                if (!limit) {
-                    done(null, results);
-                }
-                if (page) {
-                    var start = page * limit - limit;
-                    var stop = start + limit;
-                }
-                else {
-                    var start = 0;
-                    var stop = limit;
-                }
-
-                done(null, results.sort.slice(start, stop));
-            }],
-            fields: ['limitPage', function (results, done) {
-                var newResults = [];
-                if (!fields || results.limitPage) {
-                    done(null, results.limitPage);
-                }
-                else {
-                    Async.eachSeries(results.sort, function(item, callback) {
-                      var newItem = {};
-                      for (field in fields) {
-                          newItem[field] = item[field];
-                      };
-                      newResults.push(newItem);
-                      callback();
-
-                  }, function(err) {
-                      done(err, newResults);
-                  });
-              }
-            }],
-
-        }, (err, results) => {
-            if (err) {
-                return callback(err);
-            }
-
-            var paged = {
-                data: results.fields,
-                pages: {
-                    current: page,
-                    prev: page - 1,
-                    next: page + 1
-                    // Mongo provides the following:
-                    //total:
-                    //hasPrev:
-                    //hasNext:
-                },
-                items: {
-                    limit: limit
-                    // Mongo provides the following:
-                    // begin:
-                    // end:
-                    // total:
-                }
-            }
-
-            callback(null, paged);
-
-        });
+  /**
+   * Borrowed from MongoModels. Using temp to not require mongo but use similar API.
+   */
+  sortAdapter(sorts) {
+    let rsort = sorts;
+    if (Object.prototype.toString.call(sorts) === '[object String]') {
+      const document = {};
+      rsort = sorts.split(/\s+/);
+      rsort.forEach((sort) => {
+        if (sort) {
+          const order = sort[0] === '-' ? -1 : 1;
+          if (order === -1) {
+            rsort = rsort.slice(1);
+          }
+          document[rsort] = order;
+        }
+      });
+      rsort = document;
     }
+  }
+
+  pagedFind(query, fields, sort, limit, page, callback) {
+    const that = this;
+    Async.auto({
+      load: (done) => {
+        that.load(null, (err, list) => {
+          if (err) done(err);
+          done(null, list);
+        });
+      },
+      query: ['load', (results, done) => {
+        const keys = Object.keys(query);
+        if (keys.length) {
+          Async.filter(results.load, (item, call) => {
+            for (let i in keys) { // eslint-disable-line
+              const key = keys[i];
+              if (!(key in item)) {
+                call(`${key} not found`);
+              } else if (item[key].search(query[key]) >= 0) {
+                call(null, item);
+              } else {
+                call(null, null);
+              }
+            }
+          }, (err, querresults) => {
+            if (results === undefined) {
+              done(null, []);
+            } else {
+              done(null, querresults);
+            }
+          });
+        } else {
+          done(null, results.load);
+        }
+      }],
+      sort: ['query', (results, done) => {
+        if (sort) {
+          // TODO: Sort by multiple.
+          const sorts = that.sortAdapter(sort);
+          const sortItem = Object.keys(sorts)[0];
+          Async.sortBy(results.query, (item, call) => {
+            if (item[sortItem]) {
+              call(null, item[sortItem].toLowerCase());
+            } else {
+              call(null, '');
+            }
+          }, (err, items) => {
+            if (sorts[sortItem] < 1) {
+              items.reverse();
+            }
+            done(err, items);
+          });
+        } else {
+          done(null, results.query);
+        }
+      }],
+      limitPage: ['sort', (results, done) => {
+        // TODO: count total and hasPrev, hasNext
+        if (!limit) {
+          done(null, results);
+        } else if (page) {
+          const start = (page * limit) - limit;
+          const stop = start + limit;
+          done(null, results.sort.slice(start, stop));
+        } else {
+          const start = 0;
+          const stop = limit;
+          done(null, results.sort.slice(start, stop));
+        }
+      }],
+      fields: ['limitPage', (results, done) => {
+        const newResults = [];
+        if (!fields || results.limitPage) {
+          done(null, results.limitPage);
+        } else {
+          Async.eachSeries(results.sort, (item, call) => {
+            const newItem = {};
+            for (const field in fields) { // eslint-disable-line
+              newItem[field] = item[field];
+            }
+            newResults.push(newItem);
+            call();
+          }, (err) => {
+            done(err, newResults);
+          });
+        }
+      }],
+    }, (err, results) => {
+      if (err) {
+        callback(err);
+      } else {
+        const paged = {
+          data: results.fields,
+          pages: {
+            current: page,
+            prev: page - 1,
+            next: page + 1,
+            /** Mongo provides the following:
+             * total:
+             * hasPrev:
+             * hasNext:
+             */
+          },
+          items: {
+            limit,
+            /** Mongo provides the following:
+             * begin:
+             * end:
+             * total:
+             */
+          },
+        };
+        callback(null, paged);
+      }
+    });
+  }
 
   titles(collection, callback) {
-    var that = this;
+    const that = this;
     Async.auto({
-      load: function(done) {
-        that.loadByCollection(collection, function(err, list) {
+      load: (done) => {
+        that.loadByCollection(collection, (err, list) => {
           done(err, list);
         });
       },
-      sort: ['load', function (results, done) {
-        Async.sortBy(results.load, function(item, callback) {
-          callback(null, item['title'].toLowerCase())
-        }, function(err, items) {
+      sort: ['load', (results, done) => {
+        Async.sortBy(results.load, (item, call) => {
+          call(null, item.title.toLowerCase());
+        }, (err, items) => {
           done(err, items);
         });
       }],
-      fields: ['sort', function (results, done) {
-        var newResults = [];
-        Async.eachSeries(results.sort, function(item, callback) {
-          var newItem = {};
-          newItem['title'] = item['title'];
+      fields: ['sort', (results, done) => {
+        const newResults = [];
+        Async.eachSeries(results.sort, (item, call) => {
+          const newItem = {};
+          newItem.title = item.title;
           newResults.push(newItem);
-          callback();
-          }, function(err) {
-              done(err, newResults);
-          });
+          call();
+        }, (err) => {
+          done(err, newResults);
+        });
       }],
     }, (err, results) => {
-          if (err) {
-              return callback(err);
-          }
-          callback(null, results.fields);
-      });
+      if (err) {
+        callback(err);
+      }
+      callback(null, results.fields);
+    });
   }
 }
 
 module.exports = {
-  FileStorage
+  FileStorage,
 };

@@ -4,24 +4,18 @@
  */
 
 const Content = require('../models/content');
-const Schema = require('../models/schema');
-const Site = require('../models/site');
 const Harvest = require('../models/harvest').Harvest;
 const fs = require('fs-extra');
 const Async = require('async');
-const Config = require('../models/config');
-const config = new Config();
 
 /**
  * Prepares harvest.
  */
-function prepare(siteName) {
-  const siteDir = __dirname + '/../../' + config.get('sitesDir') + '/' + (siteName);
-  const site = new Site(config.get('sitesDir'));
-  const schemaName = site.getConfigItem(siteName, 'schema');
-  const schemaDir = __dirname + '/../../' +  config.get('schemasDir') + '/' + schemaName;
-  const content = new Content[config.get('storage')](siteDir, schemaDir);
-  const sources = fs.readJsonSync( siteDir + '/harvest/sources.json');
+function prepare(siteName, config) {
+  const sitesDir = config.get('sitesDir');
+  const siteDir = `${sitesDir}/${siteName}`;
+  const content = new Content[config.get('storage')](siteName, config);
+  const sources = fs.readJsonSync(`${siteDir}/harvest/sources.json`);
   const harvest = new Harvest(content, sources);
   return harvest;
 }
@@ -30,42 +24,40 @@ function prepare(siteName) {
  * Caches harvest sources. Downloading sources makes it easier to deal with
  * timeouts, revisions, and other issues.
  */
-function cache(siteName) {
-  const harvest = prepare(siteName);
-  harvest.cache((err, result) => {
-    if (!err) console.log("Harvest cached.");
+function cache(siteName, config) {
+  const harvest = prepare(siteName, config);
+  harvest.cache((err) => {
+    if (!err) console.log('Harvest cached.'); // eslint-disable-line
   });
-
 }
 
 /**
  * Runs harvest. Use after files have been cached.
  */
-function run(siteName) {
-  const harvest = prepare(siteName);
-
+function run(siteName, config) {
+  const harvest = prepare(siteName, config);
   Async.waterfall([
     (done) => {
-      console.log("Loading files...");
+      console.log('Loading files...'); // eslint-disable-line
       harvest.load((err, result) => {
-        console.log("Files loaded...");
+        console.log('Files loaded...'); // eslint-disable-line
         done(err, result);
-      })
+      });
     },
     (docsGroup, done) => {
-      console.log("Preparing files...");
+      console.log('Preparing files...'); // eslint-disable-line
       harvest.prepare(docsGroup, (err, result) => {
-        console.log("Files prepared...");
+        console.log('Files prepared...'); // eslint-disable-line
         done(null, result);
       });
     },
     (docsGroup, done) => {
-      console.log("Storing files...");
+      console.log('Storing files...'); // eslint-disable-line
       harvest.store(docsGroup, (err, result) => {
-        console.log("Files stored...");
+        console.log('Files stored...'); // eslint-disable-line
         done(null, result);
       });
-    }
+    },
   ], (err) => {
     console.log(err, !err);
   });
@@ -73,5 +65,5 @@ function run(siteName) {
 
 module.exports = {
   cache,
-  run
+  run,
 };
