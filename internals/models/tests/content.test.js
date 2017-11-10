@@ -8,14 +8,14 @@ const content = new Content[storage]('test-site', config);
 
 test('Get list of docs from tags collection', (done) => {
   content.list('tags', (err, result) => {
-    expect(result).toContain('tags/health-care.yml');
+    expect(result).toContain('tags/health-care.json');
     done();
   });
 });
 
 test('Get list of docs from organization collection', (done) => {
   content.list('organization', (err, result) => {
-    expect(result).toContain('organization/bad-org.yml');
+    expect(result).toContain('organization/bad-org.json');
     done();
   });
 });
@@ -42,7 +42,7 @@ test('Get count of docs from tags collection', (done) => {
 });
 
 test('Load specific file', (done) => {
-  content.load('organization/good-org.yml', (err, result) => {
+  content.load('organization/good-org.json', (err, result) => {
     expect(result.identifier).toBe('good-org');
     done();
   });
@@ -119,7 +119,7 @@ test('Reject a document with a reference that doesn\'t exist', (done) => {
       type: 'csv' }] };
   content.Deref(doc, (err) => {
     if (err) {
-      expect(err).toBe('Doc contains reference file organization/no-org.yml from org field that does not exist.');
+      expect(err).toBe('Doc contains reference file organization/no-org.json from org field that does not exist.');
     }
     done();
   });
@@ -296,7 +296,7 @@ test('Save a doc', (done) => {
     },
   };
   content.insertOne('test-dataset', 'datasets', doc, () => {
-    const file = path.join(__dirname, 'sites/test-site/collections/datasets/test-dataset.yml');
+    const file = path.join(__dirname, 'sites/test-site/collections/datasets/test-dataset.json');
     expect(fs.existsSync(file)).toBe(true);
     done();
   });

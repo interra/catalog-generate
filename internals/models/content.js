@@ -2,7 +2,6 @@ const fs = require('fs-extra');
 const Site = require('./site');
 const path = require('path');
 const Schema = require('./schema');
-const YAML = require('yamljs');
 const Async = require('async');
 const slug = require('slug');
 const Ajv = require('ajv');
@@ -95,7 +94,7 @@ class FileStorage extends Storage {
               Async.eachOfSeries(pre[field], (item, val, over) => {
                 const reference = {};
                 if ('interra-reference' in item) {
-                  const file = `${collection}/${item['interra-reference']}.yml`;
+                  const file = `${collection}/${item['interra-reference']}.json`;
                   if (!fs.existsSync(`${that.directory}/${file}`)) {
                     // TODO: Throw a bigger error. 'interra-reference' stays in doc.
                     over(`Doc contains reference file ${file} from ${field} field that does not exist.`, null);
@@ -478,8 +477,8 @@ class FileStorage extends Storage {
     fs.readdir(`${this.directory}/${collection}`, (err, items) => {
       const routes = [];
       for (const n in items) { // eslint-disable-line
-        // Remove .yml filename.
-        routes.push(items[n].substring(0, items[n].length - 4));
+        // Remove .json filename.
+        routes.push(items[n].substring(0, items[n].length - 5));
       }
       callback(null, routes);
     });
@@ -656,14 +655,13 @@ class FileStorage extends Storage {
    */
   createRevision(collection, doc) {
     const interraId = doc.interra.id;
-    // Temp using json until this lands https://github.com/jeremyfa/yaml.js/pull/99
     const file = `${this.directory}/${collection}/rev/${interraId}.json`;
     let revisions = [];
     if (fs.existsSync(file)) {
       revisions = fs.readJsonSync(file);
     }
     revisions.push(doc);
-    fs.writeJsonSync(file, revisions);
+    fs.writeJsonSync(file, revisions, { spaces: 2 });
     return revisions;
   }
 
@@ -674,17 +672,16 @@ class FileStorage extends Storage {
    * @return {boolean} True if the file is removed.
    */
   deleteOne(interraId, collection, callback) {
-    const file = `${this.directory}/${collection}/${interraId}.yml`;
+    const file = `${this.directory}/${collection}/${interraId}.json`;
     fs.unlink(file, (err) => {
-      if (err) return callback(err);
-      return callback(false, true);
+      callback(err, !err);
     });
   }
 
   /**
    * Inserts doc into file system. Does not care if file exists.
-   * Files are saved as [colllection]/[route].yml.
-   * @param {string} route The filename to save as without .yml
+   * Files are saved as [colllection]/[route].json.
+   * @param {string} route The filename to save as without .json
    * @param {string} collection The folder to save in.
    * @param {object} doc The doc.
    * @return {boolean} True if file saves correctly. The return error is keyed
@@ -701,25 +698,27 @@ class FileStorage extends Storage {
   insertOne(interraId, collection, doc, callback) {
     this.Hook.preSave(interraId, collection, doc, (err, preinterraId, precollection, predoc) => {
       // Validate required.
-      this.validateRequired(doc, precollection, (validerr) => {
-        if (validerr) callback(validerr);
-        // Validate schema.
-        this.validateDocToStore(predoc, precollection, (schemaErr) => {
-          const file = `${this.directory}/${collection}/${interraId}.yml`;
-          const yml = YAML.stringify(doc, 20, 2);
-          fs.outputFile(file, yml, (fserr) => {
-            if (fserr) callback(fserr);
-            this.Hook.postSave(doc, (posterr, postdoc) => {
-              if (schemaErr) {
-                callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
-              } else if (err) {
-                callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
-              } else {
-                callback(schemaErr, postdoc);
-              }
+      this.validateRequired(predoc, precollection, (validerr) => {
+        if (validerr) {
+          callback(validerr);
+        } else {
+          // Validate schema.
+          this.validateDocToStore(predoc, precollection, (schemaErr) => {
+            const file = `${this.directory}/${collection}/${interraId}.json`;
+            fs.writeJson(file, predoc, { spaces: 2 }, (fserr) => {
+              if (fserr) callback(fserr);
+              this.Hook.postSave(doc, (posterr, postdoc) => {
+                if (schemaErr) {
+                  callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
+                } else if (err) {
+                  callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
+                } else {
+                  callback(schemaErr, postdoc);
+                }
+              });
             });
           });
-        });
+        }
       });
     });
   }
@@ -773,7 +772,7 @@ class FileStorage extends Storage {
   /**
    * Retrieves a loaded field from a stored document.
    * @param {object} item An an object with a field name key and filename val.
-   *                      item = {[field]: [collection]/[file-name].yml}
+   *                      item = {[field]: [collection]/[file-name].json}
    * @param {string} key TODO: remove.
    * @return {object} A field from a doc.
    */
@@ -788,14 +787,13 @@ class FileStorage extends Storage {
 
   /**
    * Retrieves individual collection.
-   * @param {string} file Location of file, ie [collection]/[file-name].yml
+   * @param {string} file Location of file, ie [collection]/[file-name].json
    * @return {object} A referenced document.
    */
   load(file, callback) {
     const that = this;
     const dir = `${this.directory}/${file}`;
-    const data = fs.readFileSync(dir, 'utf8');
-    const doc = YAML.parse(data);
+    const doc = fs.readJsonSync(dir);
     that.Hook.postLoad(doc, (err, output) => {
       callback(err, output);
     });
@@ -871,7 +869,7 @@ class FileStorage extends Storage {
    * @return {doc} Doc.
    */
   findByInterraId(interraId, collection, callback) {
-    const file = `${collection}/${interraId}.yml`;
+    const file = `${collection}/${interraId}.json`;
     this.load(file, (err, result) => {
       if (err) return callback(err);
       return callback(null, result);
