@@ -356,6 +356,41 @@ class Harvest {
   }
 
   /**
+   * @param string collection
+   * @param object doc
+   * @param string title The field name for the title for the collection.
+   * @param string identifier The field name for the identifier for the collection.
+   * @param array ids An array of internal ids from the registry.
+   * @return object An object keyed with interraId with the reference for the inserted doc.
+   */
+  storeDoc(collection, doc, title, identifier, source, ids, callback) {
+    const existingInterraId = this.content.getRegistryInterraId(collection, doc[identifier]);
+    if (existingInterraId) {
+      this.content.updateOne(existingInterraId, collection, doc, (err) => {
+        if (err) {
+          this.log(err.type + ' validatinon error for ' + err.interraId + ' in ' + err.collection + ' : ' + JSON.stringify(err.error)); // eslint-disable-line prefer-template
+        }
+        callback(err, { 'interra-reference': existingInterraId }); // eslint-disable-line no-param-reassign
+      });
+    } else {
+      doc[title] = doc[title] ? doc[title] : uuid(); // eslint-disable-line no-param-reassign
+      const idString = this.content.buildInterraId(doc[title]);
+      const interraId = this.content.buildInterraIdSafe(idString, ids);
+      doc.interra = { // eslint-disable-line no-param-reassign
+        id: interraId,
+        source,
+      };
+      this.content.insertOne(interraId, collection, doc, (err) => {
+        if (err) {
+          this.log(err.type + ' validatinon error for ' + err.interraId + ' in ' + err.collection + ' : ' + JSON.stringify(err.error)); // eslint-disable-line prefer-template
+        }
+        this.content.addToRegistry({ [interraId]: doc[identifier] }, collection);
+        callback(err, { 'interra-reference': interraId }); // eslint-disable-line no-param-reassign
+      });
+    }
+  }
+
+  /**
    * Saves harvest files.
    * @param {object} docsGroup An object returned from harvest.load().
    * @return boolean True if succesful.
@@ -368,7 +403,7 @@ class Harvest {
     const that = this;
     Async.eachOf(docsGroup, (docs, sourceId, finished) => {
       const primaryCollection = that.content.schema.getConfigItem('primaryCollection');
-      that.content.buildRegistry((err) => {
+      that.content.buildRegistry(() => {
         Async.each(docs, (doci, done) => {
           // TODO: get source type.
           that.Hook.Store(doci, that.sources[sourceId].type, (errSt, doc) => {
@@ -391,7 +426,6 @@ class Harvest {
                   }, []);
                   if (type === 'array') {
                     doc[field] = []; // eslint-disable-line no-param-reassign
-
                     Async.eachSeries(values, (value, valdone) => {
                       if (that.toType(value) === 'string') {
                         const stringId = that.content.buildInterraId(value);
@@ -411,59 +445,20 @@ class Harvest {
                           });
                         }
                       } else {
-                        const existingInterraId = that.content.getRegistryInterraId(value[identifier]);
-                        if (existingInterraId) {
-                          that.content.UpdateOne(existingInterraId, collection, value, (errUp) => {
-                            if (err) {
-                              that.log(errUp.type + ' validatinon error for ' + errUp.interraId + ' in ' + errUp.collection + ' : ' + JSON.stringify(errUp.error)); // eslint-disable-line prefer-template
-                            }
-                            doc[field].push({ 'interra-reference': existingInterraId }); // eslint-disable-line no-param-reassign
-                            valdone();
-                          });
-                        } else {
-                          value[title] = value[title] ? value[title] : uuid(); // eslint-disable-line no-param-reassign
-
-                          const idString = that.content.buildInterraId(value[title]);
-                          const interraId = that.content.buildInterraIdSafe(idString, ids);
-                          value.interra = { id: interraId }; // eslint-disable-line no-param-reassign
-                          that.content.insertOne(interraId, collection, value, (errIns) => {
-                            if (errIns) {
-                              that.log(errIns.type + ' validatinon error for ' + errIns.interraId + ' in ' + errIns.collection + ' : ' + JSON.stringify(errIns.error)); // eslint-disable-line prefer-template
-                            }
-                            doc[field].push({ 'interra-reference': interraId }); // eslint-disable-line no-param-reassign
-                            that.content.addToRegistry({ [interraId]: value[identifier] }, collection);
-                            valdone();
-                          });
-                        }
+                        that.storeDoc(collection, value, title, identifier, sourceId, ids, (err, reference) => {
+                          doc[field].push(reference); // eslint-disable-line no-param-reassign
+                          valdone();
+                        });
                       }
                     }, (e) => {
                       fin(e, !e);
                     });
                   } else if (type === 'object') {
                     doc[field] = {}; // eslint-disable-line no-param-reassign
-                    const existingInterraId = that.content.getRegistryInterraId(values[identifier]);
-                    if (existingInterraId) {
-                      values.interra = { id: existingInterraId }; // eslint-disable-line no-param-reassign
-                      that.content.UpdateOne(existingInterraId, collection, values, (errUp) => {
-                        if (errUp) {
-                          that.log(err.type + ' validatinon error for ' + err.interraId + ' in ' + err.collection + ' : ' + JSON.stringify(err.error)); // eslint-disable-line prefer-template
-                        }
-                        doc[field]['interra-reference'] = that.content.registry[collection][values[identifier]]; // eslint-disable-line no-param-reassign
-                        fin();
-                      });
-                    } else {
-                      const tempId = that.content.buildInterraId(values[title]);
-                      const interraId = that.content.buildInterraIdSafe(tempId, ids);
-                      values.interra = { id: interraId }; // eslint-disable-line no-param-reassign
-                      that.content.insertOne(interraId, collection, values, (errIns) => {
-                        if (errIns) {
-                          that.log(errIns.type + ' validatinon error for ' + errIns.interraId + ' in ' + errIns.collection + ' : ' + JSON.stringify(errIns.error)); // eslint-disable-line prefer-template
-                        }
-                        doc[field]['interra-reference'] = interraId; // eslint-disable-line no-param-reassign
-                        that.content.addToRegistry({ [interraId]: values[identifier] }, collection);
-                        fin();
-                      });
-                    }
+                    that.storeDoc(collection, values, title, identifier, sourceId, ids, (err, reference) => {
+                      doc[field]['interra-reference'] = Object.values(reference)[0];// eslint-disable-line no-param-reassign
+                      fin();
+                    });
                   } else {
                     fin();
                   }
@@ -471,33 +466,17 @@ class Harvest {
               }, () => {
                 // Now we are saving the primary collection.
                 let ids = [];
+                const title = that.content.getMapFieldByValue(primaryCollection, 'title');
+                const identifier = that.content.getIdentifierField(primaryCollection);
                 if (that.content.registry[primaryCollection].length > 0) {
                   ids = that.content.registry[primaryCollection].reduce((acc, cur) => {
                     acc.push(Object.values(cur)[0]);
                     return acc;
                   }, []);
                 }
-                const existingInterraId = that.content.getRegistryInterraId(doc[identifierField]);
-                if (existingInterraId) {
-                  that.content.updateOne(doc[identifierField], primaryCollection, doc, (errUp) => {
-                    if (errUp) {
-                      that.log(errUp.type + ' validatinon error for ' + errUp.interraId + ' in ' + errUp.collection + ' : ' + JSON.stringify(errUp.error)); // eslint-disable-line prefer-template
-                    }
-                    done();
-                  });
-                } else {
-                  const title = that.content.getMapFieldByValue(primaryCollection, 'title');
-                  const tempId = that.content.buildInterraId(doc[title]);
-                  const interraId = that.content.buildInterraIdSafe(tempId, ids);
-                  doc.interra = { id: interraId }; // eslint-disable-line no-param-reassign
-                  that.content.insertOne(interraId, primaryCollection, doc, (errins) => {
-                    if (errins) {
-                      that.log(errins.type + ' validatinon error for ' + errins.interraId + ' in ' + errins.collection + ' : ' + JSON.stringify(errins.error)); // eslint-disable-line prefer-template
-                    }
-                    that.content.addToRegistry({ [interraId]: doc[identifierField] }, primaryCollection);
-                    done();
-                  });
-                }
+                that.storeDoc(primaryCollection, doc, title, identifier, sourceId, ids, (err) => {
+                  done(err, !err);
+                });
               });
             });
           });

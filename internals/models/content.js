@@ -523,9 +523,11 @@ class FileStorage extends Storage {
 
   getRegistryInterraId(collection, identifier) {
     if (collection in this.registry) {
-      const ids = Object.keys(this.registry[collection]);
-      if (ids.indexOf(identifier) !== -1) {
-        return ids[identifier];
+      const record = this.registry[collection].find((id) => { // eslint-disable-line
+        return Object.keys(id)[0] === identifier;
+      });
+      if (record) {
+        return Object.values(record)[0];
       }
       return null;
     }
@@ -655,8 +657,9 @@ class FileStorage extends Storage {
    */
   createRevision(collection, doc) {
     const interraId = doc.interra.id;
-    const file = `${this.directory}/${collection}/rev/${interraId}.json`;
+    const file = path.join(this.directory, collection, 'rev', `${interraId}.json`);
     let revisions = [];
+    fs.ensureDirSync(path.join(this.directory, collection, 'rev'));
     if (fs.existsSync(file)) {
       revisions = fs.readJsonSync(file);
     }
@@ -704,18 +707,17 @@ class FileStorage extends Storage {
         } else {
           // Validate schema.
           this.validateDocToStore(predoc, precollection, (schemaErr) => {
-            const file = `${this.directory}/${collection}/${interraId}.json`;
-            fs.writeJson(file, predoc, { spaces: 2 }, (fserr) => {
-              if (fserr) callback(fserr);
-              this.Hook.postSave(doc, (posterr, postdoc) => {
-                if (schemaErr) {
-                  callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
-                } else if (err) {
-                  callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
-                } else {
-                  callback(schemaErr, postdoc);
-                }
-              });
+            const file = path.join(this.directory, collection, `${interraId}.json`);
+            fs.ensureDirSync(path.join(this.directory, collection));
+            fs.writeJsonSync(file, predoc, { spaces: 2 });
+            this.Hook.postSave(predoc, (posterr, postdoc) => {
+              if (schemaErr) {
+                callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
+              } else if (err) {
+                callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);
+              } else {
+                callback(posterr, postdoc);
+              }
             });
           });
         }
@@ -793,9 +795,9 @@ class FileStorage extends Storage {
   load(file, callback) {
     const that = this;
     const dir = `${this.directory}/${file}`;
-    const doc = fs.readJsonSync(dir);
-    that.Hook.postLoad(doc, (err, output) => {
-      callback(err, output);
+    const doc = fs.readFileSync(dir, 'utf-8');
+    that.Hook.postLoad(doc, (posterr, output) => {
+      callback(posterr, JSON.parse(output));
     });
   }
 
