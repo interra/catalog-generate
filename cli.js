@@ -4,6 +4,7 @@ const Config = require('./internals/models/config');
 const Validate = require('./internals/scripts/validate');
 const Build = require('./internals/scripts/build');
 const Harvest = require('./internals/scripts/harvest');
+const Content = require('./internals/models/content');
 const config = new Config(__dirname);
 
 prog
@@ -88,6 +89,18 @@ prog
   .help('Runs a harvest with cached sources.')
   .action((args) => {
     Harvest.run(args.site, config);
+  })
+  .command('load-doc')
+  .argument('site', 'The site to build from')
+  .argument('collection', 'The colleciton to build from')
+  .argument('interraId', 'The internal id of the item')
+  .help('Runs a harvest with cached sources.')
+  .action((args) => {
+    const storage = config.get('storage');
+    content = new Content[storage](args.site, config);
+    content.load(`${args.collection}/${args.interraId}.json`, (err, doc) => {
+      console.log(err, doc);
+    });
   });
 
 prog.parse(process.argv);

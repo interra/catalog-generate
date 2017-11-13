@@ -8,7 +8,7 @@
   	},
   	"defaults": {
   		"publisher.name": ["US Department of Agriculture"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["US Department of Agriculture"]
@@ -25,13 +25,13 @@
   		"accessURL": ["https://data.mo.gov/api/file_data/Q_A5PzJ6KjRSU6UpxbrdgR5-AV8bx6EarjcJavFYWog?filename=Letter+%26+Registration+Form+with+Map+smoke+with+classroom+date.pdf"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Missouri"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Missouri",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["State of Missouri"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	}
   },
   "datahawaiigov": {
@@ -42,13 +42,13 @@
   		"theme": ["Health"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Hawaii"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Hawaii",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["State of Hawaii"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	}
   },
   "dataoregongov": {
@@ -59,13 +59,13 @@
   		"theme": ["Health & Human Services"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Oregon"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Oregon",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["State of Oregon"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	}
   },
   "dataokgov": {
@@ -76,13 +76,13 @@
   		"keyword": ["health"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Oklahoma"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Oklahoma",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["State of Oklahoma"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	}
   },
   "chronicdatacdcgov": {
@@ -90,12 +90,12 @@
   	"source": "https://chronicdata.cdc.gov/data.json",
   	"type": "DataJSON",
   	"defaults": {
-  		"publisher.name": ["Centers for Disease Control and Prevention"],
-  		"bureauCode": ["009:20"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "Centers for Disease Control and Prevention",
+  		"bureauCode": "009:20",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
-  		"publisher.name": ["Centers for Disease Control and Prevention"]
+  		"publisher.name": "Centers for Disease Control and Prevention"
   	}
   },
   "cdcgov": {
@@ -103,9 +103,9 @@
   	"source": "http://www.cdc.gov/wcms/opendata/data.json",
   	"type": "DataJSON",
   	"defaults": {
-  		"publisher.name": ["Centers for Disease Control and Prevention"],
-  		"bureauCode": ["009:20"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "Centers for Disease Control and Prevention",
+  		"bureauCode": "009:20",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["Centers for Disease Control and Prevention"]
@@ -116,9 +116,9 @@
   	"source": "https://data.cdc.gov/data.json",
   	"type": "DataJSON",
   	"defaults": {
-  		"publisher.name": ["Centers for Disease Control and Prevention"],
+  		"publisher.name": "Centers for Disease Control and Prevention",
   		"bureauCode": ["009:20"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["Centers for Disease Control and Prevention"]
@@ -130,12 +130,12 @@
   	"type": "DataJSON",
   	"overrides": {
   		"author": "State of California",
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of California"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of California",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datamichigangov": {
@@ -147,12 +147,12 @@
   	},
   	"overrides": {
   		"author": "State of Michigan",
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Michigan"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Michigan",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datasfgovorg": {
@@ -163,13 +163,13 @@
   		"theme": ["Health and Social Services"]
   	},
   	"overrides": {
-  		"publisher.name": ["City of San Francisco"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"publisher.name": "City of San Francisco",
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["City of San Francisco"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "City of San Francisco",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datacityofbostongov": {
@@ -180,13 +180,13 @@
   		"theme": ["Health"]
   	},
   	"overrides": {
-  		"publisher.name": ["City of Boston"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"publisher.name": "City of Boston",
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["City of Boston"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "City of Boston",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datacityofchicagoorg": {
@@ -197,12 +197,12 @@
   		"theme": ["Health & Human Services"]
   	},
   	"overrides": {
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["City of Chicago"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "City of Chicago",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "healthdatanygov": {
@@ -214,12 +214,12 @@
   	},
   	"overrides": {
   		"publisher.name": ["State of New York"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of New York"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of New York",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "openfdagov": {
@@ -230,11 +230,11 @@
   		"keyword": ["health", "human drugs", "community health"]
   	},
   	"overrides": {
-  		"publisher.name": ["Department of Health & Human Services"]
+  		"publisher.name": "Department of Health & Human Services"
   	},
   	"defaults": {
-  		"publisher.name": ["Department of Health & Human Services"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "Department of Health & Human Services",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datamedicaregov": {
@@ -242,12 +242,12 @@
   	"source": "https://data.medicare.gov/data.json",
   	"type": "DataJSON",
   	"overrides": {
-  		"publisher.name": ["Centers for Medicare & Medicaid Services"]
+  		"publisher.name": "Centers for Medicare & Medicaid Services"
   	},
   	"defaults": {
-  		"publisher.name": ["Centers for Medicare & Medicaid Services"],
-  		"bureauCode": ["009:38"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "Centers for Medicare & Medicaid Services",
+  		"bureauCode": "009:38",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datawagov": {
@@ -258,13 +258,13 @@
   		"theme": ["Health"]
   	},
   	"overrides": {
-  		"publisher.name": ["State of Washington"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"publisher.name": "State of Washington",
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Washington"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Washington",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datamarylandgov": {
@@ -276,12 +276,12 @@
   	},
   	"overrides": {
   		"publisher.name": ["State of Maryland"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Maryland"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Maryland",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "datacoloradogov": {
@@ -298,13 +298,13 @@
   		]
   	},
   	"overrides": {
-          "publisher.name": ["State of Colorado"],
-  		"programCode": [""],
-  		"bureauCode": [""]
+      "publisher.name": "State of Colorado",
+  		"programCode": ["000:000"],
+  		"bureauCode": ["000:00"]
   	},
   	"defaults": {
-  		"publisher.name": ["State of Colorado"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "State of Colorado",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	}
   },
   "cmsgov": {
@@ -312,8 +312,8 @@
   	"source": "https://dnav.cms.gov/api/healthdata",
   	"type": "DataJSON",
   	"defaults": {
-  		"publisher.name": ["Centers for Medicare & Medicaid Services"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "Centers for Medicare & Medicaid Services",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["Centers for Medicare & Medicaid Services"]
@@ -327,8 +327,8 @@
   		"keyword": ["Health"]
   	},
   	"defaults": {
-  		"publisher.name": ["US Department of Education"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "US Department of Education",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["US Department of Education"]
@@ -339,8 +339,8 @@
   	"source": "https://data.medicaid.gov/data.json",
   	"type": "DataJSON",
   	"defaults": {
-  		"publisher.name": ["Centers for Medicare & Medicaid Services"],
-  		"license": ["http://opendefinition.org/licenses/odc-odbl/"]
+  		"publisher.name": "Centers for Medicare & Medicaid Services",
+  		"license": "http://opendefinition.org/licenses/odc-odbl/"
   	},
   	"overrides": {
   		"publisher.name": ["Centers for Medicare & Medicaid Services"]
@@ -351,8 +351,8 @@
     "source": "http://datafiles.samhsa.gov/data.json",
     "type": "DataJSON",
     "defaults": {
-      "publisher.name": ["Substance Abuse & Mental Health Services Administration"],
-      "license": ["http://opendefinition.org/licenses/odc-odbl/"]
+      "publisher.name": "Substance Abuse & Mental Health Services Administration",
+      "license": "http://opendefinition.org/licenses/odc-odbl/"
     },
     "overrides": {
       "publisher.name": ["Substance Abuse & Mental Health Services Administration"]
