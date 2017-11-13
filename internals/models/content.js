@@ -522,9 +522,8 @@ class FileStorage extends Storage {
   }
 
   getRegistryInterraId(collection, identifier) {
-  
     if (collection in this.registry) {
-      const record = this.registry[collection].find((id) => {
+      const record = this.registry[collection].find((id) => { // eslint-disable-line
         return Object.keys(id)[0] === identifier;
       });
       if (record) {
@@ -708,10 +707,9 @@ class FileStorage extends Storage {
         } else {
           // Validate schema.
           this.validateDocToStore(predoc, precollection, (schemaErr) => {
-            const file = `${this.directory}/${collection}/${interraId}.json`;
-            fs.ensureDirSync(`${this.directory}/${collection}`);
+            const file = path.join(this.directory, collection, `${interraId}.json`);
+            fs.ensureDirSync(path.join(this.directory, collection));
             fs.writeJsonSync(file, predoc, { spaces: 2 });
-            //fs.writeFileSync(file, JSON.stringify(predoc), null, 2);
             this.Hook.postSave(predoc, (posterr, postdoc) => {
               if (schemaErr) {
                 callback({ type: 'schema', collection, interraId, error: schemaErr }, postdoc);

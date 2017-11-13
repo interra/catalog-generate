@@ -370,16 +370,16 @@ class Harvest {
         if (err) {
           this.log(err.type + ' validatinon error for ' + err.interraId + ' in ' + err.collection + ' : ' + JSON.stringify(err.error)); // eslint-disable-line prefer-template
         }
-        callback(err, {'interra-reference': existingInterraId }); // eslint-disable-line no-param-reassign
+        callback(err, { 'interra-reference': existingInterraId }); // eslint-disable-line no-param-reassign
       });
     } else {
       doc[title] = doc[title] ? doc[title] : uuid(); // eslint-disable-line no-param-reassign
       const idString = this.content.buildInterraId(doc[title]);
       const interraId = this.content.buildInterraIdSafe(idString, ids);
-      doc.interra = {
+      doc.interra = { // eslint-disable-line no-param-reassign
         id: interraId,
-        source
-      }; // eslint-disable-line no-param-reassign
+        source,
+      };
       this.content.insertOne(interraId, collection, doc, (err) => {
         if (err) {
           this.log(err.type + ' validatinon error for ' + err.interraId + ' in ' + err.collection + ' : ' + JSON.stringify(err.error)); // eslint-disable-line prefer-template
@@ -403,7 +403,7 @@ class Harvest {
     const that = this;
     Async.eachOf(docsGroup, (docs, sourceId, finished) => {
       const primaryCollection = that.content.schema.getConfigItem('primaryCollection');
-      that.content.buildRegistry((err) => {
+      that.content.buildRegistry(() => {
         Async.each(docs, (doci, done) => {
           // TODO: get source type.
           that.Hook.Store(doci, that.sources[sourceId].type, (errSt, doc) => {
@@ -456,7 +456,7 @@ class Harvest {
                   } else if (type === 'object') {
                     doc[field] = {}; // eslint-disable-line no-param-reassign
                     that.storeDoc(collection, values, title, identifier, sourceId, ids, (err, reference) => {
-                      doc[field]['interra-reference'] = Object.values(reference)[0];
+                      doc[field]['interra-reference'] = Object.values(reference)[0];// eslint-disable-line no-param-reassign
                       fin();
                     });
                   } else {
@@ -474,7 +474,7 @@ class Harvest {
                     return acc;
                   }, []);
                 }
-                that.storeDoc(primaryCollection, doc, title, identifier, sourceId, ids, (err, reference) => {
+                that.storeDoc(primaryCollection, doc, title, identifier, sourceId, ids, (err) => {
                   done(err, !err);
                 });
               });
