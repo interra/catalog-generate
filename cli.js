@@ -97,9 +97,9 @@ prog
   .help('Runs a harvest with cached sources.')
   .action((args) => {
     const storage = config.get('storage');
-    content = new Content[storage](args.site, config);
+    const content = new Content[storage](args.site, config);
     content.load(`${args.collection}/${args.interraId}.json`, (err, doc) => {
-      console.log(err, doc);
+      console.log(err, doc); // eslint-disable-line no-console
     });
   });
 
