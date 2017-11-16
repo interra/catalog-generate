@@ -26,7 +26,7 @@ Traditional catalogs use a SQL database (MySQL, PostgreSQL), webserver (Nginx, A
 
 Storing data as static files, or optionally in a NoSQL store like MongoDB, drastically reduces the overhead for managing and publishing data. Catalogs using SQL databases rely on complex abstractions for translating data from open formats to an internal state and then back to open formats. For example, many data workflows involve ingesting JSON files, writing them to rows and tables in a SQL database using an ORM, changing the data, then exporting them back to JSON files. These catalogs also require a web server and scripting language to receive requests and serve JSON.
 
-Interra Catalog takes a different approach. Data is saved in a [document store](https://en.wikipedia.org/wiki/Document-oriented_database) which is by default a file system. The only change in the way the data is stored verusus consumed are [internal references]() between docs. Updating data between harvesting, storing, and publishing is done with a small set of javascript functions. There is little state to understand and maintain.
+Interra Catalog takes a different approach. Data is saved in a [document store](https://en.wikipedia.org/wiki/Document-oriented_database) which is by default a file system. The only change in the way the data is stored versus consumed are [internal references]() between docs. Updating data between harvesting, storing, and publishing is done with a small set of javascript functions. There is little state to understand and maintain.
 
 ### Publishing
 
@@ -44,7 +44,7 @@ The schema is extremely flexible and easy to update.  Adding a new field is as s
 
 Roadmap soon to be shared. This project is still in early development.
 
-# Example Site
+## Example Site
 
 Currently have an early POC here: [http://healthdata-example.interra.io](http://healthdata-example.interra.io).
 
