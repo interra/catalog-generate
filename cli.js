@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 const prog = require('caporal');
+const chalk = require('chalk');
 const Config = require('./internals/models/config');
 const Validate = require('./internals/scripts/validate');
 const Build = require('./internals/scripts/build');
 const Harvest = require('./internals/scripts/harvest');
 const Content = require('./internals/models/content');
+const Site = require('./internals/models/site');
 const config = new Config(__dirname);
 
 prog
@@ -19,7 +21,14 @@ prog
   .help('validates a site')
   .argument('site', 'The site to validate')
   .action((args) => {
-    Validate.site(args.site, config);
+    const site = new Site(args.site, config);
+    site.validate((err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Config file is valid.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-routes')
   .help('builds collection data for a site exporting it to the build dir')

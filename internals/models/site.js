@@ -4,12 +4,14 @@ const path = require('path');
 const Schema = require('./schema');
 const Async = require('async');
 const _ = require('lodash');
+const Ajv = require('ajv');
+const ajv = new Ajv();
+const merge = require('lodash.merge');
+const apiSubDir = 'api/v1';
 
-/** Required fields for site settings. */
-const required = ['name', 'description', 'identifier', 'schema'];
+ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
-/** Optional fields for site settings. */
-const optional = ['front-page-icons', 'front-page-icon-collection', 'fontConfig'];
+const siteSchema = require('./site-schema.json');
 
 /**
  * Class for managing sites.
@@ -20,8 +22,10 @@ class Site {
    * Create a site.
    * @param {string} sitesDir The location in the filesystem of site folder.
    */
-  constructor(sitesDir) {
-    this.sitesDir = sitesDir;
+  constructor(site, config) {
+    this.config = config;
+    this.sitesDir = config.get('sitesDir');
+    this.siteDir = path.join(this.sitesDir, site);
   }
 
   /**
@@ -37,6 +41,66 @@ class Site {
     }
     return false;
   }
+  
+  validate(callback) {
+    const that = this;
+    Async.waterfall([
+      (done) => {
+        this.validateConfig((err) => {
+          done(err);
+        });
+      },
+      (done) => {
+        that.validateFolders((err, val) => {
+          done(err);
+        });
+      },
+    ], (err) => {
+      callback(err);
+    });
+    // config.yml
+    // collections
+    // harvest
+  }
+
+  validateFolders(callback) {
+    // Directory can be empty or must contain "collections" or "harvest".
+		const isDirectory = source => fs.lstatSync(source).isDirectory()
+		const getDirectories = source =>
+			fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory).map(fullDir => path.basename(fullDir));
+		const dirs = getDirectories(this.siteDir);
+		if (dirs.length < 1) {
+      callback(null);
+		} else if (dirs.length > 2) {
+			callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
+		} else if (dirs.length === 2) {
+      if (!(dirs.includes("collections"))) {
+        callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
+      } else if (!(dirs.includes("harvest"))) {
+        callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
+      } else {
+        callback(null);
+      }
+		} else if (dirs.length === 1) {
+      if (!(dirs.includes("collections")) && !(dirs.includes("harvest"))) {
+        callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
+      } else {
+        callback(null);
+      }
+    } else {
+			callback(null);
+		}
+  }
+
+  validateConfig(callback) {
+    const siteConfig = this.getConfig();
+		const valid = ajv.validate(siteSchema, siteConfig);
+		if (!valid) {
+			callback(ajv.errors);
+		} else {
+			callback(false);
+		}
+  }
 
   /**
    * Validates whether settings fields are in list of acceptable fields.
@@ -48,7 +112,7 @@ class Site {
   validateSettings(fields, settings) {
     const that = this;
     Async.each(Object.keys(settings), (item, callback) => {
-      if (that.inArray(item, optional)) {
+      if (that.inArray(item, fields)) {
         callback();
       } else {
         callback(`${item} is not allowed.`);
@@ -94,12 +158,13 @@ class Site {
         callback('Site already exists', null);
         process.exit(1);
       }
-      const schema = new Schema(settings.schema);
+      const schema = new Schema(settings.schema, that.config);
       const schemaConfig = schema.getConfig();
 
       that.sitedir = path.join(that.sitesDir, settings.identifier);
 
       that.createDirs(that.sitedir, schemaConfig.collections);
+      console.log(settings);
 
       fs.ensureDir(that.sitedir)
         .then(() => {
@@ -122,8 +187,8 @@ class Site {
     });
   }
 
-  getConfig(site) {
-    const data = fs.readFileSync(path.join(this.sitesDir, site, 'config.yml'), 'utf8');
+  getConfig() {
+    const data = fs.readFileSync(path.join(this.siteDir, 'config.yml'), 'utf8');
     return YAML.parse(data);
   }
 
