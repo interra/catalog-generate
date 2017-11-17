@@ -1,7 +1,0 @@
-'@type': 'dcat:Distribution'
-downloadURL: 'http://demo.getdkan.com/sites/default/files/IMD-MAPS.zip'
-mediaType: application/zip
-format: zip
-title: 'English Indices of Deprivation 2010'
-identifier: english-indices-of-deprivation-2010-c9d14f95-51e5-40f6-be16-0d998425d843
-interra-published: true

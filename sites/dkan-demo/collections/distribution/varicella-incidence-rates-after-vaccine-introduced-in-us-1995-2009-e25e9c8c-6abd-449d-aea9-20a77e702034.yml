@@ -1,8 +1,0 @@
-'@type': 'dcat:Distribution'
-downloadURL: 'http://demo.getdkan.com/sites/default/files/varicellaincidencerates_0.csv'
-mediaType: text/csv
-format: csv
-description: "<p>Source: \"Impact of Vaccination on the Epidemiology of Varicella: 1995–2009\" published in the journal Pediatrics in August 2011.</p>\n"
-title: 'Varicella Incidence Rates After Vaccine Introduced in U.S., 1995-2009'
-identifier: varicella-incidence-rates-after-vaccine-introduced-in-us-1995-2009-e25e9c8c-6abd-449d-aea9-20a77e702034
-interra-published: true
