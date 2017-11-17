@@ -11,11 +11,11 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
 class Schema {
 
-  constructor(directory) {
-    this.dir = directory;
+  constructor(schemaName, config) {
+    this.dir = path.join(config.get('schemasDir'), schemaName);
     this.configFile = this.dir + '/config.yml';
     if (!fs.existsSync(this.dir)) {
-      throw new Error("Schema directory does not exist.")
+      throw new Error(`Schema directory: ${this.dir} does not exist.`);
     }
     else if (!fs.existsSync(this.configFile)) {
       throw new Error("Schema config file " + this.configFile + " does not exist.")

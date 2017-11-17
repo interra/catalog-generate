@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Schema for Interra site config object",
+  "title": "Interra Catalog Site Config",
+  "type": "object",
+  "required" : ["name", "schema", "identifier"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "The name of the site"
+    },
+    "schema": {
+      "type": "string",
+      "title": "Schema",
+      "description": "The schema of the site",
+      "enum": [
+        "pod-full",
+        "pod",
+        "test-schema"
+      ]
+    },
+    "identifier": {
+      "type": "string",
+      "title": "Identifier",
+      "description": "Unique ID of the site",
+      "pattern": "^[a-z0-9]*$"
+    },
+    "description": {
+      "description": "Description of the site",
+      "type": "string",
+      "title": "Description"
+    },
+    "front-page-icon-collection": {
+      "type": "string",
+      "description": "The collection to be used for front page icons",
+      "Title": "Front page icon collection",
+      "pattern": "^[a-z]*$"
+    },
+    "front-page-icons": {
+      "type": "array",
+      "description": "The icons to be used for front page icons",
+      "Title": "Front page icons"
+    },
+    "fontConfig": {
+      "type": "object",
+      "description": "Configuration object for fonts",
+      "Title": "Font Config"
+    }
+  }
+}

@@ -16,7 +16,7 @@ New sites can be created manually by copying the "test-site" in ``./internals/mo
 Use Catalog Admin
 ---------------------
 
-[Interra Catalog Admin](https://github.com/interra/catalog-admin) includes a user interface for creating and editing sites.
+.. _Interra Catalog Admin: https://github.com/interra/catalog-admin includes a user interface for creating and editing sites.
 
 Validating Sites
 ---------------------
@@ -34,13 +34,13 @@ Below is a description of the site configuration file: ``config.yml``.
 +-----------------+-----------------+-----------------+-----------------+
 |                 | Type            | Description     | Required        |
 +=================+=================+=================+=================+
-| **name**        | ``string``      | The name of the | No              |
+| **name**        | ``string``      | The name of the | Yes             |
 |                 |                 | site            |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| **schema**      | ``string``      | The schema of   | No              |
+| **schema**      | ``string``      | The schema of   | Yes             |
 |                 |                 | the site        |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| **identifier**  | ``string``      | Unique ID of    | No              |
+| **identifier**  | ``string``      | Unique ID of    | Yes             |
 |                 |                 | the site        |                 |
 +-----------------+-----------------+-----------------+-----------------+
 | **description** | ``string``      | Description of  | No              |
@@ -62,7 +62,7 @@ Below is a description of the site configuration file: ``config.yml``.
 
 Additional properties are allowed.
 
-interra.catalog.site.config.name
+name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The name of the site
@@ -70,7 +70,7 @@ The name of the site
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.schema
+schema
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The schema of the site
@@ -83,7 +83,7 @@ The schema of the site
    -  ``"pod"``
    -  ``"test-schema"``
 
-interra.catalog.site.config.identifier
+identifier
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Unique ID of the site
@@ -91,7 +91,7 @@ Unique ID of the site
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.description
+description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Description of the site
@@ -99,7 +99,7 @@ Description of the site
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.front-page-icon-collection
+front-page-icon-collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The collection to be used for front page icons
@@ -107,7 +107,7 @@ The collection to be used for front page icons
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.front-page-icons
+front-page-icons
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The icons to be used for front page icons
@@ -115,7 +115,7 @@ The icons to be used for front page icons
 -  **Type**: ``array[]``
 -  **Required**: No
 
-interra.catalog.site.config.fontConfig
+fontConfig
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Configuration object for fonts

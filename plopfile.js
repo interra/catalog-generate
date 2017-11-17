@@ -1,8 +1,12 @@
 const path = require('path');
 const slug = require('slug');
 const fs = require('fs-extra');
+const YAML = require('yamljs');
 const chalk = require('chalk');
 const Site = require('./internals/models/site');
+const Config = require('./internals/models/config');
+const config = new Config(__dirname);
+
 
 module.exports = function (plop) {
     plop.setGenerator('Create Site', {
@@ -44,15 +48,16 @@ module.exports = function (plop) {
         ],
         actions: function (data) {
             var actions = [];
-            var site = new Site();
+            const identifier = slug(data.name.toLowerCase()); 
             var settings = {
                 name: data.name,
-                identifier: slug(data.name.toLowerCase()),
+                identifier,
                 schema: data.schema,
                 description: data.description,
                 "front-page-icon-collection": data['front-page-icon-collection'],
-                "front-page-icons": data['front-page-icons'],
+                "front-page-icons": YAML.parse(data['front-page-icons']),
             };
+            const site = new Site(identifier, config);
             site.create(settings, (err, result) => {
                 if (err == 'Site already exists') {
                     console.log(chalk.red('[PLOP] ') + 'Site "' + settings.name  + '" already exists');
