@@ -62,7 +62,7 @@ Below is a description of the site configuration file: ``config.yml``.
 
 Additional properties are allowed.
 
-interra.catalog.site.config.name
+config.name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The name of the site
@@ -70,7 +70,7 @@ The name of the site
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.schema
+config.schema
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The schema of the site
@@ -83,7 +83,7 @@ The schema of the site
    -  ``"pod"``
    -  ``"test-schema"``
 
-interra.catalog.site.config.identifier
+config.identifier
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Unique ID of the site
@@ -91,7 +91,7 @@ Unique ID of the site
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.description
+config.description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Description of the site
@@ -99,7 +99,7 @@ Description of the site
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.front-page-icon-collection
+config.front-page-icon-collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The collection to be used for front page icons
@@ -107,7 +107,7 @@ The collection to be used for front page icons
 -  **Type**: ``string``
 -  **Required**: No
 
-interra.catalog.site.config.front-page-icons
+config.front-page-icons
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The icons to be used for front page icons
@@ -115,7 +115,7 @@ The icons to be used for front page icons
 -  **Type**: ``array[]``
 -  **Required**: No
 
-interra.catalog.site.config.fontConfig
+config.fontConfig
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Configuration object for fonts
