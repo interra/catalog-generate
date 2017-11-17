@@ -1,8 +1,6 @@
-'use strict';
 const fs = require('fs-extra');
 const YAML = require('yamljs');
 const refParser = require('json-schema-ref-parser');
-const chalk = require('chalk');
 const Async = require('async');
 const path = require('path');
 const Ajv = require('ajv');
@@ -13,14 +11,13 @@ class Schema {
 
   constructor(schemaName, config) {
     this.dir = path.join(config.get('schemasDir'), schemaName);
-    this.configFile = this.dir + '/config.yml';
+    this.configFile = path.join(this.dir, 'config.yml');
     if (!fs.existsSync(this.dir)) {
       throw new Error(`Schema directory: ${this.dir} does not exist.`);
+    } else if (!fs.existsSync(this.configFile)) {
+      throw new Error('Schema config file does not exist.');
     }
-    else if (!fs.existsSync(this.configFile)) {
-      throw new Error("Schema config file " + this.configFile + " does not exist.")
-    }
-    this.Hook = require(this.dir + '/hooks/Schema.js');
+    this.Hook = require(this.dir + '/hooks/Schema.js'); // eslint-disable-line 
     this.schemas = {};
     this.refSchemas = {};
   }
@@ -33,12 +30,9 @@ class Schema {
       if (!valid.errors) {
         return true;
       }
-      else {
-        return false;
-      }
-    }
-    catch (e) {
-      throw new Error("Schema is not valid.")
+      return false;
+    } catch (e) {
+      throw new Error('Schema is not valid.');
     }
   }
 
@@ -48,9 +42,7 @@ class Schema {
     if (!valid) {
       return validator.errors;
     }
-    else {
-      return true;
-    }
+    return true;
   }
 
   // TODO: Validates full schema:
@@ -65,7 +57,7 @@ class Schema {
 
   // Retrieves uiSchema.
   uiSchema() {
-    const data = fs.readFileSync(path.join(this.dir,'UISchema.yml'), 'utf8');
+    const data = fs.readFileSync(path.join(this.dir, 'UISchema.yml'), 'utf8');
     return YAML.parse(data);
   }
 
@@ -79,16 +71,17 @@ class Schema {
   collectionAndSchema(collection, callback) {
     this.collection(collection, (err, list) => {
       if (err) {
-        return callback('Collection not found.');
+        callback('Collection not found.');
+      } else {
+        const uiSchema = this.uiSchema();
+        const map = this.mapSettings();
+        const data = {
+          schema: list,
+          uiSchema: uiSchema[collection],
+          map,
+        };
+        callback(null, data);
       }
-      const uiSchema = this.uiSchema();
-      const map = this.mapSettings();
-      let data = {
-        schema: list,
-        uiSchema: uiSchema[collection],
-        map: map
-      }
-      return callback(null,data);
     });
   }
 
@@ -99,105 +92,98 @@ class Schema {
    */
   load(collection, callback) {
     const that = this;
-    const file = path.join(that.dir, 'collections', collection + '.yml');
-    const interraSchemaFile = path.join(__dirname, '../../schemas/interra.yml');
-    that.Hook.preLoad(file,(err, file) => {
-      const collectionFile = fs.readFileSync(file, 'utf8');
-      const interraSchema = fs.readFileSync(interraSchemaFile, 'utf8');
+    const file = path.join(that.dir, 'collections', `${collection}.yml`);
+    that.Hook.preLoad(file, (err, prefile) => {
+      const collectionFile = fs.readFileSync(prefile, 'utf8');
       // const data = Object.assign(YAML.parse(collectionFile), {interra: YAML.parse(interraSchema)});
       const data = YAML.parse(collectionFile);
-      that.Hook.postLoad(collection, data, (err, output) => {
-        if (data) {
-          return callback(null, data);
-        }
-        else {
-          return callback("Collection not found");
-        }
+      that.Hook.postLoad(collection, data, (posterr, postData) => {
+        callback(posterr, postData);
       });
     });
   }
 
   /**
-   * Provides schema that includes "interra-reference" for validating stored docs.
+   * Provides schema that includes 'interra-reference' for validating stored docs.
    */
   reference(collection, callback) {
     if (collection in this.refSchemas) {
-      return callback(null, this.refSchemas[collection]);
+      callback(null, this.refSchemas[collection]);
+    } else {
+      const that = this;
+      this.load(collection, (err, schema) => {
+        const references = this.getConfigItem('references');
+        if (collection in references) {
+          Async.eachOf(references[collection], (ref, field, done) => {
+            if (schema.properties[field].type === 'object') {
+              schema.properties[field] = { // eslint-disable-line no-param-reassign
+                type: 'object',
+                title: 'interra reference',
+                required: ['interra-reference'],
+                properties: {
+                  'interra-reference': {
+                    type: 'string',
+                    title: 'Interra reference',
+                  },
+                },
+              };
+            } else {
+              schema.properties[field] = { // eslint-disable-line no-param-reassign
+                type: 'array',
+                title: 'interra reference',
+                items: {
+                  required: ['interra-reference'],
+                  properties: {
+                    'interra-reference': {
+                      type: 'string',
+                      title: 'Interra reference',
+                    },
+                  },
+                },
+              };
+            }
+            done();
+          }, (lerr) => {
+            that.refSchemas[collection] = schema;
+            callback(lerr, schema);
+          });
+        } else {
+          callback(null, schema);
+        }
+      });
     }
-    const that = this;
-    this.load(collection, (err, schema) => {
-      const references = this.getConfigItem('references');
-      if (collection in references) {
-        Async.eachOf(references[collection], (ref, field, done) => {
-          if (schema.properties[field]['type'] == 'object') {
-            schema.properties[field] = {
-              "type": "object",
-              "title": "interra reference",
-              "required": ["interra-reference"],
-              "properties": {
-                "interra-reference": {
-                  "type": "string",
-                  "title":  "Interra reference"
-                }
-              }
-            }
-          }
-          else {
-            schema.properties[field] = {
-              "type": "array",
-              "title": "interra reference",
-              "items": {
-                "required": ["interra-reference"],
-                "properties": {
-                  "interra-reference": {
-                    "type": "string",
-                    "title":  "Interra reference"
-                  }
-                }
-              }
-            }
-          }
-          done();
-        }, function(err) {
-          that.refSchemas[collection] = schema;
-          callback(err, schema);
-        });
-      }
-      else {
-        callback(null, schema);
-      }
-    });
   }
 
   dereference(collection, callback) {
     if (collection in this.schemas) {
-      return callback(null, this.schemas[collection]);
-    }
-    const that = this;
-    this.load(collection, (err, schema) => {
-      if (err) {
-        return callback(err);
-      }
-      that.Hook.preDereference(schema,(err, schema) => {
-
-        const dir = __dirname;
-        const schemaDir = this.dir + '/collections';
-        process.chdir(schemaDir);
-        refParser.dereference(schema)
-          .then(function(derefSchema) {
-            process.chdir(dir);
-            that.Hook.postDereference(derefSchema,(err, derefSchema) => {
-              that.schemas[collection] = derefSchema;
-              return callback(null, derefSchema);
-            });
-          })
-          .catch(function(err) {
-            process.chdir(dir);
-            return callback(err, null);
+      callback(null, this.schemas[collection]);
+    } else {
+      const that = this;
+      this.load(collection, (err, schema) => {
+        if (err) {
+          callback(err);
+        } else {
+          that.Hook.preDereference(schema, (preerr, preschema) => {
+            const dir = __dirname;
+            const schemaDir = path.join(this.dir, 'collections');
+            process.chdir(schemaDir);
+            refParser.dereference(preschema)
+              .then((derefSchema) => {
+                process.chdir(dir);
+                that.Hook.postDereference(derefSchema, (posterr, postDerefSchema) => {
+                  that.schemas[collection] = postDerefSchema;
+                  callback(posterr, postDerefSchema);
+                });
+              })
+              .catch((dereferr) => {
+                process.chdir(dir);
+                callback(dereferr, null);
+              });
           });
-        });
-      })
+        }
+      });
     }
+  }
 
   getConfig() {
     const data = fs.readFileSync(this.configFile, 'utf8');
@@ -214,21 +200,22 @@ class Schema {
    * @return {array} Array of schemas.
    */
   list(callback) {
-    fs.readdir(this.dir + '/../.', function (err, data) {
+    fs.readdir(path.join(this.dir, '/../.'), (err, data) => {
       if (err) {
-        return callback(err);
+        callback(err);
+      } else {
+        callback(null, data);
       }
-      callback(null, data);
     });
   }
 }
 
-Schema.register = function (server, options, next) {
-    next();
-}
+Schema.register = (server, options, next) => {
+  next();
+};
 
 Schema.register.attributes = {
-    "name": "schema"
-}
+  name: 'schema',
+};
 
 module.exports = Schema;
