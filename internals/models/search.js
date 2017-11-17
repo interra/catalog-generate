@@ -16,9 +16,9 @@ class Search {
     this.sitesDir = config.get('sitesDir');
     this.siteDir = path.join(this.sitesDir, site);
     this.schemasDir = config.get('schemasDir');
-    this.siteInfo = new Site(this.sitesDir);
+    this.siteInfo = new Site(site, config);
     this.schemaName = this.siteInfo.getConfigItem(site,'schema'); 
-    this.schema = new Schema(path.join(this.schemasDir, this.schemaName));
+    this.schema = new Schema(this.schemaName, config);
     this.apiDir = path.join(config.get('buildDir'), site, apiSubDir);
   }
 

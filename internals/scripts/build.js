@@ -80,9 +80,9 @@ function docExport(site, config, collection, interraId, callback) {
  * Exports the schema for the site.
  */
 function schemaExport(site, config, callback) {
-  const siteInfo = new Site(config.get('sitesDir'));
+  const siteInfo = new Site(site, config);
   const schemaName = siteInfo.getConfigItem(site, 'schema');
-  const schema = new Schema(path.join(config.get('schemasDir'), schemaName));
+  const schema = new Schema(schemaName, config);
   const collections = schema.getConfigItem('collections');
   const facets = schema.getConfigItem('facets');
   const primaryCollection = schema.getConfigItem('primaryCollection');
@@ -126,7 +126,7 @@ function schemaExport(site, config, callback) {
  * Exports configuration.
  */
 function configExport(site, config, callback) {
-  const siteInfo = new Site(config.get('sitesDir'));
+  const siteInfo = new Site(site, config);
   const siteConfig = siteInfo.getConfig(site);
   const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
   fs.outputJson(`${apiDir}/config.json`, siteConfig, (err) => {
@@ -138,9 +138,9 @@ function configExport(site, config, callback) {
  * Exports search file for site.
  */
 function searchExport(site, config, callback) {
-  const siteInfo = new Site(config.get('sitesDir'));
+  const siteInfo = new Site(site, config);
   const schemaName = siteInfo.getConfigItem(site, 'schema');
-  const schema = new Schema(path.join(config.get('schemasDir'), schemaName));
+  const schema = new Schema(schemaName, config);
   const searchEngine = config.get('search');
   const search = new Search[searchEngine](site, config);
   const content = prepare(site, config);
@@ -213,10 +213,10 @@ function setCollectionPathDef(collection) {
 }
 
 function swaggerExport(site, config, callback) {
-  const siteInfo = new Site(config.get('sitesDir'));
+  const siteInfo = new Site(site, config);
   const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
   const schemaName = siteInfo.getConfigItem(site, 'schema');
-  const schema = new Schema(path.join(config.get('schemasDir'), schemaName));
+  const schema = new Schema(schemaName, config);
   const primaryCollection = schema.getConfigItem('primaryCollection');
   const collections = schema.getConfigItem('collections');
 
@@ -380,10 +380,10 @@ function swaggerExport(site, config, callback) {
 }
 
 function datajsonExport(site, config, callback) {
-  const siteInfo = new Site(config.get('sitesDir'));
+  const siteInfo = new Site(site, config);
   const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
   const schemaName = siteInfo.getConfigItem(site, 'schema');
-  const schema = new Schema(path.join(config.get('schemasDir'), schemaName));
+  const schema = new Schema(schemaName, config);
   const primaryCollection = schema.getConfigItem('primaryCollection');
   const content = prepare(site, config);
 
