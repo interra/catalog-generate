@@ -1,0 +1,51 @@
+{
+  "@type": "dcat:Dataset",
+  "accessLevel": "public",
+  "accrualPeriodicity": "R/P1Y",
+  "contactPoint": {
+    "fn": "Gray, Stefanie",
+    "hasEmail": "mailto:datademo@example.com"
+  },
+  "description": "<p>Deprivation is measured across seven different areas or domains - income, employment, health, education, living environment, crime and barriers to services using a wide range of indicators, and the methods used show how each area compares with other areas across England using a combination of all these indicators.</p>\n<p>As stated by The Guardian, \"the data is based on a close analysis of the UK government's Indices of Multiple Deprivation - which measures relative poverty across England – by Alasdair Rae at the University of Sheffield.\" (<a href=\"http://www.theguardian.com/uk/datablog/2012/apr/12/deprivation-poverty-london\">Source</a>)</p>\n<p><strong>Source:</strong> <a href=\"http://data.london.gov.uk/dataset/indices-of-deprivation-2015\">http://data.london.gov.uk/dataset/indices-of-deprivation-2015</a></p>\n<p><strong>Related Data Story: </strong><a href=\"/story/london-income-analysis\">London Income Analysis</a></p>\n",
+  "distribution": [
+    {
+      "interra-reference": "english-indices-of-depriv"
+    }
+  ],
+  "identifier": "fb3525f2-d32a-451e-8869-906ed41f7695",
+  "issued": "2016-04-21",
+  "keyword": [
+    {
+      "interra-reference": "demographics"
+    },
+    {
+      "interra-reference": "economy"
+    },
+    {
+      "interra-reference": "spatial-data"
+    },
+    {
+      "interra-reference": "united-kingdom"
+    }
+  ],
+  "landingPage": "http://demo.getdkan.com/dataset/london-deprivation-index",
+  "license": "http://opendefinition.org/licenses/odc-odbl/",
+  "modified": "2017-11-17",
+  "publisher": {
+    "interra-reference": "state-economic-council-co"
+  },
+  "references": [
+    "http://www.lfpress.com/2016/05/13/expert-panel-says-londons-living-wage-is-1553h-londoners-need-30284-to-meet-basic-needs"
+  ],
+  "spatial": "POLYGON ((-1.1178588867187 51.08282186161, -1.1178588867187 51.859531509855, 1.1178588867187 51.859531509855, 1.1178588867187 51.08282186161))",
+  "theme": [
+    {
+      "interra-reference": "finance-and-budgeting"
+    }
+  ],
+  "title": "London Deprivation Index",
+  "interra": {
+    "id": "london-deprivation-index",
+    "source": "dkandemo"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "@type": "org:Organization",
+  "name": "demo.getdkan.com",
+  "interra": {
+    "id": "demogetdkancom",
+    "source": "dkandemo"
+  },
+  "identifier": "3a326e8b-0aa0-497c-9f2b-c7d0bd083fc6",
+  "created": "2017-11-17",
+  "modified": "2017-11-17"
+}

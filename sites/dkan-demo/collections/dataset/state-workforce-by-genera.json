@@ -1,0 +1,45 @@
+{
+  "@type": "dcat:Dataset",
+  "accessLevel": "public",
+  "contactPoint": {
+    "fn": "Stefanie Gray",
+    "hasEmail": "mailto:stefanie@example.com"
+  },
+  "description": "<p>Information about the state workforce, broken down into four generational cohorts.</p>\n<p><strong>Note:</strong> This dataset has been given a vague name because it is anonymized demo data, not actual state data.</p>\n",
+  "distribution": [
+    {
+      "interra-reference": "workforce-by-generation-2"
+    },
+    {
+      "interra-reference": "retirements-2011-2015"
+    },
+    {
+      "interra-reference": "retirements-eligible-vs-a"
+    }
+  ],
+  "identifier": "95f8eac4-fd1f-4b35-8472-5c87e9425dfa",
+  "issued": "2016-04-11",
+  "keyword": [
+    {
+      "interra-reference": "demographics"
+    },
+    {
+      "interra-reference": "socioeconomic"
+    },
+    {
+      "interra-reference": "workforce"
+    }
+  ],
+  "landingPage": "http://demo.getdkan.com/dataset/state-workforce-generation-2011-2015",
+  "license": "http://opendefinition.org/licenses/gfdl/",
+  "modified": "2017-11-17",
+  "publisher": {
+    "interra-reference": "state-economic-council"
+  },
+  "temporal": "2011-01-01T05:00:00+00:00/2011-01-01T05:00:00+00:00",
+  "title": "State Workforce by Generation (2011-2015)",
+  "interra": {
+    "id": "state-workforce-by-genera",
+    "source": "dkandemo"
+  }
+}

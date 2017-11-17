@@ -1,0 +1,11 @@
+{
+  "@type": "org:Organization",
+  "name": "Committee on International Affairs",
+  "interra": {
+    "id": "committee-on-internationa",
+    "source": "dkandemo"
+  },
+  "identifier": "3b611ac7-17a1-48ee-a4e7-4fd08d9af3f7",
+  "created": "2017-11-17",
+  "modified": "2017-11-17"
+}
