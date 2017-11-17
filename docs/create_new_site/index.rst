@@ -16,7 +16,7 @@ New sites can be created manually by copying the "test-site" in ``./internals/mo
 Use Catalog Admin
 ---------------------
 
-.. _Interra Catalog Admin: https://github.com/interra/catalog-admin includes a user interface for creating and editing sites.
+`Interra Catalog Admin: <https://github.com/interra/catalog-admin>`_ includes a user interface for creating and editing sites.
 
 Validating Sites
 ---------------------
