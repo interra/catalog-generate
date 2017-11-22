@@ -8,7 +8,7 @@ Use Plop Generator
 
 A new site can be created using plop: ``node_modules/.bin/plop``.
 
-Create a Site Manully
+Create a Site Manually
 ---------------------
 
 New sites can be created manually by copying the "test-site" in ``./internals/models/tests/sites/test-site``.
@@ -16,7 +16,7 @@ New sites can be created manually by copying the "test-site" in ``./internals/mo
 Use Catalog Admin
 ---------------------
 
-`Interra Catalog Admin: <https://github.com/interra/catalog-admin>`_ includes a user interface for creating and editing sites.
+`Interra Catalog Admin <https://github.com/interra/catalog-admin>`_ includes a user interface for creating and editing sites.
 
 Validating Sites
 ---------------------
