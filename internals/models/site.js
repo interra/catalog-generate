@@ -171,7 +171,6 @@ class Site {
     const items = this.getConfig();
     return items[item];
   }
-
 }
 
 module.exports = Site;
