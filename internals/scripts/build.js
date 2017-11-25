@@ -142,6 +142,7 @@ function searchExport(site, config, callback) {
   const schemaName = siteInfo.getConfigItem('schema');
   const schema = new Schema(schemaName, config);
   const searchConfig = siteInfo.getConfigItem('search');
+  console.log(searchConfig);
   const searchEngine = searchConfig.type;
   const search = new Search[searchEngine](site, config);
   const content = prepare(site, config);
@@ -151,32 +152,32 @@ function searchExport(site, config, callback) {
     if (err) {
       callback(err);
     } else {
-			Async.auto({
-				load: (done) => {
-					content.findByCollection(primaryCollection, true, (err, results) => {
-						done(err, results);
-					});
-				},
-				index: ['load', (results, done) => {
-					Async.eachSeries(results.load, (item, fin) => {
-						search.insertOne(item, (err, out) => {
-							fin(err, out);
-						});
-					}, (err) => {
-						done(err, !err);
-					});
-				}],
-			}, (err) => {
-				if (err) {
-					callback(err);
-				} else {
-					search.push((pusherr) => {
-						callback(pusherr, !pusherr);
-					});
-				}
-			});
-		}
-	});
+      Async.auto({
+        load: (done) => {
+          content.findByCollection(primaryCollection, true, (loadErr, results) => {
+            done(loadErr, results);
+          });
+        },
+        index: ['load', (results, done) => {
+          Async.eachSeries(results.load, (item, fin) => {
+            search.insertOne(item, (insErr, out) => {
+              fin(insErr, out);
+            });
+          }, (derr) => {
+            done(derr, !derr);
+          });
+        }],
+      }, (ferr) => {
+        if (ferr) {
+          callback(ferr);
+        } else {
+          search.push((pusherr) => {
+            callback(pusherr, !pusherr);
+          });
+        }
+      });
+    }
+  });
 }
 
 function setCollectionPathDocDef(collection, collectionPathDef) {
