@@ -11,6 +11,7 @@ script:
   - node_modules/.bin/jest build.test.js
   - node_modules/.bin/jest content.test.js
   - node_modules/.bin/jest harvest.test.js
+  - git st
 
 
 before_install:
