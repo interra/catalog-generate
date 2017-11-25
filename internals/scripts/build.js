@@ -433,11 +433,6 @@ function datajsonExport(site, config, callback) {
 function all(site, config, callback) {
   Async.waterfall([
     (done) => {
-      routesExport(site, config, (err) => {
-        done(err);
-      });
-    },
-    (done) => {
       docsExport(site, config, (err) => {
         done(err);
       });

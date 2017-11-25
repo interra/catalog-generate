@@ -6,12 +6,13 @@ search:
   type: elasticLunr 
   fields:
     - title
-    - keyword
-    - publisher
-    - description
-    - theme
+    - id
+    - created
     - modified
-    - distribution
+    - tags 
+    - org 
+    - description
+    - resources 
 front-page-icon-collection: tags
 front-page-icons:
  - city-planning
