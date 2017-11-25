@@ -8,7 +8,6 @@ script:
 #  - node ./internals/scripts/generate-templates-for-linting
 #  - npm run test
 #  - npm run build
-  - rm -r node_modules/elasticlunr; git clone git@github.com:weixsong/elasticlunr.js.git node_modules/elasticlunr
   - node_modules/.bin/jest build.test.js
   - node_modules/.bin/jest content.test.js
   - node_modules/.bin/jest harvest.test.js
