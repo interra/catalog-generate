@@ -1,12 +1,12 @@
 const uuid = require('uuidv4');
 function formatDate(date) {
   const d = new Date(date);
-  let month = '' + (d.getMonth() + 1);
-  let day = '' + d.getDate();
+  let month = '' + (d.getMonth() + 1); // eslint-disable-line
+  let day = '' + d.getDate(); // eslint-disable-line
   const year = d.getFullYear();
 
   if (month.length < 2) month = `0${month}`;
-  if (day.length < 2) day = `0${day}`
+  if (day.length < 2) day = `0${day}`;
 
   return [year, month, day].join('-');
 }
@@ -18,24 +18,23 @@ module.exports = {
     const now = formatDate(Date.now());
     // TODO: move this logic to harvest.
     if (collection === 'distribution' || collection === 'organization') {
-      if (!("identifier" in doc)) {
-        doc.identifier = uuid();
+      if (!('identifier' in doc)) {
+        doc.identifier = uuid(); // eslint-disable-line
       }
-      if (!("created" in doc)) {
-        doc.created = now;
+      if (!('created' in doc)) {
+        doc.created = now; // eslint-disable-line
       }
-      if (!("modified" in doc)) {
-        doc.modified = now;
+      if (!('modified' in doc)) {
+        doc.modified = now; // eslint-disable-line
       }
-      if ("subOrganizationOf" in doc) {
-        if (typeof doc["subOrganizationOf"] !== 'string') {
-          delete doc["subOrganizationOf"];
+      if ('subOrganizationOf' in doc) {
+        if (typeof doc.subOrganizationOf !== 'string') {
+          delete doc.subOrganizationOf; // eslint-disable-line
         }
       }
-    }
-    else if (collection === 'dataset') {
-      if (!("issued" in doc)) {
-        doc.issued = now;
+    } else if (collection === 'dataset') {
+      if (!('issued' in doc)) {
+        doc.issued = now; // eslint-disable-line
       }
     }
     callback(null, interraId, collection, doc);
