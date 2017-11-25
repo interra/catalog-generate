@@ -142,7 +142,6 @@ function searchExport(site, config, callback) {
   const schemaName = siteInfo.getConfigItem('schema');
   const schema = new Schema(schemaName, config);
   const searchConfig = siteInfo.getConfigItem('search');
-  console.log(searchConfig);
   const searchEngine = searchConfig.type;
   const search = new Search[searchEngine](site, config);
   const content = prepare(site, config);
