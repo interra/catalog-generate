@@ -24,7 +24,7 @@
       "type": "string",
       "title": "Identifier",
       "description": "Unique ID of the site",
-      "pattern": "^[a-z0-9]*$"
+      "pattern": "^[a-z0-9-]*$"
     },
     "description": {
       "description": "Description of the site",

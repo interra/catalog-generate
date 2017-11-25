@@ -17,7 +17,7 @@ export class HomeListItem extends React.PureComponent { // eslint-disable-line r
 
     // Put together the content of the repository
     const content = (
-      <StyledLink to={`dataset/${item.ref}`}>
+      <StyledLink to={`dataset/${item.doc.interra.id}`}>
         { item.doc.title }
       </StyledLink>
     );
@@ -30,7 +30,7 @@ export class HomeListItem extends React.PureComponent { // eslint-disable-line r
 
     // Render the content into a list item
     return (
-      <Listy itemKey={`repo-list-item-${item.ref}`} item={content} />
+      <Listy itemKey={`repo-list-item-${item.doc.interra.id}`} item={content} />
     );
   }
 }

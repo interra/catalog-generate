@@ -22,7 +22,19 @@ export class SearchListItem extends React.PureComponent { // eslint-disable-line
       let i = 0;
       return distributions.map(function(dist) {
         i++
-        return <span key={`dist-id-${dist.identifier}-${i}`} className="label" data-format={dist.format}>{dist.format}</span>
+        return <div title={`format: ${dist.format}`} key={`dist-id-${dist.identifier}-${i}`} style={{float: "left"}} className="label" data-format={dist.format}>{dist.format}</div>
+      })
+    }
+  }
+  themes(themes) {
+    if (!themes) {
+      return null;
+    }
+    else {
+      let i = 0;
+      return themes.map(function(theme) {
+        i++
+        return <div title={`theme: ${theme.title}`} key={`dist-id-${theme.identifier}-${i}`} style={{fontSize:"1.4em", color: "#555", marginTop: "-5px", paddingLeft: "5px", float:"left"}} className={`font-icon-select-1 font-icon-select-1-${theme.icon}`}></div>
       })
     }
   }
@@ -30,22 +42,19 @@ export class SearchListItem extends React.PureComponent { // eslint-disable-line
   render() {
 
     const item = this.props.item;
-
-    const description = excerpts(item.doc.description,{words: 35});
+    const description = excerpts(item.doc.description, {words: 35});
     const formats = this.formats(item.doc.distribution);
+    const themes = this.themes(item.doc.theme);
 
     // Put together the content of the repository
     const content = (
       <Wrapper>
-        <Link to={`dataset/${item.ref}`} style={{fontSize: "1.2em"}}>
+        <Link to={`dataset/${item.doc.interra.id}`} style={{fontSize: "1.2em"}}>
           { item.doc.title }
         </Link>
-        <div className="row">
-          <div className="col-md-12">
-            <span style={{fontSize: ".9em"}}> {item.doc.theme}</span>
-          </div>
+        <div style={{paddingTop: "20px"}} className="row">
           <div className="col-md-12" style={{textAlign: "right"}}>
-            {formats}
+          {formats} {themes}
           </div>
         </div>
         <div className="row" style={{fontSize: ".9em", padding: "5px 0px"}}>

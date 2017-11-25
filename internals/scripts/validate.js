@@ -17,13 +17,13 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
  * TODO: Use methods from content class.
  */
 function contents(siteName, config) {
-  const siteInfo = new Site();
+  const siteInfo = new Site(siteName, config);
   const storage = config.get('storage');
   const schemaName = siteInfo.getConfigItem(siteName, 'schema');
-  const schema = new Schema(schemaName);
+  const schema = new Schema(schemaName, config);
   const collections = schema.getConfigItem('collections');
   _.each(collections, (collection) => {
-    const content = new Content[storage](siteName);
+    const content = new Content[storage](siteName, config);
     schema.dereference(collection, (err, collectionSchema) => {
       if (err) {
         console.log(chalk.red('Error for ' + collection), err); // eslint-disable-line
@@ -32,6 +32,7 @@ function contents(siteName, config) {
       content.findByCollection(collection, true, (docserr, results) => {
         let count = 0;
         _.each(results, (item) => {
+          console.log(item.publisher);
           const valid = ajv.validate(collectionSchema, item);
           if (!valid) {
             count++; // eslint-disable-line

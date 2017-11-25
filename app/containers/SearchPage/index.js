@@ -35,10 +35,9 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
       const { loadResults, selectedFacets } = this.props;
 
       if (e.target.value.length > 0) {
-          loadResults(e.target.value, selectedFacets)
-      }
-      else if (e.target.value.length == 0) {
-          loadResults(null, selectedFacets);
+        loadResults(e.target.value, selectedFacets)
+      } else if (e.target.value.length == 0) {
+        loadResults(null, selectedFacets);
       }
   }
 
@@ -85,19 +84,14 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
   componentWillMount() {
 
     const { query, results, error, facets, loadResults, selectedFacets, loadFacets, updateFacets, facetsResults } = this.props;
-
-    console.log(results);
-    console.log(error);
-    console.log(selectedFacets);
-    console.log(facetsResults);
     if (results === false && error === false && selectedFacets === false) {
-      loadResults();
+      loadResults(null, false);
     }
     if (results && facetsResults === false) {
       updateFacets();
     }
     if (results === false & error == false && selectedFacets) {
-      loadResults(null,selectedFacets);
+      loadResults(null, selectedFacets);
     }
 
 
@@ -109,10 +103,10 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
     const resultmessage = query  && resultsCount  ? resultsCount + " Results for \"" + query + "\"": resultsCount + " Results";
 
     const searchListProps = {
-         loading,
-         results,
-         error,
-         resultmessage,
+       loading,
+       results,
+       error,
+       resultmessage,
      };
 
     // TODO: remove from render.
@@ -149,7 +143,7 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
           <FacetList {...facetListProps} />
         </div>
         <div className="col-xs-12 col-md-9">
-            <SearchList {...searchListProps} />
+          <SearchList {...searchListProps} />
         </div>
       </PageContainer>
     );

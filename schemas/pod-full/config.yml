@@ -9,18 +9,18 @@ collections:
   - license
   - theme
 facets:
-    keyword:
-      label: Tags
-      field: keyword
-    theme:
-      label: Category
-      field: theme
-    publisher:
-      label: Organization
-      field: publisher.name
-    format:
-      label: format
-      field: distribution.format
+  keyword:
+    label: Tags
+    field: keyword.title
+  theme:
+    label: Category
+    field: theme.title
+  publisher:
+    label: Organization
+    field: publisher.name
+  distribution:
+    label: Format
+    field: distribution.format
 # TODO: remove and autodiscover from collections. This saves looking this up
 # every time.
 references:

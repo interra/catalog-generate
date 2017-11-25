@@ -15,7 +15,7 @@ prog
   .help('validates a site contents based off of a schema')
   .argument('site', 'The site to validate')
   .action((args) => {
-    Validate.content(args.site, config);
+    Validate.contents(args.site, config);
   })
   .command('validate-site')
   .help('validates a site')
@@ -49,7 +49,13 @@ prog
   .argument('collection', 'The colleciton to build from')
   .argument('interraId', 'The internal id of the item')
   .action((args) => {
-    Build.docExport(args.site, args.interraId, args.collection, config);
+    Build.docExport(args.site, config, args.collection, args.interraId, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('File exported.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-schema')
   .help('builds schema file for a site')
@@ -67,7 +73,13 @@ prog
   .help('builds search index for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    Build.searchExport(args.site, config);
+    Build.searchExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Search built.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-swagger')
   .help('builds swagger json file for a site')
@@ -85,7 +97,13 @@ prog
   .help('builds api files for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    Build.all(args.site, config);
+    Build.all(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Build completed.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('harvest-cache')
   .argument('site', 'The site to import into')

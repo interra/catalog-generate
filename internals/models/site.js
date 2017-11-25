@@ -192,8 +192,8 @@ class Site {
     return YAML.parse(data);
   }
 
-  getConfigItem(site, item) {
-    const items = this.getConfig(site);
+  getConfigItem(item) {
+    const items = this.getConfig();
     return items[item];
   }
 
