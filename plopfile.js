@@ -30,9 +30,20 @@ module.exports = function (plop) {
             },
             {
                 type: 'list',
+                message: 'Select search',
+                name: 'search',
+                choices: ['simpleSearch', 'elasticLunr', 'elasticSearch'],
+            },
+            {
+                type: 'editor',
+                message: 'Enter fields to include in the search index  (as yml array of collections)',
+                name: 'fields',
+            },
+            {
+                type: 'list',
                 message: 'Select storage',
                 name: 'storage',
-                choices: ['FileStorage', 'S3'],
+                choices: ['FileStorage', 'Mongo'],
             },
             {
                 type: 'input',
@@ -47,12 +58,16 @@ module.exports = function (plop) {
             }
         ],
         actions: function (data) {
-            var actions = [];
             const identifier = slug(data.name.toLowerCase()); 
-            var settings = {
+            const search = {
+              type: data.search,
+              fields: YAML.parse(data['fields'])
+            };
+            const settings = {
                 name: data.name,
                 identifier,
                 schema: data.schema,
+                search,
                 description: data.description,
                 "front-page-icon-collection": data['front-page-icon-collection'],
                 "front-page-icons": YAML.parse(data['front-page-icons']),
@@ -79,7 +94,7 @@ module.exports = function (plop) {
                     console.log(chalk.blue('[PLOP] ') + "Site creation successful.");
                 }
             });
-            return actions;
+            return [];
         }
     });
 };

@@ -164,7 +164,6 @@ class Site {
       that.sitedir = path.join(that.sitesDir, settings.identifier);
 
       that.createDirs(that.sitedir, schemaConfig.collections);
-      console.log(settings);
 
       fs.ensureDir(that.sitedir)
         .then(() => {

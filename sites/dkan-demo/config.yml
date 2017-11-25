@@ -11,7 +11,7 @@ front-page-icons:
  - public-safety
  - transportation
 search:
-  type: simpleSearch 
+  type: elasticLunr 
   endpoint: https://oac6jckk0f.execute-api.us-west-2.amazonaws.com/prod
   fields:
     - title

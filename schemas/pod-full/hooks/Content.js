@@ -1,18 +1,19 @@
 const uuid = require('uuidv4');
 function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+  const d = new Date(date);
+  let month = '' + (d.getMonth() + 1);
+  let day = '' + d.getDate();
+  const year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+  if (month.length < 2) month = `0${month}`;
+  if (day.length < 2) day = `0${day}`
 
-    return [year, month, day].join('-');
+  return [year, month, day].join('-');
 }
 
 module.exports = {
   // Save.
+  // TODO: Don't mutate.
   preSave: (interraId, collection, doc, callback) => {
     const now = formatDate(Date.now());
     // TODO: move this logic to harvest.
@@ -37,7 +38,6 @@ module.exports = {
         doc.issued = now;
       }
     }
-
     callback(null, interraId, collection, doc);
   },
   postSave: (content, callback) => {
@@ -70,5 +70,5 @@ module.exports = {
   },
   postOutput: (data, callback) => {
     callback(null, data);
-  }
-}
+  },
+};
