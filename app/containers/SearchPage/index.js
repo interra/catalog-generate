@@ -123,6 +123,9 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
 
     return (
       <PageContainer>
+        <Helmet>
+          <title>Search</title>
+        </Helmet>
         <div className="col-xs-12 col-md-3">
           <InputGroup>
               <input type="text" className="form-control" onChange={this.queryEnter.bind(this)} placeholder="Search for..." />

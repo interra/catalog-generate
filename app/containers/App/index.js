@@ -36,10 +36,10 @@ export default function App() {
   return (
     <AppWrapper>
       <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="Open data catalog exp"
+        titleTemplate={"%s - " + interraConfig.name}
+        defaultTitle={interraConfig.name}
       >
-        <meta name="description" content="A React.js Boilerplate application" />
+        <meta name="description" content={interraConfig.description} />
       </Helmet>
       <Header />
       <Switch>

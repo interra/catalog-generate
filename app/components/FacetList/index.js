@@ -56,7 +56,6 @@ function FacetList({ facets, loadingFacets, loadingFacetsResults, selectedFacets
     ));
 
     return <div key="facets">{content}</div>;
-
   }
 
   return null;
