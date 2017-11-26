@@ -1,8 +1,0 @@
-'@type': 'dcat:Distribution'
-downloadURL: 'http://demo.getdkan.com/sites/default/files/ViolentCrimeRates.csv'
-mediaType: text/csv
-format: csv
-description: "<p>Source: FBI Uniform Crime Report, 2014 (<a href=\"https://www.fbi.gov/about-us/cjis/ucr/ucr\">https://www.fbi.gov/about-us/cjis/ucr/ucr</a>)</p>\n<p>Includes information on the frequency of violent crimes in general, murder and non-negligent manslaughter, aggravated assault, rape and robbery. All crime rates are per 100,000 people.</p>\n"
-title: 'Violent Crime Data for the Ten Most Populous Cities in the U.S.'
-identifier: violent-crime-data-for-the-ten-most-populous-cities-in-the-us-57645464-6ace-4870-9dd1-338e28af18ef
-interra-published: true

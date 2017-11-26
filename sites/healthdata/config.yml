@@ -11,6 +11,29 @@ front-page-icons:
  - public-safety
  - transportation
  - education
+search:
+  type: simpleSearch 
+  endpoint: https://oac6jckk0f.execute-api.us-west-2.amazonaws.com/prod
+  fields:
+    - title
+    - keyword
+    - publisher
+    - description
+    - theme
+    - modified
+    - distribution
+private:
+  algolia:
+    applicationId: 
+    apiKey:  
+    index: healthdata 
+  aws:
+    accessKeyId:  
+    secretAccessKey: 
+    region: us-west-1
+    es:
+      endpoint: 
+      index: hhs 
 fontConfig:
   backColor: "#fff"
   link: "#0A77BD"

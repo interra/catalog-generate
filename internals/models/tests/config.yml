@@ -2,4 +2,3 @@ sitesDir: sites
 schemasDir: schemas
 storage: FileStorage
 buildDir: build
-search: elasticLunr

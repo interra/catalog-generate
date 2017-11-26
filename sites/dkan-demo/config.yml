@@ -10,4 +10,25 @@ front-page-icons:
  - health-care
  - public-safety
  - transportation
- - education
+search:
+  type: elasticLunr 
+  endpoint: https://oac6jckk0f.execute-api.us-west-2.amazonaws.com/prod
+  fields:
+    - title
+    - keyword
+    - publisher
+    - description
+    - theme
+    - modified
+    - distribution
+private:
+  aws:
+    accessKeyId:  
+    secretAccessKey: 
+    region: us-west-2
+    es:
+      endpoint: 
+      index: dkan-demo 
+fontConfig:
+  navBarBackColor: "#0A77BD"
+ 

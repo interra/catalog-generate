@@ -100,12 +100,12 @@ properties:
           type: string
   distribution:
     title: Distribution
-      description: A container for the array of Distribution objects
-      type: array
-      items:
-        $ref: distribution.yml
-        minItems: 1
-        uniqueItems: true
+    description: A container for the array of Distribution objects
+    type: array
+    items:
+      $ref: distribution.yml
+      minItems: 1
+      uniqueItems: true
   issued:
     title: "Release Date"
     description: "Date of formal issuance."

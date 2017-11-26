@@ -10,7 +10,8 @@ const schemaMock = require('./mockschema.json');
 const routesMock = require('./mockroutes.json');
 const datasetMock = require('./mockdatasetone.json');
 const tagMock = require('./mocktagtransportation.json');
-const indexMock = require('./mocksearchindex.json');
+const indexMockSS = require('./mocksearchindexSS.json'); // eslint-disable-line
+const indexMockEL = require('./mocksearchindexEL.json');
 const swaggerMock = require('./mockswagger.json');
 const datajsonMock = require('./mockdatajson.json');
 
@@ -20,7 +21,7 @@ fs.emptyDirSync(buildDir);
 test('Build routes', (done) => {
   Build.routesExport(site, config, () => {
     const result = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/routes.json'));
-    expect(routesMock).toMatchObject(JSON.parse(result));
+    expect(JSON.parse(result)).toMatchObject(routesMock);
     done();
   });
 });
@@ -29,8 +30,8 @@ test('Build docs', (done) => {
   Build.docsExport(site, config, () => {
     const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
     const tag = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/tags/transportation.json'));
-    expect(datasetMock).toMatchObject(JSON.parse(dataset));
-    expect(tagMock).toMatchObject(JSON.parse(tag));
+    expect(JSON.parse(dataset)).toMatchObject(datasetMock);
+    expect(JSON.parse(tag)).toMatchObject(tagMock);
     done();
   });
 });
@@ -39,7 +40,7 @@ test('Build doc', (done) => {
   fs.emptyDirSync(buildDir);
   Build.docExport(site, config, 'datasets', 'dataset-one', () => {
     const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
-    expect(datasetMock).toMatchObject(JSON.parse(dataset));
+    expect(JSON.parse(dataset)).toMatchObject(datasetMock);
     done();
   });
 });
@@ -47,16 +48,16 @@ test('Build doc', (done) => {
 test('Build schema', (done) => {
   Build.schemaExport(site, config, () => {
     const result = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/schema.json'));
-    expect(schemaMock).toMatchObject(JSON.parse(result));
+    expect(JSON.parse(result)).toMatchObject(schemaMock);
     done();
   });
 });
 
-
-test('Build search', (done) => {
+// TODO: Test simpleSearch. Need to refactor build to pass fully-build site to override site setting.
+test('Build search elasticLunr', (done) => {
   Build.searchExport(site, config, () => {
     const index = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/search-index.json'));
-    expect(indexMock).toMatchObject(JSON.parse(index));
+    expect(JSON.parse(index)).toMatchObject(indexMockEL);
     done();
   });
 });
@@ -64,7 +65,7 @@ test('Build search', (done) => {
 test('Build swagger', (done) => {
   Build.swaggerExport(site, config, () => {
     const swagger = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/swagger.json'));
-    expect(swaggerMock).toMatchObject(JSON.parse(swagger));
+    expect(JSON.parse(swagger)).toMatchObject(swaggerMock);
     done();
   });
 });
@@ -72,7 +73,7 @@ test('Build swagger', (done) => {
 test('Build datajson', (done) => {
   Build.datajsonExport(site, config, () => {
     const datajson = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/data.json'));
-    expect(datajsonMock).toMatchObject(JSON.parse(datajson));
+    expect(JSON.parse(datajson)).toMatchObject(datajsonMock);
     done();
   });
 });
@@ -81,17 +82,17 @@ test('Build all', (done) => {
   fs.emptyDirSync(buildDir);
   Build.all(site, config, () => {
     const datajson = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/data.json'));
-    expect(datajsonMock).toMatchObject(JSON.parse(datajson));
+    expect(JSON.parse(datajson)).toMatchObject(datajsonMock);
     const swagger = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/swagger.json'));
-    expect(swaggerMock).toMatchObject(JSON.parse(swagger));
+    expect(JSON.parse(swagger)).toMatchObject(swaggerMock);
     const index = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/search-index.json'));
-    expect(indexMock).toMatchObject(JSON.parse(index));
+    expect(JSON.parse(index)).toMatchObject(indexMockEL);
     const result = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/schema.json'));
-    expect(schemaMock).toMatchObject(JSON.parse(result));
+    expect(JSON.parse(result)).toMatchObject(schemaMock);
     const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
     const tag = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/tags/transportation.json'));
-    expect(datasetMock).toMatchObject(JSON.parse(dataset));
-    expect(tagMock).toMatchObject(JSON.parse(tag));
+    expect(JSON.parse(dataset)).toMatchObject(datasetMock);
+    expect(JSON.parse(tag)).toMatchObject(tagMock);
     done();
   });
 });

@@ -13,7 +13,6 @@ import FacetBlockDiv from './FacetBlockDiv';
 
 
 function FacetBlocks({ title, items, facetKey, loading, click, selectedFacets }) {
-
     if (loading) {
       return <FacetBlockDiv><h4>{title}</h4><List component={LoadingIndicator} /></FacetBlockDiv>;
     }
@@ -57,7 +56,6 @@ function FacetList({ facets, loadingFacets, loadingFacetsResults, selectedFacets
     ));
 
     return <div key="facets">{content}</div>;
-
   }
 
   return null;

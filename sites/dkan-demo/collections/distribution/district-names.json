@@ -1,0 +1,15 @@
+{
+  "@type": "dcat:Distribution",
+  "downloadURL": "http://demo.getdkan.com/sites/default/files/district_centerpoints_0.csv",
+  "mediaType": "text/csv",
+  "format": "csv",
+  "description": "<p>You can see this data plotted on a map, by clicking on 'Map' below. Individual data records can be seen by clicking on each point.</p>\n",
+  "title": "District Names",
+  "interra": {
+    "id": "district-names",
+    "source": "dkandemo"
+  },
+  "identifier": "f8d6eeda-a0ca-4a0f-9bfd-7955cdbae92d",
+  "created": "2017-11-17",
+  "modified": "2017-11-17"
+}

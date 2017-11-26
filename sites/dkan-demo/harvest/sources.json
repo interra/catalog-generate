@@ -1,0 +1,7 @@
+{
+  "dkandemo": {
+  	"id": "dkandemo",
+  	"source": "http://demo.getdkan.com/data.json",
+  	"type": "DataJSON"
+  }
+}

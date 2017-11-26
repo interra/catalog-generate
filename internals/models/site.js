@@ -6,8 +6,6 @@ const Async = require('async');
 const _ = require('lodash');
 const Ajv = require('ajv');
 const ajv = new Ajv();
-const merge = require('lodash.merge');
-const apiSubDir = 'api/v1';
 
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
 
@@ -41,7 +39,7 @@ class Site {
     }
     return false;
   }
-  
+
   validate(callback) {
     const that = this;
     Async.waterfall([
@@ -51,7 +49,7 @@ class Site {
         });
       },
       (done) => {
-        that.validateFolders((err, val) => {
+        that.validateFolders((err) => {
           done(err);
         });
       },
@@ -64,42 +62,42 @@ class Site {
   }
 
   validateFolders(callback) {
-    // Directory can be empty or must contain "collections" or "harvest".
-		const isDirectory = source => fs.lstatSync(source).isDirectory()
-		const getDirectories = source =>
-			fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory).map(fullDir => path.basename(fullDir));
-		const dirs = getDirectories(this.siteDir);
-		if (dirs.length < 1) {
+    // Directory can be empty or must contain 'collections' or 'harvest'.
+    const isDirectory = (source) => fs.lstatSync(source).isDirectory();
+    const getDirectories = (source) =>
+      fs.readdirSync(source).map((name) => path.join(source, name)).filter(isDirectory).map((fullDir) => path.basename(fullDir));
+    const dirs = getDirectories(this.siteDir);
+    if (dirs.length < 1) {
       callback(null);
-		} else if (dirs.length > 2) {
-			callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
-		} else if (dirs.length === 2) {
-      if (!(dirs.includes("collections"))) {
-        callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
-      } else if (!(dirs.includes("harvest"))) {
-        callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
+    } else if (dirs.length > 2) {
+      callback(`${this.sitesDir} can only include 'collections' and 'harvest' folders`);
+    } else if (dirs.length === 2) {
+      if (!(dirs.includes('collections'))) {
+        callback(`${this.sitesDir} can only include 'collections' and 'harvest' folders`);
+      } else if (!(dirs.includes('harvest'))) {
+        callback(`${this.sitesDir} can only include 'collections' and 'harvest' folders`);
       } else {
         callback(null);
       }
-		} else if (dirs.length === 1) {
-      if (!(dirs.includes("collections")) && !(dirs.includes("harvest"))) {
-        callback(`${this.sitesDir} can only include "collections" and "harvest" folders`);
+    } else if (dirs.length === 1) {
+      if (!(dirs.includes('collections')) && !(dirs.includes('harvest'))) {
+        callback(`${this.sitesDir} can only include 'collections' and 'harvest' folders`);
       } else {
         callback(null);
       }
     } else {
-			callback(null);
-		}
+      callback(null);
+    }
   }
 
   validateConfig(callback) {
     const siteConfig = this.getConfig();
-		const valid = ajv.validate(siteSchema, siteConfig);
-		if (!valid) {
-			callback(ajv.errors);
-		} else {
-			callback(false);
-		}
+    const valid = ajv.validate(siteSchema, siteConfig);
+    if (!valid) {
+      callback(ajv.errors);
+    } else {
+      callback(false);
+    }
   }
 
   /**
@@ -125,28 +123,6 @@ class Site {
   }
 
   /**
-   * Validates whether settings contains required fields.
-   * @param {array} required An array required fields,
-   * @param {object} settings Settings object for a site.
-   * @return {boolean} Returns true if validation passes.
-   */
-  validateRequired(settings) {
-    const that = this;
-    Async.each(required, (item, callback) => {
-      if (that.inArray(item, Object.keys(settings))) {
-        callback();
-      } else {
-        callback(`${item} not found in settings.`);
-      }
-    }, (err) => {
-      if (err) {
-        throw new Error(err);
-      }
-      return true;
-    });
-  }
-
-  /**
    * Creates a new site.
    * @param {object} settings The site settings.
    * @param {function} callback callback function (err, result);
@@ -164,7 +140,6 @@ class Site {
       that.sitedir = path.join(that.sitesDir, settings.identifier);
 
       that.createDirs(that.sitedir, schemaConfig.collections);
-      console.log(settings);
 
       fs.ensureDir(that.sitedir)
         .then(() => {
@@ -192,11 +167,10 @@ class Site {
     return YAML.parse(data);
   }
 
-  getConfigItem(site, item) {
-    const items = this.getConfig(site);
+  getConfigItem(item) {
+    const items = this.getConfig();
     return items[item];
   }
-
 }
 
 module.exports = Site;

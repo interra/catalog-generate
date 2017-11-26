@@ -4,11 +4,12 @@ import { call, put, select, takeLatest, fetch } from 'redux-saga/effects';
 import { LOAD_REPOS } from 'containers/App/constants';
 
 import { LOAD_HOME_PAGE_ICONS, LOAD_SEARCH_INDEX, LOAD_SEARCH_RESULTS, UPDATE_SORT, LOAD_FACETS, UPDATE_FACETS } from './constants';
-import { actionLoadHomePageIconsLoaded, searchIndexLoaded, searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
+import { actionLoadHomePageIconsLoaded, selectedFacets, searchIndexLoaded, searchResultsLoaded, searchResultsError, actionsearchResultsTotal, actionFacetsLoaded, actionFacetResultsLoaded } from './actions';
 
 import request from 'utils/request';
 import { makeSelectIndex, makeSelectQuery, makeSelectSort, makeSelectFacets, makeSelectResults } from 'containers/SearchPage/selectors';
 import elasticlunr from 'elasticlunr';
+import search from 'search';
 
 export function* getIcons(action) {
   const collection = interraConfig['front-page-icon-collection'];
@@ -16,9 +17,7 @@ export function* getIcons(action) {
   const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
 
   try {
-
     const responses = yield icons.map(p => call(request, url + '/api/v1/collections/' + collection + '/' + p + '.json'));
-
     yield put(actionLoadHomePageIconsLoaded(responses));
     return responses;
   } catch (err) {
@@ -75,12 +74,11 @@ Object.filter = (obj, predicate) =>
  * Get Search results.
  */
 export function* loadIndex() {
-  const url = window.location.origin + '/api/v1/search-index.json';
-  console.time("Loading index.");
-  let index = yield call(request, url);
-  index = elasticlunr.Index.load(index);
+  const searchType = interraConfig.search.type;
+  const searchEngine = new search[searchType];
+  const index = yield searchEngine.init();
+  console.log(index);
   yield put(searchIndexLoaded(index));
-  console.timeEnd("Index Loaded");
   return index;
 }
 
@@ -89,6 +87,7 @@ function getFacetValue(doc, facet, facets) {
   let fields = facets[facet].field.split('.');
   let docR = new Object();
   let docRArray = [];
+
   fields.forEach(function(field, i) {
     // If we are at the end of the field array just return the value, otherwise
     // we just get the entire array.
@@ -97,8 +96,7 @@ function getFacetValue(doc, facet, facets) {
       docRArray.forEach(function(item, x) {
         docR[x] = item[field];
       });
-    }
-    else {
+    } else {
       // Clone the object or array if the docR hasn't been recorded yet.
       if (Array.isArray(doc[field])) {
         docR = doc[field].slice(0);
@@ -129,6 +127,7 @@ export function* getFacetInitialTotal(facets, results) {
   results.forEach(function(result) {
     for (var facet in facets) {
       const docR = getFacetValue(result.doc, facet, facets);
+
       facetsTotal[facet] = !facetsTotal[facet] ? [] : facetsTotal[facet];
       // We want to flatten the results so there is one big array instead of a
       // combo of array results.
@@ -157,9 +156,11 @@ export function* loadFacets(facets, results) {
 
   for (var facet in facets) {
     facetsResults[facet] = {};
-    facetsTotal[facet].forEach(function(i) {
-        facetsResults[facet][i] = (facetsResults[facet][i]||0)+1;
-    });
+    if (facetsTotal[facet]) {
+      facetsTotal[facet].forEach(function(i) {
+          facetsResults[facet][i] = (facetsResults[facet][i]||0)+1;
+      });
+    }
   };
 
   // TODO: separate into func.
@@ -183,6 +184,8 @@ export function* loadFacets(facets, results) {
  * Get Search results.
  */
 export function* getResults(action) {
+  const searchType = interraConfig.search.type;
+  const searchEngine = new search[searchType];
 
   var query = action.query;// yield select(makeSelectQuery());
   var index = yield select(makeSelectIndex());
@@ -204,26 +207,19 @@ export function* getResults(action) {
     console.time("Querying index.");
 
     if (query) {
-      items = index.search(query, {expand: true});
-    }
-    else {
-      const docs = index.documentStore.docs;
-      items = Object.keys(docs).map(function(index) {
-        var item = {
-          doc: docs[index],
-          ref: index,
-          score: 1
-        }
-        return item;
-      });
+      items = yield searchEngine.query(query, index);
+    } else {
+      items = yield searchEngine.getAll(index);
       // Alphabetical by default if there is no query.
       items = alphabetize(items);
+
     }
     console.timeEnd("Query Loaded");
 
     let faceted = [];
 
-    if (selectedFacets) {
+    if (selectedFacets && selectedFacets.length > 0) {
+
       selectedFacets.forEach(function(selectedFacet) {
         let term = selectedFacet[0];
         let value = selectedFacet[1];
@@ -240,17 +236,14 @@ export function* getResults(action) {
           return false;
         });
       })
-    }
-    else {
+    } else {
+      console.log("no selected facets");
       faceted = items;
     }
-
     yield put(actionsearchResultsTotal(faceted.length));
 
     const paged = faceted.slice(0, pageSize);
-
     yield put(searchResultsLoaded(paged));
-
 
     if (facets) {
       const preparedFacets = yield loadFacets(facets, faceted);

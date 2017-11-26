@@ -19,10 +19,14 @@ function SearchList({ loading, error, results, resultmessage }) {
     return <List component={ErrorComponent} />;
   }
 
-  if (results !== false) {
+  if (results.length === 0) {
+    return <span><H3>{resultmessage}</H3><div>No records found, try another search term.</div></span>;
+  }
 
+  if (results !== false) {
     return <span><H3>{resultmessage}</H3><List items={results} component={SearchListItem} /></span>;
   }
+
 
   return null;
 }

@@ -1,0 +1,11 @@
+{
+  "@type": "org:Organization",
+  "name": "Advisory Council for Infectious Disease",
+  "interra": {
+    "id": "advisory-council-for-infe",
+    "source": "dkandemo"
+  },
+  "identifier": "77df7dc5-7645-49de-bb0e-63e9c71a02d0",
+  "created": "2017-11-17",
+  "modified": "2017-11-17"
+}

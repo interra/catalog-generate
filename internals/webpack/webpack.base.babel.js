@@ -6,6 +6,7 @@ const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
 const YAML = require('yamljs');
+const omit = require('lodash/omit');
 
 // Remove this line once the following warning goes away (it was meant for webpack loader authors not users):
 // 'DeprecationWarning: loaderUtils.parseQuery() received a non-string value which can be problematic,
@@ -16,6 +17,7 @@ const site = process.env.SITE;
 
 // TODO: use the site model.
 const config = fs.readFileSync(path.resolve(process.cwd(), 'sites/' + site + '/config.yml'), 'utf8');
+const interraConfig = omit(YAML.parse(config), 'private'); 
 
 module.exports = (options) => ({
   entry: options.entry,
@@ -101,7 +103,7 @@ module.exports = (options) => ({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
-      'interraConfig': JSON.stringify(YAML.parse(config)),
+      'interraConfig': JSON.stringify(interraConfig),
     }),
     new webpack.NamedModulesPlugin(),
   ]),

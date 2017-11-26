@@ -81,7 +81,7 @@ function docExport(site, config, collection, interraId, callback) {
  */
 function schemaExport(site, config, callback) {
   const siteInfo = new Site(site, config);
-  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schemaName = siteInfo.getConfigItem('schema');
   const schema = new Schema(schemaName, config);
   const collections = schema.getConfigItem('collections');
   const facets = schema.getConfigItem('facets');
@@ -139,36 +139,41 @@ function configExport(site, config, callback) {
  */
 function searchExport(site, config, callback) {
   const siteInfo = new Site(site, config);
-  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schemaName = siteInfo.getConfigItem('schema');
   const schema = new Schema(schemaName, config);
-  const searchEngine = config.get('search');
+  const searchConfig = siteInfo.getConfigItem('search');
+  const searchEngine = searchConfig.type;
   const search = new Search[searchEngine](site, config);
   const content = prepare(site, config);
   const primaryCollection = schema.getConfigItem('primaryCollection');
 
-  search.init();
-
-  Async.auto({
-    load: (done) => {
-      content.findByCollection(primaryCollection, true, (err, results) => {
-        done(err, results);
-      });
-    },
-    index: ['load', (results, done) => {
-      Async.eachSeries(results.load, (item, fin) => {
-        search.insertOne(item, (err, out) => {
-          fin(err, out);
-        });
-      }, (err) => {
-        done(err, !err);
-      });
-    }],
-  }, (err) => {
+  search.init((err) => {
     if (err) {
       callback(err);
     } else {
-      search.push((pusherr) => {
-        callback(pusherr, !pusherr);
+      Async.auto({
+        load: (done) => {
+          content.findByCollection(primaryCollection, true, (loadErr, results) => {
+            done(loadErr, results);
+          });
+        },
+        index: ['load', (results, done) => {
+          Async.eachSeries(results.load, (item, fin) => {
+            search.insertOne(item, (insErr, out) => {
+              fin(insErr, out);
+            });
+          }, (derr) => {
+            done(derr, !derr);
+          });
+        }],
+      }, (ferr) => {
+        if (ferr) {
+          callback(ferr);
+        } else {
+          search.push((pusherr) => {
+            callback(pusherr, !pusherr);
+          });
+        }
       });
     }
   });
@@ -215,7 +220,7 @@ function setCollectionPathDef(collection) {
 function swaggerExport(site, config, callback) {
   const siteInfo = new Site(site, config);
   const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
-  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schemaName = siteInfo.getConfigItem('schema');
   const schema = new Schema(schemaName, config);
   const primaryCollection = schema.getConfigItem('primaryCollection');
   const collections = schema.getConfigItem('collections');
@@ -225,7 +230,7 @@ function swaggerExport(site, config, callback) {
     info: {
       description: 'Interra Open Data Catalog APIs. These are all read endpoints since Interra Generate runs without a server. Full CRUD APIs are available with Interra Admin.',
       version: '0.0.1',
-      title: `${siteInfo.getConfigItem(site, 'name')} Data Catalog API`,
+      title: `${siteInfo.getConfigItem('name')} Data Catalog API`,
     },
     paths: {
       '/data.json': {
@@ -382,7 +387,7 @@ function swaggerExport(site, config, callback) {
 function datajsonExport(site, config, callback) {
   const siteInfo = new Site(site, config);
   const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
-  const schemaName = siteInfo.getConfigItem(site, 'schema');
+  const schemaName = siteInfo.getConfigItem('schema');
   const schema = new Schema(schemaName, config);
   const primaryCollection = schema.getConfigItem('primaryCollection');
   const content = prepare(site, config);
@@ -427,11 +432,6 @@ function datajsonExport(site, config, callback) {
 
 function all(site, config, callback) {
   Async.waterfall([
-    (done) => {
-      routesExport(site, config, (err) => {
-        done(err);
-      });
-    },
     (done) => {
       docsExport(site, config, (err) => {
         done(err);

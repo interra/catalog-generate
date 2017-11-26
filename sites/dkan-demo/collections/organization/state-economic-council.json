@@ -1,0 +1,11 @@
+{
+  "@type": "org:Organization",
+  "name": "State Economic Council",
+  "interra": {
+    "id": "state-economic-council",
+    "source": "dkandemo"
+  },
+  "identifier": "d48ea7d8-ef73-4d59-894a-327822b803db",
+  "created": "2017-11-17",
+  "modified": "2017-11-17"
+}

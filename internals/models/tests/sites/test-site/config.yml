@@ -2,6 +2,17 @@ name: Test Site
 description: 'A site for tests.'
 identifier: test-site
 schema: test-schema
+search:
+  type: elasticLunr 
+  fields:
+    - title
+    - id
+    - created
+    - modified
+    - tags 
+    - org 
+    - description
+    - resources 
 front-page-icon-collection: tags
 front-page-icons:
  - city-planning

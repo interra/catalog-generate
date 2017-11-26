@@ -1,0 +1,15 @@
+{
+  "@type": "dcat:Distribution",
+  "downloadURL": "http://demo.getdkan.com/sites/default/files/us_foreclosures_jan_2012_by_state_0.csv",
+  "mediaType": "text/csv",
+  "format": "csv",
+  "description": "<p>US National Foreclosure Statistics - By State - January 2012</p>\n",
+  "title": "1-2012-Foreclosures-by-State",
+  "interra": {
+    "id": "1-2012-foreclosures-by-st",
+    "source": "dkandemo"
+  },
+  "identifier": "eb8f7a37-8e9f-4799-ba75-8e1abafb18c6",
+  "created": "2017-11-17",
+  "modified": "2017-11-17"
+}
