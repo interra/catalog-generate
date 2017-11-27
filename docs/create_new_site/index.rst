@@ -46,6 +46,12 @@ Below is a description of the site configuration file: ``config.yml``.
 | **description** | ``string``      | Description of  | No              |
 |                 |                 | the site        |                 |
 +-----------------+-----------------+-----------------+-----------------+
+| **search**      | ``string``      | Search settings | Yes             |
+|                 |                 | of the site     |                 |
++-----------------+-----------------+-----------------+-----------------+
+| **private**     | ``object``      | Private settings| No              |
+|                 |                 | of the site     |                 |
++-----------------+-----------------+-----------------+-----------------+
 | **front-page-ic | ``string``      | The collection  | No              |
 | on-collection** |                 | to be used for  |                 |
 |                 |                 | front page      |                 |
@@ -90,6 +96,38 @@ Unique ID of the site
 
 -  **Type**: ``string``
 -  **Required**: No
+
+search
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Search settings for the site.
+
+**type**:
+
+The search engine to use for the site. Options include elasticLunr, elasticSearch, and simpleSearch
+
+- type: ``string``
+- required: Yes
+
+**fields**:
+
+The fields to include in the search. 
+
+- type: ``array``
+- required: Yes
+
+**endpoint**:
+
+Endpoint for Elastic Search or other remote search backend
+
+- type: ``string``
+- required: no 
+- format: uri
+
+private
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Private settings for the site that are not exported to the production instance. Includes settings for AWS and other services
 
 description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

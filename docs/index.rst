@@ -14,6 +14,6 @@ Table of Contents
 
    introduction/index
    create_new_site/index
-   publish_site/index
    schemas/index
    harvesting/index
+   publish_site/index

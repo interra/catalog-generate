@@ -74,7 +74,29 @@ Contains the react app that builds renders the catalog.
 cli.js
 ~~~~~~
 
-A cli for performing site tasks built using `Caporal <https://github.com/mattallty/Caporal.js>`_.
+A cli for performing site tasks built using `Caporal <https://github.com/mattallty/Caporal.js>`_. Run ``node cli.js`` to see a list of available commands:
+
+.. code-block:: console
+
+     validate-site-contents site
+     validate-site site
+     build-collection-data site
+     build-collection-data-item site collection interraId
+     build-config site
+     build-datajson site
+     build-routes site
+     build-schema site
+     build-search site
+     build-swagger site
+     build-apis site
+     build-site site
+     run-dev site
+     run-dev-dll
+     run-dev-tunnel site
+     harvest-cache site
+     harvest-run site
+     load-doc site collection interraId
+
 
 React App Front-End
 ===================

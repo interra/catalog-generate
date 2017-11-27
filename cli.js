@@ -8,6 +8,7 @@ const Harvest = require('./internals/scripts/harvest');
 const Content = require('./internals/models/content');
 const Site = require('./internals/models/site');
 const config = new Config(__dirname);
+const path = require('path');
 
 prog
   .version('0.0.1')
@@ -99,8 +100,8 @@ prog
       }
     });
   })
-  .command('build')
-  .help('builds api files for a site')
+  .command('build-apis')
+  .help('builds all api files for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
     Build.all(args.site, config, (err) => {
@@ -111,12 +112,37 @@ prog
       }
     });
   })
+  .command('build-site')
+  .help('builds react app a site')
+  .argument('site', 'The site to index from')
+  .action((args) => {
+    const shell = require('shelljs');
+    process.env.NODE_ENV = 'production';
+    process.env.SITE = args.site;
+    process.env.PATH += (path.delimiter + path.join(__dirname, 'node_modules', '.bin'));
+    shell.exec('webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules');
+  })
   .command('run-dev')
   .help('runs dev server for a site.')
   .argument('site', 'The site run')
   .action((args) => {
     process.env.NODE_ENV = 'development';
     process.env.SITE = args.site;
+    require('./server'); // eslint-disable-line
+  })
+  .command('run-dev-dll')
+  .help('builds dll for dev server.')
+  .action((args) => {
+    process.env.NODE_ENV = 'development';
+    exec('./internals/scripts/dependencies.js');
+  })
+  .command('run-dev-tunnel')
+  .help('runs dev server for a site.')
+  .argument('site', 'The site run')
+  .action((args) => {
+    process.env.NODE_ENV = 'development';
+    process.env.SITE = args.site;
+    process.env.ENABLE_TUNNEL = true;
     require('./server'); // eslint-disable-line
   })
   .command('harvest-cache')
