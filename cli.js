@@ -9,6 +9,7 @@ const Content = require('./internals/models/content');
 const Site = require('./internals/models/site');
 const config = new Config(__dirname);
 const path = require('path');
+const shell = require('shelljs');
 
 prog
   .version('0.0.1')
@@ -62,19 +63,37 @@ prog
   .help('builds data.json file for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    Build.datajsonxport(args.site, config);
+    Build.datajsonExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Data.json built.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-routes')
   .help('builds collection data for a site exporting it to the build dir')
   .argument('site', 'The site to build')
   .action((args) => {
-    Build.routesExport(args.site, config);
+    Build.routesExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Routes built.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-schema')
   .help('builds schema file for a site')
   .argument('site', 'The site to build from')
   .action((args) => {
-    Build.schemaExport(args.site, config);
+    Build.schemaExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Schema built.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-search')
   .help('builds search index for a site')
@@ -116,7 +135,6 @@ prog
   .help('builds react app a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    const shell = require('shelljs');
     process.env.NODE_ENV = 'production';
     process.env.SITE = args.site;
     process.env.PATH += (path.delimiter + path.join(__dirname, 'node_modules', '.bin'));
@@ -132,9 +150,9 @@ prog
   })
   .command('run-dev-dll')
   .help('builds dll for dev server.')
-  .action((args) => {
+  .action(() => {
     process.env.NODE_ENV = 'development';
-    exec('./internals/scripts/dependencies.js');
+    shell.exec('./internals/scripts/dependencies.js');
   })
   .command('run-dev-tunnel')
   .help('runs dev server for a site.')
