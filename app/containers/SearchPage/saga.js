@@ -77,7 +77,6 @@ export function* loadIndex() {
   const searchType = interraConfig.search.type;
   const searchEngine = new search[searchType];
   const index = yield searchEngine.init();
-  console.log(index);
   yield put(searchIndexLoaded(index));
   return index;
 }

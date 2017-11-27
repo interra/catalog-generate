@@ -30,12 +30,6 @@ prog
       }
     });
   })
-  .command('build-routes')
-  .help('builds collection data for a site exporting it to the build dir')
-  .argument('site', 'The site to build')
-  .action((args) => {
-    Build.routesExport(args.site, config);
-  })
   .command('build-collection-data')
   .help('builds collection data for a site exporting it to the build dir')
   .argument('site', 'The site to build')
@@ -57,17 +51,29 @@ prog
       }
     });
   })
-  .command('build-schema')
-  .help('builds schema file for a site')
-  .argument('site', 'The site to build from')
-  .action((args) => {
-    Build.schemaExport(args.site, config);
-  })
   .command('build-config')
   .help('builds config file for a site')
   .argument('site', 'The site to build from')
   .action((args) => {
     Build.configExport(args.site, config);
+  })
+  .command('build-datajson')
+  .help('builds data.json file for a site')
+  .argument('site', 'The site to index from')
+  .action((args) => {
+    Build.datajsonxport(args.site, config);
+  })
+  .command('build-routes')
+  .help('builds collection data for a site exporting it to the build dir')
+  .argument('site', 'The site to build')
+  .action((args) => {
+    Build.routesExport(args.site, config);
+  })
+  .command('build-schema')
+  .help('builds schema file for a site')
+  .argument('site', 'The site to build from')
+  .action((args) => {
+    Build.schemaExport(args.site, config);
   })
   .command('build-search')
   .help('builds search index for a site')
@@ -85,13 +91,13 @@ prog
   .help('builds swagger json file for a site')
   .argument('site', 'The site to index from')
   .action((args) => {
-    Build.swaggerExport(args.site, config);
-  })
-  .command('build-datajson')
-  .help('builds data.json file for a site')
-  .argument('site', 'The site to index from')
-  .action((args) => {
-    Build.datajsonxport(args.site, config);
+    Build.swaggerExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Swagger build completed.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build')
   .help('builds api files for a site')
@@ -104,6 +110,14 @@ prog
         console.log(chalk.green('Build completed.')); // eslint-disable-line no-console
       }
     });
+  })
+  .command('run-dev')
+  .help('runs dev server for a site.')
+  .argument('site', 'The site run')
+  .action((args) => {
+    process.env.NODE_ENV = 'development';
+    process.env.SITE = args.site;
+    require('./server'); // eslint-disable-line
   })
   .command('harvest-cache')
   .argument('site', 'The site to import into')

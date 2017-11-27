@@ -1,9 +1,11 @@
 /* eslint consistent-return:0 */
 
-const site = process.argv[2];
+const site = process.env.SITE;
 if (site == undefined) {
-  console.log("You must specify a site using SITE=");
+  console.log("You must specify a site");
   process.exit(0);
+} else {
+  console.log("Starting dev server for " + site);
 }
 
 const express = require('express');
