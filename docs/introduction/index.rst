@@ -26,16 +26,17 @@ Structure
 
 This project consists of the following:
 
-```bash
-config.yml
-models/
-schemas/
-build/
-sites/
-app/
-cli.js
-plopfile.js
-```
+.. code-block:: console
+
+  config.yml
+  models/
+  schemas/
+  build/
+  sites/
+  app/
+  cli.js
+  plopfile.js
+
 
 The rest of the files and folders are artifacts of `react boilerplate <https://github.com/react-boilerplate/react-boilerplate>`_ which drives the ``app/``.
 
