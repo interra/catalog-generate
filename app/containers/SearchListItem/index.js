@@ -22,7 +22,8 @@ export class SearchListItem extends React.PureComponent { // eslint-disable-line
       let i = 0;
       return distributions.map(function(dist) {
         i++
-        return <div title={`format: ${dist.format}`} key={`dist-id-${dist.identifier}-${i}`} style={{float: "left"}} className="label" data-format={dist.format}>{dist.format}</div>
+        const format = dist.format === undefined ? '' : dist.format.toLowerCase();
+        return <div title={`format: ${dist.format}`} key={`dist-id-${dist.identifier}-${i}`} style={{float: "left"}} className="label" data-format={format}>{format}</div>
       })
     }
   }
