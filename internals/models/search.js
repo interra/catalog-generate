@@ -60,19 +60,18 @@ class algoliaSearch extends Search {
     this.algolia = this.siteInfo.getConfigItem('algolia');
     const client = algoliasearch(this.algolia.applicationId, this.algolia.apiKey);
     this.index = client.initIndex(this.algolia.index);
-    this.index.clearIndex((err, content) => {
+    this.index.clearIndex((err) => {
       callback(err, !err);
     });
   }
 
   insertOne(item, callback) {
-    let doc = this.prepareSearchFields(item, false);
+    const doc = this.prepareSearchFields(item, false);
     doc.objectID = doc.interra.id;
-    console.log("indexing " + doc.title);
-    this.index.addObject(doc, (err, content) => {
+    console.log('indexing ' + doc.title); // eslint-disable-line
+    this.index.addObject(doc, (err) => {
       callback(err, !err);
     });
-
   }
 }
 
@@ -87,30 +86,30 @@ class elasticSearch extends Search {
     const esEndpoint = this.aws.es.endpoint;
     AWS.config.update({
       credentials: new AWS.Credentials(accessKeyId, secretAccessKey),
-      region
+      region,
     });
 
-    this.Client = require('elasticsearch').Client({
-      hosts: [ esEndpoint ],
-      connectionClass: require('http-aws-es')
+    this.Client = require('elasticsearch').Client({ // eslint-disable-line
+      hosts: [esEndpoint],
+      connectionClass: require('http-aws-es'), // eslint-disable-line
     });
     const that = this;
 
     this.Client.ping({
       requestTimeout: 30000,
-    }, function (error) {
+    }, (error) => {
       if (error) {
         callback(error);
       } else {
         that.Client.indices.delete({
-          index: that.aws.es.index
-        }, (err, res) => {
+          index: that.aws.es.index,
+        }, (err) => {
           if (err) {
             callback(err.msg);
           } else {
             that.Client.indices.create({
-              index: that.aws.es.index
-            }, (createErr, res) => {
+              index: that.aws.es.index,
+            }, (createErr) => {
               callback(createErr, !createErr);
             });
           }
@@ -126,7 +125,7 @@ class elasticSearch extends Search {
       type: this.schema.getConfigItem('primaryCollection'),
       id: doc.identifier,
       body: doc,
-    }, function (error, response) {
+    }, (error) => {
       callback(error, !error);
     });
   }
@@ -145,7 +144,7 @@ class simpleSearch extends Search {
     const exp = {
       doc,
       ref: doc.interra.id,
-    }
+    };
     this.idx.push(exp);
     return callback(null);
   }
@@ -185,35 +184,36 @@ class elasticLunr extends Search {
 }
 
 function type(obj) {
-  return Object.prototype.toString.call(obj).match(/.* (.*)\]/)[  1]
+  return Object.prototype.toString.call(obj).match(/.* (.*)\]/)[1];
 }
 
 function stringify(obj) {
   if (type(obj) === 'Function') {
-    return null
+    return null;
   }
   if (type(obj) === 'Undefined') {
-    return null
+    return null;
   }
   if (type(obj) === 'Null') {
-    return 'null'
+    return null;
   }
   if (type(obj) === 'Number') {
-    return obj
+    return obj;
   }
   if (type(obj) === 'String') {
-    return obj
+    return obj;
   }
   if (type(obj) === 'Object' || type(obj) === 'Array') {
-    var result = ''
-    Object.keys(obj).forEach(function(key) {
-      var val = stringify(obj[key])
+    let result = '';
+    Object.keys(obj).forEach((key) => {
+      const val = stringify(obj[key]);
       if (val !== null) {
-      result = result.trim() + ' ' + val
+        result = `${result.trim()}  ${val}`;
       }
-    })
-    return result
+    });
+    return result;
   }
+  return null;
 }
 
 module.exports = {

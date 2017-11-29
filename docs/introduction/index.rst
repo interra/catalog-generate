@@ -19,7 +19,7 @@ Collections and Docs
 
 Content in this catalog is divided into ``collections`` and ``documents`` similar to MongoDB or other `Document Stores <https://en.wikipedia.org/wiki/Document-oriented_database>`_. ``Collections`` are types of content such as a "dataset" or "organization" though they can be anything defined by a schema. ``Docs`` are the individual content items.
 
-The `content model<>`_ contains a ``FileStorage`` and ``MongoDB`` sub-classes which are options for storage. The ``FileStorage``  class treats the local file system as a document databse storing and retrieving results from disk. Using files to store metadata is a primary advantage of this project however a Mongo option is offered since it is necessary for `Interra Catalog Admin <>`_ and the methods for interacting with the data (ie `InsertOne<>`_) are identical. Note the Mongo methods are `not fully supported yet <https://github.com/interra/catalog-generate/issues/12>`_.
+The `content model<https://github.com/interra/catalog-generate/blob/master/internals/models/content.js>`_ contains a ``FileStorage`` and ``MongoDB`` sub-classes which are options for storage. The ``FileStorage``  class treats the local file system as a document databse storing and retrieving results from disk. Using files to store metadata is a primary advantage of this project however a Mongo option is offered since it is necessary for `Interra Catalog Admin <https://github.com/interra/catalog-admin>`_ and the methods for interacting with the data (ie `InsertOne<https://github.com/interra/catalog-generate/blob/master/internals/models/content.js#L701>`_) are identical. Note the Mongo methods are `not fully supported yet <https://github.com/interra/catalog-generate/issues/12>`_.
 
 Structure
 =========
