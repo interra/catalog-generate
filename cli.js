@@ -37,7 +37,13 @@ prog
   .argument('site', 'The site to build')
   .action((args) => {
     console.log("Exporting data for " + args.site); // eslint-disable-line
-    Build.docsExport(args.site, config);
+    Build.docsExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Collection data exported.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-collection-data-item')
   .help('builds collection data for a collection item')

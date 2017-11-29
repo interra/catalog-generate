@@ -17,3 +17,4 @@ Table of Contents
    schemas/index
    harvesting/index
    publish_site/index
+   configruation/index

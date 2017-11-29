@@ -21,8 +21,8 @@ class Search {
   }
 
   init(callback) {
-		callback();
-	}
+    callback();
+  }
 
   prepareSearchFields(doc, toString) {
     const prepped = {};
@@ -40,11 +40,11 @@ class Search {
   }
 
   push(callback) {
-		callback();
+    callback();
   }
 
   insertOne(callback) {
-		callback();
+    callback();
   }
 
   insertMany() {}
@@ -63,7 +63,7 @@ class algoliaSearch extends Search {
     this.index.clearIndex((err, content) => {
       callback(err, !err);
     });
-	}
+  }
 
   insertOne(item, callback) {
     let doc = this.prepareSearchFields(item, false);
@@ -79,7 +79,8 @@ class algoliaSearch extends Search {
 class elasticSearch extends Search {
 
   init(callback) {
-    this.aws = this.siteInfo.getConfigItem('aws');
+    this.private = this.siteInfo.getConfigItem('private');
+    this.aws = this.private.aws;
     const accessKeyId = this.aws.accessKeyId; 
     const secretAccessKey = this.aws.secretAccessKey; 
     const region = this.aws.region; 
@@ -89,45 +90,45 @@ class elasticSearch extends Search {
       region
     });
 
-		this.Client = require('elasticsearch').Client({
-			hosts: [ esEndpoint ],
-			connectionClass: require('http-aws-es')
-		});
-		const that = this;
+    this.Client = require('elasticsearch').Client({
+      hosts: [ esEndpoint ],
+      connectionClass: require('http-aws-es')
+    });
+    const that = this;
    
-		this.Client.ping({
-			requestTimeout: 30000,
-		}, function (error) {
-			if (error) {
-				callback(error);
-			} else {
-				that.Client.indices.delete({
-					index: that.aws.es.index 
-				}, (err, res) => {
-					if (err) {
-						callback(err);
-					} else {
-						that.Client.indices.create({
-							index: that.aws.es.index 
-						}, (createErr, res) => {
-							callback(createErr, !createErr);
-						});
-					}
-				});
-			}
-		});
+    this.Client.ping({
+      requestTimeout: 30000,
+    }, function (error) {
+      if (error) {
+        callback(error);
+      } else {
+        that.Client.indices.delete({
+          index: that.aws.es.index 
+        }, (err, res) => {
+          if (err) {
+            callback(err.msg);
+          } else {
+            that.Client.indices.create({
+              index: that.aws.es.index 
+            }, (createErr, res) => {
+              callback(createErr, !createErr);
+            });
+          }
+        });
+      }
+    });
   }
 
   insertOne(item, callback) {
     const doc = this.prepareSearchFields(item, false);
-		this.Client.create({
-			index: this.aws.es.index,
-			type: this.schema.getConfigItem('primaryCollection'),
-			id: doc.identifier,
-			body: doc 
-		}, function (error, response) {
+    this.Client.create({
+      index: this.aws.es.index,
+      type: this.schema.getConfigItem('primaryCollection'),
+      id: doc.identifier,
+      body: doc 
+    }, function (error, response) {
       callback(error, !error);
-		});
+    });
   }
 
 }
@@ -166,7 +167,7 @@ class elasticLunr extends Search {
     this.searchConfig.fields.forEach((field) => {
       this.idx.addField(field);
     });
-		callback();
+    callback();
   }
 
   insertOne(item, callback) {
