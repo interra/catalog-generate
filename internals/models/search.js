@@ -28,9 +28,9 @@ class Search {
     const prepped = {};
     this.searchConfig.fields.forEach((field) => {
       if (toString) {
-      prepped[field] = stringify(doc[field]); 
+        prepped[field] = stringify(doc[field]);
       } else {
-        prepped[field] = doc[field]; 
+        prepped[field] = doc[field];
       }
     });
     prepped.identifier = doc.identifier;
@@ -72,7 +72,7 @@ class algoliaSearch extends Search {
     this.index.addObject(doc, (err, content) => {
       callback(err, !err);
     });
-    
+
   }
 }
 
@@ -81,9 +81,9 @@ class elasticSearch extends Search {
   init(callback) {
     this.private = this.siteInfo.getConfigItem('private');
     this.aws = this.private.aws;
-    const accessKeyId = this.aws.accessKeyId; 
-    const secretAccessKey = this.aws.secretAccessKey; 
-    const region = this.aws.region; 
+    const accessKeyId = this.aws.accessKeyId;
+    const secretAccessKey = this.aws.secretAccessKey;
+    const region = this.aws.region;
     const esEndpoint = this.aws.es.endpoint;
     AWS.config.update({
       credentials: new AWS.Credentials(accessKeyId, secretAccessKey),
@@ -95,7 +95,7 @@ class elasticSearch extends Search {
       connectionClass: require('http-aws-es')
     });
     const that = this;
-   
+
     this.Client.ping({
       requestTimeout: 30000,
     }, function (error) {
@@ -103,13 +103,13 @@ class elasticSearch extends Search {
         callback(error);
       } else {
         that.Client.indices.delete({
-          index: that.aws.es.index 
+          index: that.aws.es.index
         }, (err, res) => {
           if (err) {
             callback(err.msg);
           } else {
             that.Client.indices.create({
-              index: that.aws.es.index 
+              index: that.aws.es.index
             }, (createErr, res) => {
               callback(createErr, !createErr);
             });
@@ -125,7 +125,7 @@ class elasticSearch extends Search {
       index: this.aws.es.index,
       type: this.schema.getConfigItem('primaryCollection'),
       id: doc.identifier,
-      body: doc 
+      body: doc,
     }, function (error, response) {
       callback(error, !error);
     });
