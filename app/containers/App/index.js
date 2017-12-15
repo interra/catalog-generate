@@ -16,7 +16,8 @@ import FeaturePage from 'containers/FeaturePage/Loadable';
 import SwaggerPage from 'containers/SwaggerPage/Loadable';
 
 import CollectionEntity from 'containers/CollectionEntity/Loadable';
-import SearchPage from 'containers/SearchPage/Loadable';
+import CollectionPage from 'containers/CollectionPage/Loadable';
+import SearchPageWrapper from 'containers/SearchPageWrapper/Loadable';
 
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
@@ -45,7 +46,8 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={FeaturePage} />
-        <Route path="/search" component={SearchPage} />
+        <Route path="/search" component={SearchPageWrapper} />
+        <Route path="/groups" component={CollectionPage} />
         <Route path="/api" component={SwaggerPage} />
         <Route path="" component={CollectionEntity} />
       </Switch>

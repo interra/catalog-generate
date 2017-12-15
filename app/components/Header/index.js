@@ -30,6 +30,9 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <HeaderLink className={activeClass('/search')} to="/search">
             Search
           </HeaderLink>
+          <HeaderLink className={activeClass('/groups')} to="/groups">
+            Groups
+          </HeaderLink>
           <HeaderLink className={activeClass('/api')} to="/api">
             API
           </HeaderLink>

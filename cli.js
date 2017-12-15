@@ -35,9 +35,10 @@ prog
   .command('build-collection-data')
   .help('builds collection data for a site exporting it to the build dir')
   .argument('site', 'The site to build')
+  .argument('env', 'The environment to build')
   .action((args) => {
     console.log("Exporting data for " + args.site); // eslint-disable-line
-    Build.docsExport(args.site, config, (err) => {
+    Build.docsExport(args.site, config, args.env, (err) => {
       if (err) {
         console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
       } else {
@@ -50,8 +51,9 @@ prog
   .argument('site', 'The site to build from')
   .argument('collection', 'The colleciton to build from')
   .argument('interraId', 'The internal id of the item')
+  .argument('env', 'The environment to build')
   .action((args) => {
-    Build.docExport(args.site, config, args.collection, args.interraId, (err) => {
+    Build.docExport(args.site, config, args.collection, args.interraId, args.env, (err) => {
       if (err) {
         console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
       } else {
@@ -86,6 +88,30 @@ prog
         console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
       } else {
         console.log(chalk.green('Routes built.')); // eslint-disable-line no-console
+      }
+    });
+  })
+  .command('build-sitemap')
+  .help('builds sitemap file for a site')
+  .argument('site', 'The site to build from')
+  .action((args) => {
+    Build.siteMapExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(err)); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Sitemap built.')); // eslint-disable-line no-console
+      }
+    });
+  })
+  .command('build-media')
+  .help('builds media files for a site')
+  .argument('site', 'The site to build from')
+  .action((args) => {
+    Build.mediaExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Media files built.')); // eslint-disable-line no-console
       }
     });
   })
@@ -128,8 +154,9 @@ prog
   .command('build-apis')
   .help('builds all api files for a site')
   .argument('site', 'The site to index from')
+  .argument('env', 'The environment to build')
   .action((args) => {
-    Build.all(args.site, config, (err) => {
+    Build.all(args.site, config, args.env, (err) => {
       if (err) {
         console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
       } else {

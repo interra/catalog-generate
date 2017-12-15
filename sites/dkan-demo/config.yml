@@ -1,5 +1,7 @@
 name: 'DKAN Demo'
-url: dkan-demo-example.data.interra.io
+prodUrl: http://catalog-demo.interra.io
+testUrl: http://localhost:3000
+devUrl: http://localhost:3000
 identifier: dkan-demo
 schema: pod-full
 description: 'this is a demo'
@@ -10,8 +12,9 @@ front-page-icons:
  - health-care
  - public-safety
  - transportation
+ - education 
 search:
-  type: elasticLunr 
+  type: simpleSearch 
   endpoint: https://oac6jckk0f.execute-api.us-west-2.amazonaws.com/prod
   fields:
     - title
@@ -21,6 +24,24 @@ search:
     - theme
     - modified
     - distribution
+siteMap:
+- title: Home
+  loc: "/"
+  children:
+  - title: About
+    loc: "/about"
+  - title: Search
+    loc: "/search"
+  - title: API
+    loc: "/api"
+  - title: Groups
+    loc: "/groups"
+    children:
+    - collections
+siteMapCollections:
+  - organization 
+  - dataset
+  - distribution 
 private:
   aws:
     accessKeyId:  

@@ -16,7 +16,7 @@ const swaggerMock = require('./mockswagger.json');
 const datajsonMock = require('./mockdatajson.json');
 
 // Let's start from scratch.
-fs.emptyDirSync(buildDir);
+fs.emptyDirSync(path.join(buildDir, 'api/v1/collections'));
 
 test('Build routes', (done) => {
   Build.routesExport(site, config, () => {
@@ -27,20 +27,11 @@ test('Build routes', (done) => {
 });
 
 test('Build docs', (done) => {
-  Build.docsExport(site, config, () => {
+  Build.docsExport(site, config, 'dev', () => {
     const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
     const tag = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/tags/transportation.json'));
     expect(JSON.parse(dataset)).toMatchObject(datasetMock);
     expect(JSON.parse(tag)).toMatchObject(tagMock);
-    done();
-  });
-});
-
-test('Build doc', (done) => {
-  fs.emptyDirSync(buildDir);
-  Build.docExport(site, config, 'datasets', 'dataset-one', () => {
-    const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
-    expect(JSON.parse(dataset)).toMatchObject(datasetMock);
     done();
   });
 });
@@ -79,8 +70,7 @@ test('Build datajson', (done) => {
 });
 
 test('Build all', (done) => {
-  fs.emptyDirSync(buildDir);
-  Build.all(site, config, () => {
+  Build.all(site, config, 'dev', () => {
     const datajson = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/data.json'));
     expect(JSON.parse(datajson)).toMatchObject(datajsonMock);
     const swagger = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/swagger.json'));
@@ -96,3 +86,14 @@ test('Build all', (done) => {
     done();
   });
 });
+
+test('Build doc', (done) => {
+  fs.emptyDirSync(path.join(buildDir, site, 'api/v1/collections'));
+  Build.docExport(site, config, 'datasets', 'dataset-one', 'dev', () => {
+    const dataset = fs.readFileSync(path.join(config.get('buildDir'), site, 'api/v1/collections/datasets/dataset-one.json'));
+    expect(JSON.parse(dataset)).toMatchObject(datasetMock);
+    done();
+  });
+});
+
+

@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/TobaccoTaxes2016_2_1.csv",
+  "downloadURL": "[interraUrl]/media/TobaccoTaxes2016.csv",
   "mediaType": "text/csv",
   "format": "csv",
   "description": "<p>Source: The Campaign for Tobacco-Free Kids, April 2016: <a href=\"https://www.tobaccofreekids.org/research/factsheets/pdf/0097.pdf\">https://www.tobaccofreekids.org/research/factsheets/pdf/0097.pdf</a></p>\n",

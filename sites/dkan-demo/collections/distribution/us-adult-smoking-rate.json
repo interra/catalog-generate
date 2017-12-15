@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/CDCSmokingRates.csv",
+  "downloadURL": "[interraUrl]/media/CDCSmokingRates.csv",
   "mediaType": "text/csv",
   "format": "csv",
   "description": "<p>Source: Centers for Disease Control and Prevention, 2015</p>\n",

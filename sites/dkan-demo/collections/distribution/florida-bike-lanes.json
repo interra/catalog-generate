@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/Bike_Lane.csv",
+  "downloadURL": "[interraUrl]/media/Bike_Lane.csv",
   "mediaType": "text/csv",
   "format": "csv",
   "title": "Florida Bike Lanes",

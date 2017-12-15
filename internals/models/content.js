@@ -255,10 +255,19 @@ class FileStorage extends Storage {
     }
   }
 
+  getRefFieldVal(collection, field) {
+    if (collection in this.references) {
+      if (Object.values(this.references[collection]).indexOf(field) !== -1) {
+        return Object.keys(this.references[collection])[Object.values(this.references[collection]).indexOf(field)];
+      }
+    }
+    return field;
+  }
+
   getRefField(collection, field) {
     if (collection in this.references) {
-      if (field in this.references[field]) {
-        return this.references[field];
+      if (field in this.references[collection]) {
+        return this.references[collection][field];
       }
     }
     return field;

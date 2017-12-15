@@ -1,13 +1,16 @@
 import { call, put, select, takeLatest, fetch } from 'redux-saga/effects';
 import request from 'utils/request';
 import elasticlunr from 'elasticlunr';
+import elasticsearch from 'elasticsearch';
 
 class Search {
   *init() {
     return {};
   }
 
-  query() {}
+  *resultCount() {}
+
+  *query() {}
 }
 
 export class elasticLunr extends Search {
@@ -23,6 +26,10 @@ export class elasticLunr extends Search {
   *query(query, index) {
     const items = index.search(query, {expand: true});
     return items;
+  }
+
+  *resultCount(results) {
+    return results.length;
   }
 
   *getAll(index) {
@@ -46,11 +53,15 @@ export class simpleSearch extends Search {
     console.time("Loading index.");
     const index = yield call(request, url);
     console.timeEnd("Index Loaded");
-    return {index};
+        return {index};
   }
 
   *getAll(index) {
     return index.index;
+  }
+
+  *resultCount(results) {
+    return results.length;
   }
 
   *query(query, index) {
@@ -67,23 +78,39 @@ export class simpleSearch extends Search {
 }
 
 export class elasticSearch extends Search {
-  *query(query, index) {
-    const docs = yield call(request, interraConfig.search.endpoint + "?q=" +  query + "*");
-    const items = docs.hits.hits.map((index) => {
-      const item = {
-        doc: index._source,
-        score: index._score,
-        ref: index._source.interra.id,
-      }
-      return item;
-    });
-    return items;
 
-    return result;
+
+  *init() {
+    const index = elasticsearch.Client({
+      host: 'https://search-interra-hakxd4cqlxcaapxlc7hzatsani.us-west-2.es.amazonaws.com/hhs',
+    });
+    return index;
   }
+
+  *query(query, index) {
+    const docs = yield this.esSearch(query, index);
+  }
+
   *getAll(index) {
-    const docs = yield call(request, interraConfig.search.endpoint);
-    const items = docs.hits.hits.map((index) => {
+    const that = this;
+    const docs = yield this.esSearch("*", index);
+    return docs;
+  }
+
+  esSearch(query, index) {
+    const body = {
+  "query": {
+    "match": {
+      "title": "*MRSA*"
+    }
+  }
+};
+    const that = this;
+    return index.search({
+      body: body
+    }).then(function (docs) {
+      that.count = docs.hits.total;
+      const items = docs.hits.hits.map((index) => {
       const item = {
         doc: index._source,
         score: index._score,
@@ -91,10 +118,18 @@ export class elasticSearch extends Search {
       }
       return item;
     });
-    return items;
+      return items;
+    }, function (error) {
+      console.trace(error.message);
+    });
+  }
+
+  *resultCount(results) {
+    return this.count;
   }
 
 }
+
 
 const search = {
   elasticSearch,

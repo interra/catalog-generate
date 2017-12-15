@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/NumbersByCity.csv",
+  "downloadURL": "[interraUrl]/media/NumbersByCity.csv",
   "mediaType": "text/csv",
   "format": "csv",
   "title": "Violent Crime Statistics by City ",

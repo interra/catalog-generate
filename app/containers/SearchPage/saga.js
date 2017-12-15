@@ -101,7 +101,12 @@ function getFacetValue(doc, facet, facets) {
         docR = doc[field].slice(0);
       }
       else {
-        docR = Object.keys(docR).length === 0 ? Object.assign({}, doc[field]) : docR[field];
+        // TODO: differently.
+        if (doc[field] !== undefined) {
+          docR = Object.keys(docR).length === 0 ? Object.assign({}, doc[field]) : docR[field];
+        } else {
+          docR = Object.keys(docR).length === 0 ? ' ' : docR[field];
+        }
       }
     }
   });
@@ -185,7 +190,6 @@ export function* loadFacets(facets, results) {
 export function* getResults(action) {
   const searchType = interraConfig.search.type;
   const searchEngine = new search[searchType];
-
   var query = action.query;// yield select(makeSelectQuery());
   var index = yield select(makeSelectIndex());
   let selectedFacets = action.selectedFacets;
@@ -211,14 +215,11 @@ export function* getResults(action) {
       items = yield searchEngine.getAll(index);
       // Alphabetical by default if there is no query.
       items = alphabetize(items);
-
     }
     console.timeEnd("Query Loaded");
 
     let faceted = [];
-
     if (selectedFacets && selectedFacets.length > 0) {
-
       selectedFacets.forEach(function(selectedFacet) {
         let term = selectedFacet[0];
         let value = selectedFacet[1];
@@ -239,7 +240,8 @@ export function* getResults(action) {
       console.log("no selected facets");
       faceted = items;
     }
-    yield put(actionsearchResultsTotal(faceted.length));
+    const resultCount = yield searchEngine.resultCount(faceted);
+    yield put(actionsearchResultsTotal(resultCount));
 
     const paged = faceted.slice(0, pageSize);
     yield put(searchResultsLoaded(paged));

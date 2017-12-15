@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/PropertyCrimeRates_1.csv",
+  "downloadURL": "[interraUrl]/media/PropertyCrimeRates.csv",
   "mediaType": "text/csv",
   "format": "csv",
   "description": "<p>Source: FBI Uniform Crime Report, 2014 (<a href=\"https://www.fbi.gov/about-us/cjis/ucr/ucr\">https://www.fbi.gov/about-us/cjis/ucr/ucr</a>)</p>\n",

@@ -5,9 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
 
 const site = process.env.SITE;
-console.log(process.argv);
 
-if (site == undefined && process.argv[1].split('/')[process.argv[1].split('/').length -1] == 'webpack') {
+if (site == undefined && process.argv[1].split('/')[process.argv[1].split('/').length -1] === 'webpack') {
   console.log("You must specify a site using SITE=");
   process.exit(0);
 }

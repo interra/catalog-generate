@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/IMD-MAPS.zip",
+  "downloadURL": "[interraUrl]/media/media/IMD-MAPS.zip",
   "mediaType": "application/zip",
   "format": "zip",
   "title": "English Indices of Deprivation 2010",

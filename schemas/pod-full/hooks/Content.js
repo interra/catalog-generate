@@ -37,6 +37,11 @@ module.exports = {
         doc.issued = now; // eslint-disable-line
       }
     }
+    if (collection === 'distribution') {
+      if ('mediaType' in doc && !('format' in doc)) {
+        doc.format = doc.mediaType.substring(doc.mediaType.indexOf('/') + 1, doc.mediaType.length);
+      }
+    }
     callback(null, interraId, collection, doc);
   },
   postSave: (content, callback) => {
@@ -64,8 +69,8 @@ module.exports = {
     callback(null, data);
   },
   // Output.
-  preOutput: (identifier, collection, content, callback) => {
-    callback(null, identifier, collection, content);
+  preOutput: (identifier, collection, doc, callback) => {
+    callback(null, identifier, collection, doc);
   },
   postOutput: (data, callback) => {
     callback(null, data);

@@ -16,6 +16,10 @@ properties:
     description: A full formatted name, eg Firstname Lastname
     type: string
     minLength: 1
+  description:
+    title: Description
+    type: string
+    description: Description of the organization
   identifier:
     type: string
     title: "Identifier"

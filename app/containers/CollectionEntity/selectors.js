@@ -9,7 +9,22 @@ const selectCol = (state) => { return state.get('collections')};
 
 const makeSelectCollection = () => createSelector(
   selectCol,
-  (collectionState) => { return collectionState.get('collection')}
+  (collectionState) => { return collectionState.get('doc')}
+);
+
+const makeSelectSiteMap = () => createSelector(
+  selectCol,
+  (collectionState) => { return collectionState.get('sitemap')}
+);
+
+const makeSelectBreadcrumb = () => createSelector(
+  selectCol,
+  (collectionState) => { return collectionState.get('breadcrumb')}
+);
+
+const makeSelectBreadcrumbLoading = () => createSelector(
+  selectCol,
+  (collectionState) => { return collectionState.get('breadcrumbLoading')}
 );
 
 const makeSelectCollectionError = () => createSelector(
@@ -34,4 +49,7 @@ export {
   makeSelectCollectionName,
   makeSelectCollection,
   makeSelectSchema,
+  makeSelectSiteMap,
+  makeSelectBreadcrumb,
+  makeSelectBreadcrumbLoading,
 };

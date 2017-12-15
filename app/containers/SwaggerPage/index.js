@@ -18,6 +18,8 @@ import saga from './saga';
 import { actionLoadSwagger } from './actions';
 import SwaggerUI from './Swagger';
 import './index.css';
+import PageContainer from 'components/PageContainer';
+import Breadcrumb from 'components/Breadcrumb';
 
 import H1 from 'components/H1';
 
@@ -40,19 +42,25 @@ export class SwaggerPage extends React.Component { // eslint-disable-line react/
       loading,
       error,
     }
+    const breadcrumbs = [{
+      title: 'Home',
+      loc: '/',
+      icon: 'home'
+    },{
+      title: 'API',
+      loc: '/api'
+    }];
 
     return (
-      <div style={{padding: "20px 50px"}}>
-        <Helmet>
-          <title>API</title>
-          <meta name="description" content="API" />
-        </Helmet>
-        <H1>API</H1>
-        <p>The following is a <a href="http://swagger.io">swagger</a> rendered defintion of the Interra API.</p>
-
-        <SwaggerUI {...swaggerProps} />
-
-      </div>
+    <PageContainer>
+      <Helmet>
+        <title>API</title>
+        <meta name="description" content="API" />
+      </Helmet>
+      <Breadcrumb breadcrumbs={breadcrumbs} />
+      <p>The following is a <a href="http://swagger.io">swagger</a> rendered defintion of the Interra API.</p>
+      <SwaggerUI {...swaggerProps} />
+    </PageContainer>
     );
   }
 }

@@ -40,6 +40,12 @@ class Site {
     return false;
   }
 
+  // Retrieves pageSchema.
+  pageSchema() {
+    const data = fs.readFileSync(path.join(this.siteDir, 'pageSchema.yml'), 'utf8');
+    return YAML.parse(data);
+  }
+
   validate(callback) {
     const that = this;
     Async.waterfall([

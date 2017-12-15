@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/GenChart_0_0.csv",
+  "downloadURL": "[interraUrl]/media/media/GenChart_0_0.csv",
   "mediaType": "text/csv",
   "format": "csv",
   "description": "<p>Population of state employees broken down into Gen X, Gen Y, Baby Boomers and Over 65+.</p>\n",

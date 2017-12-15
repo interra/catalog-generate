@@ -21,6 +21,25 @@ function prepare(site, config) {
 }
 
 /**
+ * Exports media files.
+ */
+function mediaExport(site, config, callback) {
+  const buildDir = path.join(config.get('buildDir'), site, 'media');
+  const siteDir = path.join(config.get('sitesDir'), site, 'media');
+  fs.emptyDirSync(buildDir);
+  fs.copySync(siteDir, buildDir);
+  // Moves logo.png if it exists.
+  if (fs.pathExistsSync(path.join(config.get('sitesDir'), site, '/logo.png'))) {
+    fs.copySync(path.join(config.get('sitesDir'), site, '/logo.png'), path.join(config.get('buildDir'), site, '/logo.png'));
+  }
+  // Moves favicon.ico if it exists.
+  if (fs.pathExistsSync(path.join(config.get('sitesDir'), site, '/favicon.ico'))) {
+    fs.copySync(path.join(config.get('sitesDir'), site, '/favicon.ico'), path.join(config.get('buildDir'), site, '/favicon.ico'));
+  }
+  callback(null, true);
+}
+
+/**
  * Exports routes.
  */
 function routesExport(site, config, callback) {
@@ -45,14 +64,25 @@ function routesExport(site, config, callback) {
 /**
  * Exports json files for each doc in each collection.
  */
-function docsExport(site, config, callback) {
+function docsExport(site, config, env, callback) {
   const content = prepare(site, config);
+  const siteInfo = new Site(site, config);
+  const url = siteInfo.getConfigItem(`${env}Url`);
+  const re = new RegExp('\\[interraUrl\\]', 'g');
 
   content.findAll(true, (err, results) => {
     Async.each(content.collections, (collection, done) => {
-      const docs = results[collection];
-      content.exportMany(docs, collection, (experr) => {
-        done(experr, !experr);
+      let docs = results[collection];
+      // Replaces interraUrl with env url.
+      // TODO: move to content model in exportOne.
+      docs = JSON.stringify(docs);
+      docs = docs.replace(re, url);
+      docs = JSON.parse(docs);
+      const file = path.join(config.get('buildDir'), site, 'api/v1/collections', `${collection}.json`);
+      fs.outputFile(file, JSON.stringify(docs), (fileerr) => {
+        content.exportMany(docs, collection, (experr) => {
+          done(experr, !experr);
+        });
       });
     }, (eacherr) => {
       callback(eacherr, !eacherr);
@@ -63,12 +93,19 @@ function docsExport(site, config, callback) {
 /**
  * Exports json file for single doc.
  */
-function docExport(site, config, collection, interraId, callback) {
+function docExport(site, config, collection, interraId, env, callback) {
   const content = prepare(site, config);
+  const siteInfo = new Site(site, config);
+  const url = siteInfo.getConfigItem(`${env}Url`);
+  const re = new RegExp('\\[interraUrl\\]', 'g');
+
   content.findByInterraId(interraId, collection, (err, doc) => {
     if (err) callback(err);
     content.Deref(doc, (derefErr, dereffed) => {
       if (err) callback(derefErr);
+      dereffed = JSON.stringify(dereffed);
+      dereffed = dereffed.replace(re, url);
+      dereffed = JSON.parse(dereffed);
       content.exportOne(interraId, collection, dereffed, (exportErr) => {
         callback(exportErr, !exportErr);
       });
@@ -93,6 +130,7 @@ function schemaExport(site, config, callback) {
     schema: {},
     map: {},
     uiSchema: {},
+    pageSchema: {},
     facets,
   };
   Async.each(collections, (collection, done) => {
@@ -115,7 +153,8 @@ function schemaExport(site, config, callback) {
     }
   }, () => {
     schemas.map = schema.mapSettings();
-    schema.uiSchema = schema.uiSchema();
+    schemas.uiSchema = schema.uiSchema();
+    schemas.pageSchema = siteInfo.pageSchema();
     fs.outputJson(`${apiDir}/schema.json`, schemas, (fileerr) => {
       callback(fileerr, !fileerr);
     });
@@ -133,6 +172,94 @@ function configExport(site, config, callback) {
     callback(err, !err);
   });
 }
+
+function getCollectionMap(schema, content, siteMapCollections, primaryCollection, callback) {
+  schema.dereference(primaryCollection, (e, primaryCollectionSchema) => {
+    content.findByCollection(primaryCollection, true, (loadErr, results) => {
+      Async.map(results, (doc, done) => {
+        content.Map(doc, primaryCollection, (mapErr, mappedDoc) => {
+          done(mapErr, mappedDoc);
+        }); 
+      }, (err, docs) => {
+        const cols = siteMapCollections.slice().reverse();
+        const siteMapCollectionsBuild = docs.reduce((acc, doc) => {
+          const entries = cols.reduce((entryAcc, col) => {
+            let entry = {};
+            if (col === primaryCollection) {
+              entry = {
+                loc: `/${col}/${doc.interra.id}`, 
+                title: doc.title,
+                children: entryAcc,
+              };
+
+              return entry;
+            } else {
+              const field = content.getRefFieldVal(primaryCollection, col);
+              if (field in doc) {
+                const type = primaryCollectionSchema.properties[field].type;
+                if (type === 'object') {
+                  return {
+                    loc: `/${col}/${doc[field].interra.id}`, 
+                    title: doc[field].name,
+                    children: [entryAcc],
+                  };
+                } else {
+                  const items = doc[field].map((item) => {
+                    return {
+                      loc: `/${col}/${item.interra.id}`, 
+                      title: item.title,
+                    };
+                  });
+                  return items;
+                }
+              }
+              else {
+                exit();
+              }
+            }
+          }, {});
+          const highestLevelLoc = entries.loc;
+          const i = Object.values(acc).findIndex((i) => { return i.loc === highestLevelLoc});
+          if (i !== -1) {
+            acc[i].children.push(entries.children[0]);
+            return acc; 
+          } else {
+            acc.push(entries);
+            return acc;
+          }
+        }, []);
+        callback(err, siteMapCollectionsBuild);
+      });
+    });
+  });
+}
+
+function addCollectionsMaptoSiteMap(obj, arr) {
+  return JSON.parse(JSON.stringify(obj)
+    .replace(new RegExp('\\[\"collections\"]'), JSON.stringify(arr)))
+}
+
+/**
+ * Exports search file for site.
+ */
+function siteMapExport(site, config, callback) {
+  const siteInfo = new Site(site, config);
+  const siteMap = siteInfo.getConfigItem('siteMap');
+  const siteMapCollections = siteInfo.getConfigItem('siteMapCollections');
+  const schemaName = siteInfo.getConfigItem('schema');
+  const schema = new Schema(schemaName, config);
+  const content = prepare(site, config);
+  const apiDir = path.join(config.get('buildDir'), site, apiSubDir);
+  const primaryCollection = schema.getConfigItem('primaryCollection');
+  getCollectionMap(schema, content, siteMapCollections, primaryCollection, (err, result) => {
+    const mapBuild = addCollectionsMaptoSiteMap(siteMap, result);
+    const file = path.join(apiDir, 'sitemap.json');
+    fs.outputFile(file, JSON.stringify(mapBuild), (fileErr) => {
+      callback(fileErr, !fileErr);
+    });
+  });
+}
+
 
 /**
  * Exports search file for site.
@@ -430,10 +557,10 @@ function datajsonExport(site, config, callback) {
   });
 }
 
-function all(site, config, callback) {
+function all(site, config, env, callback) {
   Async.waterfall([
     (done) => {
-      docsExport(site, config, (err) => {
+      docsExport(site, config, env, (err) => {
         done(err);
       });
     },
@@ -458,6 +585,11 @@ function all(site, config, callback) {
       });
     },
     (done) => {
+      mediaExport(site, config, (err) => {
+        done(err);
+      });
+    },
+    (done) => {
       datajsonExport(site, config, (err) => {
         done(err);
       });
@@ -475,6 +607,8 @@ module.exports = {
   schemaExport,
   searchExport,
   swaggerExport,
+  siteMapExport,
+  mediaExport,
   datajsonExport,
   all,
 };

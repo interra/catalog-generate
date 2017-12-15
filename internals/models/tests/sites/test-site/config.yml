@@ -1,5 +1,8 @@
 name: Test Site
 description: 'A site for tests.'
+prodUrl: http://test-site.interra.io
+testUrl: http://localhost:3000
+devUrl: http://localhost:3000
 identifier: test-site
 schema: test-schema
 search:

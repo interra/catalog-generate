@@ -16,24 +16,43 @@
  */
 
 import {
-    LEAVE_COLLECTION,
-    LOAD_COLLECTION,
-    LOAD_COLLECTION_SUCCESS,
-    LOAD_COLLECTION_ERROR,
-    LOAD_SCHEMA,
-    LOAD_SCHEMA_SUCCESS,
-    LOAD_SCHEMA_ERROR,
-    } from './constants';
+  SET_COLLECTION_NAME,
+  LEAVE_COLLECTION,
+  LOAD_COLLECTION,
+  LOAD_COLLECTION_SUCCESS,
+  LOAD_COLLECTION_ERROR,
+  LOAD_SCHEMA,
+  LOAD_SCHEMA_SUCCESS,
+  LOAD_SCHEMA_ERROR,
+  LOAD_SITEMAP_SUCCESS,
+  LOAD_BREADCRUMB,
+  LOAD_BREADCRUMB_SUCCESS,
+  LOAD_BREADCRUMB_ERROR,
+} from './constants';
+
+
 
 /**
 * Load the repositories, this action starts the request saga
 *
 * @return {object} An action object with a type of LOAD_REPOS
 */
-function actionLoadCollection(collectionName) {
+function actionSetCollectionName(collectionName) {
+    return {
+      type: SET_COLLECTION_NAME,
+      collectionName,
+    };
+}
+
+/**
+* Load the repositories, this action starts the request saga
+*
+* @return {object} An action object with a type of LOAD_REPOS
+*/
+function actionLoadCollection(path) {
     return {
       type: LOAD_COLLECTION,
-      collectionName,
+      path,
     };
 }
 
@@ -75,16 +94,70 @@ function schemaLoaded(schema) {
 }
 
 /**
+* Dispatched when the CollectionEntity page loads for the first time
+*
+* @param  {string} siteMap The loaded siteMap
+*
+* @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
+*/
+function siteMapLoaded(siteMap) {
+    return {
+      type: LOAD_SITEMAP_SUCCESS,
+      siteMap,
+    };
+}
+
+/**
+* Load the breadcrumb, this action starts the request saga
+*
+* @return {object} An action object with a type of LOAD_REPOS
+*/
+function actionLoadBreadcrumb(path) {
+    return {
+      type: LOAD_BREADCRUMB,
+      path,
+    };
+}
+
+/**
+* Dispatched when the CollectionEntity page loads for the first time
+*
+* @param  {string} breadcrumb The loaded breadcrumb
+*
+* @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
+*/
+function breadcrumbLoaded(breadcrumb) {
+    return {
+      type: LOAD_BREADCRUMB_SUCCESS,
+      breadcrumb,
+    };
+}
+
+/**
+* Dispatched when the CollectionEntity page loads for the first time
+*
+* @param  {string} breadcrumb The loaded breadcrumb
+*
+* @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
+*/
+function breadcrumbLoadedError(error) {
+    return {
+      type: LOAD_BREADCRUMB_ERROR,
+      error,
+    };
+}
+
+/**
 * Dispatched when the repositories are loaded by the request saga
 *
 * @param  {string} collection The current collection
 *
 * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
 */
-function collectionLoaded(collection) {
+function collectionLoaded(doc) {
     return {
       type: LOAD_COLLECTION_SUCCESS,
-      collection,
+      doc,
     };
 }
 
@@ -108,7 +181,12 @@ export {
     actionLeaveCollection,
     collectionLoaded,
     actionLoadCollection,
+    actionSetCollectionName,
     actionLoadSchema,
     schemaLoaded,
+    siteMapLoaded,
+    breadcrumbLoadedError,
+    breadcrumbLoaded,
+    actionLoadBreadcrumb,
     collectionLoadingError,
 }

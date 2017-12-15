@@ -3,7 +3,7 @@
   "description": "Schema for Interra site config object",
   "title": "Interra Catalog Site Config",
   "type": "object",
-  "required" : ["name", "schema", "identifier", "search"],
+  "required" : ["name", "schema", "identifier", "search", "prodUrl", "devUrl"],
   "properties": {
     "name": {
       "type": "string",
@@ -19,6 +19,24 @@
         "pod",
         "test-schema"
       ]
+    },
+    "prodUrl": {
+      "type": "string",
+      "title": "Production URL",
+      "description": "A URL for the production instance.",
+      "format": "uri"
+    },
+    "testUrl": {
+      "type": "string",
+      "title": "Test URL",
+      "description": "A URL for the test instance.",
+      "format": "uri"
+    },
+    "devdUrl": {
+      "type": "string",
+      "title": "Development URL",
+      "description": "A URL for the development instance. In most cases use http://localhost:3000",
+      "format": "uri"
     },
     "identifier": {
       "type": "string",

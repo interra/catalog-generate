@@ -9,6 +9,7 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
+export const SET_COLLECTION_NAME = 'app/CollectionEntity/SET_COLLECTION_NAME';
 export const LEAVE_COLLECTION = 'app/CollectionEntity/LEAVE_COLLECTION';
 export const LOAD_COLLECTION = 'app/CollectionEntity/LOAD_COLLECTION';
 export const LOAD_COLLECTION_SUCCESS = 'app/CollectionEntity/LOAD_COLLECTION_SUCCESS';
@@ -16,3 +17,7 @@ export const LOAD_COLLECTION_ERROR = 'app/CollectionEntity/LOAD_COLLECTION_ERROR
 export const LOAD_SCHEMA = 'app/CollectionEntity/LOAD_SCHEMA';
 export const LOAD_SCHEMA_SUCCESS = 'app/CollectionEntity/LOAD_SCHEMA_SUCCESS';
 export const LOAD_SCHEMA_ERROR = 'app/CollectionEntity/LOAD_SCHEMA_ERROR';
+export const LOAD_BREADCRUMB = 'app/CollectionEntity/LOAD_BREADCRUMB';
+export const LOAD_BREADCRUMB_ERROR = 'app/CollectionEntity/LOAD_BREADCRUMB_ERROR';
+export const LOAD_BREADCRUMB_SUCCESS = 'app/CollectionEntity/LOAD_BREADCRUMB_SUCCESS';
+export const LOAD_SITEMAP_SUCCESS = 'app/CollectionEntity/LOAD_SITEMAP_SUCCESS';

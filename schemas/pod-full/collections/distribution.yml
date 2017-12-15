@@ -90,3 +90,52 @@ properties:
     description: "Date of formal issuance."
     type: string
     pattern: "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$"
+  schema:
+    title: Schema
+    description: Ref of https://frictionlessdata.io/schemas/table-schema.json 
+    type: object
+    properties:
+      fields:
+        type: array
+        items:
+          title: "Table Schema Field"
+          type: "object"
+          properties:
+           name: 
+             title: "Name"
+             description: "A name for this field."
+             type: "string"
+           title:
+             title: "Title"
+             description: "A human-readable title."
+             type: "string"
+           description:
+             title: "Description"
+             description: "A text description. Markdown is encouraged."
+             type: "string"
+           type:
+             description: "The type for the data."
+             enum: 
+               - string
+               - integer
+               - number
+               - boolean
+               - object
+               - array
+               - date
+               - time
+               - datetime
+               - year
+               - yearmonth
+               - duration
+               - geopoint
+               - geojson
+           format:
+             description: "The format keyword options for `string` are `default`, `email`, `uri`, `binary`, and `uuid`."
+             enum:
+               - default
+               - email
+               - uri
+               - binary
+               - uuid
+            

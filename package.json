@@ -8,7 +8,7 @@
   },
   "engines": {
     "npm": ">=3",
-    "node": ">=7"
+    "node": ">=6"
   },
   "author": "Aaron Couch",
   "license": "MIT",
@@ -221,10 +221,12 @@
     "cheerio": "^0.22.0",
     "compression": "1.6.2",
     "cross-env": "5.0.0",
+    "csv-parse": "^2.0.0",
     "elasticlunr": "^0.9.5",
     "elasticsearch": "^14.0.0",
     "excerpts": "0.0.2",
     "express": "4.15.3",
+    "font-awesome": "^4.7.0",
     "fontfaceobserver": "2.0.9",
     "history": "4.6.3",
     "hoist-non-react-statics": "2.1.1",
@@ -234,6 +236,7 @@
     "intl": "1.2.5",
     "invariant": "2.2.2",
     "ip": "1.1.5",
+    "leaflet": "^1.2.0",
     "lodash": "4.17.4",
     "lunr": "^2.1.2",
     "minimist": "1.2.0",
@@ -247,6 +250,7 @@
     "react-redux": "5.0.5",
     "react-router-dom": "4.1.1",
     "react-router-redux": "5.0.0-alpha.6",
+    "react-table": "^6.7.5",
     "redux": "3.6.0",
     "redux-immutable": "4.0.0",
     "redux-saga": "0.15.3",
@@ -255,6 +259,7 @@
     "styled-components": "2.0.0",
     "swagger-ui": "^3.1.7",
     "warning": "3.0.0",
+    "wellknown": "^0.5.0",
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {

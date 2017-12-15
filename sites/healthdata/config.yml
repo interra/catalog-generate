@@ -1,19 +1,21 @@
 name: HealthData
-description: 'This was a lot of work'
-url: healthdata-example.interra.io
+description: 'Example of a harvested site creaed with Interra Catalog'
+prodUrl: http://healthdata-example.interra.io
+testUrl: http://localhost:3000
+devUrl: http://localhost:3000
 identifier: healthdata
 schema: pod-full
 front-page-icon-collection: theme
 front-page-icons:
- - city-planning
- - finance-and-budgeting
- - health-care
- - public-safety
- - transportation
- - education
+ - health
+ - medicare
+ - facilities-and-services
+ - hospital-compare
+ - diseases-and-conditions 
+ - demographics
 search:
-  type: simpleSearch 
-  endpoint: https://oac6jckk0f.execute-api.us-west-2.amazonaws.com/prod
+  type: elasticSearch
+  endpoint: https://aj1585l13a.execute-api.us-west-2.amazonaws.com/prod 
   fields:
     - title
     - keyword
@@ -28,12 +30,6 @@ private:
     apiKey:  
     index: healthdata 
   aws:
-    accessKeyId:  
-    secretAccessKey: 
-    region: us-west-1
-    es:
-      endpoint: 
-      index: hhs 
 fontConfig:
   backColor: "#fff"
   link: "#0A77BD"

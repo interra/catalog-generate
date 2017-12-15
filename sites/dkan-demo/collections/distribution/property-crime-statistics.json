@@ -1,6 +1,6 @@
 {
   "@type": "dcat:Distribution",
-  "downloadURL": "http://demo.getdkan.com/sites/default/files/PropertyCrimesByCity_3.csv",
+  "downloadURL": "[interraUrl]/media/PropertyCrimesByCity.csv",
   "mediaType": "text/csv",
   "format": "csv",
   "title": "Property Crime Statistics by City",

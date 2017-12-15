@@ -1,6 +1,8 @@
 {
   "@type": "org:Organization",
   "name": "Advisory Council for Infectious Disease",
+  "description": "Advisory Council for Infectious Disease is a working group that performs research and prepares reports to inform treatment and prevention programs nationally.",
+  "image": "[interraUrl]/media/clipboard.png",
   "interra": {
     "id": "advisory-council-for-infe",
     "source": "dkandemo"
