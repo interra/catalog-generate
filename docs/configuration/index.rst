@@ -1,8 +1,6 @@
 Configuration
 --------
 
-Harvests are configured and stored in the ``sites/SITE-NAME/harvest`` folder.
-
 Search
 ========
 
