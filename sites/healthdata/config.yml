@@ -14,7 +14,7 @@ front-page-icons:
  - diseases-and-conditions 
  - demographics
 search:
-  type: elasticSearch
+  type: simpleSearch 
   endpoint: https://aj1585l13a.execute-api.us-west-2.amazonaws.com/prod 
   fields:
     - title
@@ -30,6 +30,24 @@ private:
     apiKey:  
     index: healthdata 
   aws:
+siteMap:
+- title: Home
+  loc: "/"
+  children:
+  - title: About
+    loc: "/about"
+  - title: Search
+    loc: "/search"
+  - title: API
+    loc: "/api"
+  - title: Groups
+    loc: "/groups"
+    children:
+    - collections
+siteMapCollections:
+  - organization 
+  - dataset
+  - distribution 
 fontConfig:
   backColor: "#fff"
   link: "#0A77BD"

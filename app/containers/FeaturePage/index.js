@@ -12,6 +12,8 @@ import messages from './messages';
 import List from './List';
 import ListItem from './ListItem';
 import ListItemTitle from './ListItemTitle';
+import Breadcrumb from 'components/Breadcrumb';
+import PageContainer from 'components/PageContainer';
 
 export default class FeaturePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -22,17 +24,30 @@ export default class FeaturePage extends React.Component { // eslint-disable-lin
   }
 
   render() {
+    const breadcrumbs = [{
+      title: 'Home',
+      loc: '/',
+      icon: 'home'
+    },{
+      title: 'About',
+      loc: '/about'
+    }];
+
     return (
-      <div style={{padding: "20px 50px", lineHeight: "2.5em", maxWidth: "700px"}}>
+      <PageContainer>
         <Helmet>
           <title>About</title>
-          <meta name="description" content="About Interra Data" />
+          <meta name="description" content="About" />
         </Helmet>
+        <Breadcrumb breadcrumbs={breadcrumbs} />
+      <div style={{lineHeight: "2.5em", maxWidth: "700px"}}>
+
         <H1>
           <FormattedMessage {...messages.header} />
         </H1>
         <FormattedMessage {...messages.esplain} />
       </div>
+      </PageContainer>
     );
   }
 }

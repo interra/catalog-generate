@@ -6,10 +6,11 @@ import Wrapper from './Wrapper';
 import LoadingIndicator from 'components/LoadingIndicator';
 import { Link } from 'react-router-dom';
 import { Parser } from 'html-to-react';
+import ellipsize from 'ellipsize';
 
 function PageItemCard(props) {
   const computeGrid = (numberOfItems) => {
-    let number = 1;
+    let number = 3;
     if (numberOfItems === 2) {
       number = 6;
     }
@@ -36,15 +37,15 @@ function PageItemCard(props) {
     const numRows = num > maxPerRow ? Math.ceil(num/maxPerRow) : 1;
     const columnWidth = computeGrid(num);
     const parser = new Parser();
-    const items = props.data.collection.map(function(item, i) {
+      const items = props.data.collection.map(function(item, i) {
       const ref = `${props.data.collectionType}/${item.interra.id}`;
-      const description = item.description ?  parser.parse(item.description) : '';
+      const description = item.description ? parser.parse(ellipsize(item.description, 150)) : '';
       // TODO: Maybe default image?
-      const image = 'image' in item ? <img style={{top: "50%",transform: "translateY(-50%)", position:   "relative"}} alt={`image for ${item.name}`} src={item. image}/> : <div style={{height: "125px"}}className="font-icon-select-1 font-icon-select-1-account-group-1"></div>;
+      const image = 'image' in item ? <img style={{top: "50%",transform: "translateY(-50%)", position: "relative", maxHeight: "150px", maxWidth: "300px"}} alt={`image for ${item.name}`} src={item. image}/> : <div style={{height: "125px"}}className="font-icon-select-1 font-icon-select-1-account-group-1"></div>;
       item.columnWidth = columnWidth;
       return <div key={`col-${i}`} className={`col-lg-${columnWidth}`}>
-        <article style={{minHeight: "365px", marginBottom: "20px"}}>
-          <div style={{textAlign: "center", height: "125px"}}>
+        <article style={{minHeight: "435px", marginBottom: "20px"}}>
+          <div style={{textAlign: "center", height: "155px"}}>
             <Link to={ref}>{image}</Link>
           </div>
           <h2 style={{fontSize: "25px", lineHeight: "35px"}}><Link to={ref}>{item.name}</Link></h2>

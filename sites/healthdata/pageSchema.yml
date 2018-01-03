@@ -1,17 +1,14 @@
+
 dataset:
   Main:
     description:
       type: Text 
-      label: false 
     theme:
       type: Theme
-      label: false
     keyword:
       type: Tag
-      label: false
     distribution:
       type: Resource
-      label: false
   Table:
     issued:
       type: String
@@ -65,24 +62,33 @@ dataset:
       type: String
       label: true
     spatial:
-      type: String
+      type: String 
       label: true
   Left:
     publisher:
       type: Org 
       labe: false
+    spatial:
+      type: ExtentMap 
+      label: true
+    widget:
+      type: Social
 distribution:
   Main:
     description:
       type: Text 
-      label: true 
-  Table:
     downloadURL:
-      type: String
-      label: true
+      type: FileDownload 
     accessURL:
-      type: String
-      label: true
+      type: FileDownload 
+    widget:
+      type: FilePreview
+      fields:
+        - downloadURL
+        - accessURL 
+    schema:
+      type: Schema
+  Table:
     isssued:
       type: String
       label: true
@@ -112,10 +118,13 @@ distribution:
       label: true
 organization:
   Main:
+    image:
+      type: Image 
+      lable: false
+      float: left
     description:
       type: Text 
-      label: false
-    image:
-      type: String
-      lable: false
-    
+    widget:
+      type: SearchPage
+      collection: publisher
+      arg: name

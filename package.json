@@ -224,6 +224,7 @@
     "csv-parse": "^2.0.0",
     "elasticlunr": "^0.9.5",
     "elasticsearch": "^14.0.0",
+    "ellipsize": "0.0.3",
     "excerpts": "0.0.2",
     "express": "4.15.3",
     "font-awesome": "^4.7.0",

@@ -10,7 +10,9 @@ import parse from 'csv-parse';
 
 function parseResponse(response) {
   const initialContentType = response.headers.get('Content-Type');
-  const contentType = initialContentType.substring(0, initialContentType.indexOf(';'));
+  const trimmedContentType = initialContentType.substring(0, initialContentType.indexOf(';'));
+  const contentType = trimmedContentType ? trimmedContentType : initialContentType;
+
   const length = response.headers.get('Content-Length');
   if (length < 99999) {
     if (contentType === 'text/csv') {
@@ -22,7 +24,8 @@ function parseResponse(response) {
         });
       });
     } else if (contentType === 'application/json') {
-      return response.json().then(item);
+      const jsonObj = response.json();
+      return jsonObj;
     }
   } else {
     return false;

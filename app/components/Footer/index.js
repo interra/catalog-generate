@@ -13,9 +13,6 @@ function Footer() {
         <FormattedMessage {...messages.licenseMessage} />
       </section>
       <section>
-        <LocaleToggle />
-      </section>
-      <section>
         <FormattedMessage
           {...messages.authorMessage}
           values={{
