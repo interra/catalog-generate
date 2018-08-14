@@ -221,7 +221,7 @@
     "cheerio": "^0.22.0",
     "compression": "1.6.2",
     "cross-env": "5.0.0",
-    "csv-parse": "^2.0.0",
+    "csv-parse": "1.2.2",
     "elasticlunr": "^0.9.5",
     "elasticsearch": "^14.0.0",
     "ellipsize": "0.0.3",
