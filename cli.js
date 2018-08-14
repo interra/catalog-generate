@@ -65,7 +65,13 @@ prog
   .help('builds config file for a site')
   .argument('site', 'The site to build from')
   .action((args) => {
-    Build.configExport(args.site, config);
+    Build.configExport(args.site, config, (err) => {
+      if (err) {
+        console.log(chalk.red(JSON.stringify(err))); // eslint-disable-line no-console
+      } else {
+        console.log(chalk.green('Config exported.')); // eslint-disable-line no-console
+      }
+    });
   })
   .command('build-datajson')
   .help('builds data.json file for a site')
@@ -171,7 +177,7 @@ prog
     process.env.NODE_ENV = 'production';
     process.env.SITE = args.site;
     process.env.PATH += (path.delimiter + path.join(__dirname, 'node_modules', '.bin'));
-    shell.exec('webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules');
+    shell.exec('node_modules/.bin/webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules');
   })
   .command('run-dev')
   .help('runs dev server for a site.')
