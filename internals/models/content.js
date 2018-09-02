@@ -41,34 +41,6 @@ class Storage {
     return ['identifier', 'title', 'created', 'modified'];
   }
 
-  addPath() {
-
-  }
-
-  init() {}
-
-  count() {}
-
-  findByIdentifier() {}
-
-  insertOne() {}
-
-  insertMany() {}
-
-  update() {}
-
-  delete() {}
-}
-
-class FileStorage extends Storage {
-
-  // Ref, Deref, and Map are the functions that transform docs
-  // between states.
-  // A doc is:
-  // * stored in a referenced state
-  // * edited in a referenced and mapped state
-  // * viewed in a dereferenced and mapped state.
-
   /**
    * Adds referenced data to collection using 'interra-reference' key.
    * @param {object} doc Doc to dereference.
@@ -296,16 +268,6 @@ class FileStorage extends Storage {
   }
 
   /**
-   * Creates a reference to be used as 'interra-reference' value.
-   * @param {string} identifier Item to be prepared for reference value.
-   * @return {string} Value for reference.
-   */
-  createCollectionFileName(identifier) {
-    // TODO: user path if available.
-    return slug(identifier);
-  }
-
-  /**
    * Validates whether a doc contains required fields.
    * @param {object} doc Doc to validate.
    * @param {boolean} routeCollection Whether doc is part of collection with routes.
@@ -372,28 +334,6 @@ class FileStorage extends Storage {
   }
 
   /**
-   * Checks whether item with same identifier exists.
-   * @param {string} identifier - {@link identifier} to check.
-   * @param {string} collection - {@link collection} to use.
-   * @return {string} Returns interra id for identifier if it exists.
-   */
-  validateUnique(identifier, collection, callback) {
-    const that = this;
-    this.buildRegistry(() => {
-      Async.detect(that.registry[collection], (id, done) => {
-        if (identifier === Object.values(id)[0]) {
-          done(null, true);
-        } else {
-          done(null);
-        }
-      }, (deterr, res) => {
-        const out = res === undefined ? null : Object.keys(res)[0];
-        callback(deterr, out);
-      });
-    });
-  }
-
-  /**
    * Like insertOne but outputs to json.
    * @param {string} identifier
    */
@@ -436,6 +376,75 @@ class FileStorage extends Storage {
       return this.Hook.buildInterraId(idString);
     }
     return slug(idString).substring(0, 25).toLowerCase();
+  }
+
+  /**
+   * Retrieves a field by the field it is being mapped to.
+   * @param {string} collection Collection of the field.
+   * @param {string} field Field value to search.
+   * @return {string} Mapped field or original value.
+   */
+  getMapFieldByValue(collection, field) {
+    if (collection in this.map) {
+      const fields = Object.values(this.map[collection]);
+      if (fields.indexOf(field) !== -1) {
+        return Object.keys(this.map[collection])[fields.indexOf(field)];
+      }
+    }
+    return field;
+  }
+
+  getIdentifierField(collection) {
+    if (collection in this.map) {
+      const fields = Object.values(this.map[collection]);
+      if (fields.indexOf('identifier') !== -1) {
+        return Object.keys(this.map[collection])[fields.indexOf('identifier')];
+      }
+    }
+    return 'identifier';
+  }
+
+}
+
+class FileStorage extends Storage {
+
+  // Ref, Deref, and Map are the functions that transform docs
+  // between states.
+  // A doc is:
+  // * stored in a referenced state
+  // * edited in a referenced and mapped state
+  // * viewed in a dereferenced and mapped state.
+
+  /**
+   * Creates a reference to be used as 'interra-reference' value.
+   * @param {string} identifier Item to be prepared for reference value.
+   * @return {string} Value for reference.
+   */
+  createCollectionFileName(identifier) {
+    // TODO: user path if available.
+    return slug(identifier);
+  }
+
+  /**
+   * Checks whether item with same identifier exists.
+   * @param {string} identifier - {@link identifier} to check.
+   * @param {string} collection - {@link collection} to use.
+   * @return {string} Returns interra id for identifier if it exists.
+   */
+  validateUnique(identifier, collection, callback) {
+    const that = this;
+    this.buildRegistry(() => {
+      Async.detect(that.registry[collection], (id, done) => {
+        if (identifier === Object.values(id)[0]) {
+          done(null, true);
+        } else {
+          done(null);
+        }
+      }, (deterr, res) => {
+        const out = res === undefined ? null : Object.keys(res)[0];
+        callback(deterr, out);
+      });
+    });
   }
 
   /**
@@ -491,32 +500,6 @@ class FileStorage extends Storage {
       }
       callback(null, routes);
     });
-  }
-
-  /**
-   * Retrieves a field by the field it is being mapped to.
-   * @param {string} collection Collection of the field.
-   * @param {string} field Field value to search.
-   * @return {string} Mapped field or original value.
-   */
-  getMapFieldByValue(collection, field) {
-    if (collection in this.map) {
-      const fields = Object.values(this.map[collection]);
-      if (fields.indexOf(field) !== -1) {
-        return Object.keys(this.map[collection])[fields.indexOf(field)];
-      }
-    }
-    return field;
-  }
-
-  getIdentifierField(collection) {
-    if (collection in this.map) {
-      const fields = Object.values(this.map[collection]);
-      if (fields.indexOf('identifier') !== -1) {
-        return Object.keys(this.map[collection])[fields.indexOf('identifier')];
-      }
-    }
-    return 'identifier';
   }
 
   getRegistryIdentifier(collection, interraId) {
