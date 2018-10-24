@@ -10,7 +10,7 @@ function PageItemOrg(props) {
   const name = props.data.value.name;
   const image = props.data.value.image ? <img alt={name} src={props.data.value.image} /> : '';
   const description = props.data.value.description;
-  const link = `/organization/${props.data.value.interra.id}`;
+  const link = `/organization/${props.data.value.identifier}`;
 
   return (
     <div style={{borderRadius: "5px",

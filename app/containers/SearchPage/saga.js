@@ -14,7 +14,8 @@ import search from 'search';
 export function* getIcons(action) {
   const collection = interraConfig['front-page-icon-collection'];
   const icons = interraConfig['front-page-icons'];
-  const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  //const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  const url = interraConfig.devUrl;
 
   try {
     const responses = yield icons.map(p => call(request, url + '/api/v1/collections/' + collection + '/' + p + '.json'));
@@ -29,7 +30,8 @@ export function* getIcons(action) {
 export function* getFacets() {
 
   // This breaks staic compilation. Lets fix that later :).
-  const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  //const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  const url = interraConfig.devUrl;
   const requestURL = url + '/api/v1/schema.json';
   try {
     //  TODO: do this all on the server and export as the schema.

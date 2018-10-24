@@ -16,11 +16,14 @@ import {makeSelectCollectionName, makeSelectCollection, makeSelectSiteMap } from
 export function* getSchema() {
 
   // This breaks staic compilation. Lets fix that later :).
-  const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  //const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  const url = interraConfig.devUrl;
   const requestURL = url + '/api/v1/schema.json';
+  console.log(requestURL);
   try {
     // Call our request helper (see 'utils/request')
     const currentSchema = yield call(request, requestURL);
+    console.log(currentSchema);
     yield put(schemaLoaded(currentSchema));
   } catch (err) {
     console.log("error?", err);
@@ -77,7 +80,8 @@ export function* getBreadCrumb(action) {
 
 export function* getSiteMap() {
   // This breaks staic compilation. Lets fix that later :).
-  const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  //const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  const url = interraConfig.devUrl;
   const requestURL = url + '/api/v1/sitemap.json';
   try {
     // Call our request helper (see 'utils/request')
@@ -93,7 +97,8 @@ export function* getDoc(items) {
   const path = items.path;
   const collectionName = path.split('/')[0];
   yield put(actionSetCollectionName(collectionName));
-  const url = window.location.origin;
+  //const url = window.location.origin;
+  const url = interraConfig.devUrl;
   const requestURL = url + '/api/v1/collections/' + path + '.json';
   try {
     const doc = yield call(request, requestURL);

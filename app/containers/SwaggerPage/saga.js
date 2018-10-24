@@ -11,7 +11,8 @@ import { makeSelectSwagger } from './selectors';
 export function* getSwagger() {
 
   // This breaks staic compilation. Lets fix that later :).
-  const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  //const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  const url = interraConfig.devUrl;
   const requestURL = url + '/api/v1/swagger.json';
 
   try {

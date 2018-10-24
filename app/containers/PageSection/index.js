@@ -61,6 +61,7 @@ export class PageSection extends React.PureComponent { // eslint-disable-line re
       const section = Object.keys(fields).map((field, index) => {
         const Component = pageItems[`PageItem${fields[field].type}`];
         const label = 'label' in fields[field] ? [field].label : false;
+        console.log(field, schema, pageSchema);
         const labelValue = field === 'widget' ? '' : schema.properties[field].title;
         const def = fields[field];
         const item = {

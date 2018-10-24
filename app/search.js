@@ -15,7 +15,7 @@ class Search {
 
 export class elasticLunr extends Search {
   *init() {
-    const url = window.location.origin + '/api/v1/search-index.json';
+    const url = interraConfig.devUrl + '/api/v1/search-index.json';
     console.time("Loading index.");
     const searchIndex = yield call(request, url);
     const index = elasticlunr.Index.load(searchIndex);

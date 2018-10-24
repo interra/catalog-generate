@@ -1,0 +1,35 @@
+name: Project Open Data Full Specification
+api: 1
+primaryCollection: dataset
+collections:
+  - dataset
+  - organization
+  - distribution
+  - keyword
+  - license
+  - theme
+facets:
+  keyword:
+    label: Tags
+    field: keyword.title
+  theme:
+    label: Category
+    field: theme.title
+  publisher:
+    label: Organization
+    field: publisher.name
+  distribution:
+    label: Format
+    field: distribution.format
+# TODO: remove and autodiscover from collections. This saves looking this up
+# every time.
+references:
+  dataset:
+      publisher: organization
+      distribution: distribution
+      keyword: keyword
+      theme: theme
+routeCollections:
+  - dataset
+  - organization
+  - distribution

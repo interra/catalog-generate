@@ -11,7 +11,8 @@ import { makeSelectCollection } from './selectors';
 export function* getCollection(action) {
 
   // This breaks staic compilation. Lets fix that later :).
-  const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  //const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
+  const url = interraConfig.devUrl;
   const requestURL = `${url}/api/v1/collections/${action.collectionType}.json`;
 
   try {

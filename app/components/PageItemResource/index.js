@@ -14,7 +14,7 @@ function PageItemResource(props) {
         key={i}>
           <li style={{display: "block", position: "relative", minHeight: "60px", paddingLeft: "45px"}}>
             <div>
-              <Link className='heading' title={`${resource.format}`} to={`/distribution/${resource.interra.id}`}>
+              <Link className='heading' title={`${resource.format}`} to={`/distribution/${resource.title}`}>
                 {resource.title}
                 <span
                   data-toggle='tooltip'

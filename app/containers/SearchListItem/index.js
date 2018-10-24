@@ -61,7 +61,7 @@ export class SearchListItem extends React.PureComponent { // eslint-disable-line
     // Put together the content of the repository
     const content = (
       <Wrapper className="search-list-item">
-        <Link to={`/dataset/${item.doc.interra.id}`} style={{fontSize: "1.2em"}}>
+        <Link to={`/dataset/${item.doc.identifier}`} style={{fontSize: "1.2em"}}>
           { item.doc.title }
         </Link>
         <div style={{paddingTop: "15px"}} className="row">

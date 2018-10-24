@@ -38,7 +38,7 @@ function PageItemCard(props) {
     const columnWidth = computeGrid(num);
     const parser = new Parser();
       const items = props.data.collection.map(function(item, i) {
-      const ref = `${props.data.collectionType}/${item.interra.id}`;
+      const ref = `${props.data.collectionType}/${item.identifier}`;
       const description = item.description ? parser.parse(ellipsize(item.description, 150)) : '';
       // TODO: Maybe default image?
       const image = 'image' in item ? <img style={{top: "50%",transform: "translateY(-50%)", position: "relative", maxHeight: "150px", maxWidth: "300px"}} alt={`image for ${item.name}`} src={item. image}/> : <div style={{height: "125px"}}className="font-icon-select-1 font-icon-select-1-account-group-1"></div>;

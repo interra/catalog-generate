@@ -7,11 +7,12 @@ import Wrapper from './Wrapper';
 function PageItemTag(props) {
   const label = props.label ? <strong>{props.labelValue}:</strong> : '';
   const tags = props.data.value.map((tag) => {
+
     return (
       <div
-        style={{margin: "5px", float: "left", padding: "7px"}}
+        style={{margin: "6px", float: "left", padding: "7px"}}
         className="label label-default"
-        key={tag.interra.id}>
+        key={tag.identifier}>
         {tag.title}
       </div>
     );
