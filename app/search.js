@@ -49,7 +49,7 @@ export class elasticLunr extends Search {
 
 export class simpleSearch extends Search {
   *init() {
-    const url = window.location.origin + '/api/v1/search-index.json';
+    const url = interraConfig.devUrl + '/api/v1/search-index.json';
     console.time("Loading index.");
     const index = yield call(request, url);
     console.timeEnd("Index Loaded");
