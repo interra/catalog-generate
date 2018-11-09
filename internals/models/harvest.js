@@ -4,6 +4,7 @@ const HarvestSource = require('./harvestsource');
 const isEqual = require('lodash.isequal');
 const defaults = require('lodash.defaults');
 const uuid = require('uuidv4');
+  wtf
 const path = require('path');
 
 const ajv = new Ajv();
