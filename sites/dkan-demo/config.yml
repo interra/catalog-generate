@@ -1,18 +1,19 @@
 name: 'DKAN Demo'
 prodUrl: http://catalog-demo.interra.io
-testUrl: http://localhost:3000
-devUrl: http://d8.docksal
+testUrl: http://catalog-demo.interra.io
+devUrl: http://catalog-demo.interra.io
+publicPath: '/'
 identifier: dkan-demo
 schema: pod-full
 description: 'this is a demo'
 front-page-icon-collection: theme
 front-page-icons:
- - cityplanning
- - financeandbudgeting
- - healthcare
- - publicsafety
- - transportation
- - education 
+ - hospitalcompare 
+ - homehealthcompare 
+ - hospicecompare 
+ - supplierdirectory 
+ - nursinghomecompare 
+ - physiciancompare 
 search:
   type: simpleSearch 
   fields:

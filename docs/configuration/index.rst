@@ -48,6 +48,11 @@ For ElasticSearch include the ``endpoint:`` which should be the URL to the endpo
         endpoint: 
         index: 
 
+pubilcPath 
+===============
+
+This updates webpack's publicPath. Useful if you want to host interra in subfolder of your root URL.
+
 
 Front Page Icons 
 ===============
