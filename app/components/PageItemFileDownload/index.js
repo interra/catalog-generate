@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 
 function PageItemResource(props) {
   const label = props.label ? <strong>{props.labelValue}:</strong> : '';
-  console.log(props);
   const resource = props.data.doc;
   const item =
     <div style={{position: "relative"}}>

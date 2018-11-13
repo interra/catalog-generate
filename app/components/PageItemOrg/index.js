@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 function PageItemOrg(props) {
   const name = props.data.value.name;
-  const image = props.data.value.image ? <img alt={name} src={props.data.value.image} /> : '';
+  const image = props.data.value.image ? <img style={{maxWidth: "100%"}} alt={name} src={props.data.value.image} /> : '';
   const description = props.data.value.description;
   const link = `/organization/${props.data.value.identifier}`;
 

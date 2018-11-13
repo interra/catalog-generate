@@ -19,11 +19,9 @@ export function* getSchema() {
   //const url = window.location.href.split('/')[0] + '//' + window.location.href.split('/')[2];
   const url = interraConfig.devUrl;
   const requestURL = url + '/api/v1/schema.json';
-  console.log(requestURL);
   try {
     // Call our request helper (see 'utils/request')
     const currentSchema = yield call(request, requestURL);
-    console.log(currentSchema);
     yield put(schemaLoaded(currentSchema));
   } catch (err) {
     console.log("error?", err);
